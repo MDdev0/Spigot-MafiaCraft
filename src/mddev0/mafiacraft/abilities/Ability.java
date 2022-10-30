@@ -1,0 +1,35 @@
+package mddev0.mafiacraft.abilities;
+
+public enum Ability { // TODO: if grayed out, not implemented yet.
+    PROTECTION,
+    CHARISMA, // Has no class
+    SUCCESSION,
+    FORGE,
+    ASSASSINATE,
+    REANIMATION,
+    RETALIATION,
+    SKILLFUL_HARVEST,
+    INVESTIGATE,
+    WATCH,
+    PERIPHERALS,
+    CLEAR_SIGHT,
+    SAVE_A_LIFE,
+    AMBROSIA,
+    INQUISITION,
+    AMBUSH,
+    THIS_IS_FINE,
+    DODGE_ROLL,
+    SCATTER,
+    TOADIFY,
+    FOG_OF_WAR,
+    VANISH,
+    TRANSFORM,
+    RAMPAGE,
+    BITE,
+    NEMESIS,
+    CONVERT,
+    HUNTING_NIGHT,
+    NIGHT_OWL,
+    STAKED,
+    JUST_A_PRANK
+}
