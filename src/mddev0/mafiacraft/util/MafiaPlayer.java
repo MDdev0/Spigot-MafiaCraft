@@ -1,5 +1,6 @@
-package mddev0.mafiacraft;
+package mddev0.mafiacraft.util;
 
+import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.Role;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -10,6 +11,7 @@ public class MafiaPlayer {
     private final MafiaCraft plugin;
     private UUID uuid;
     private Role role;
+    private Role originalRole;
     private int attackerTicks;
     private final PlayerTicker onTick;
 
@@ -21,6 +23,18 @@ public class MafiaPlayer {
 
     public Role getRole() {
         return role;
+    }
+
+    public Role getOriginalRole() {
+        return originalRole;
+    }
+
+    public void changeRole(Role newRole) {
+        role = newRole;
+    }
+
+    public void changeOriginalRole(Role newRole) {
+        originalRole = newRole;
     }
 
     public void setAttacker() {

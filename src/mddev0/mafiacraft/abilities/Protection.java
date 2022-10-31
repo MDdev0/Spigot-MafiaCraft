@@ -1,7 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.MafiaPlayer;
+import mddev0.mafiacraft.util.MafiaPlayer;
 import mddev0.mafiacraft.util.CombatState;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

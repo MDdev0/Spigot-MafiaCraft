@@ -9,9 +9,4 @@ public class Godfather extends Role {
         abilities.add(Ability.PROTECTION);
         abilities.add(Ability.CHARISMA);
     }
-
-    @Override
-    boolean isUnholySuspect() {
-        return false;
-    }
 }

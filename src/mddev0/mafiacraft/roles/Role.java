@@ -37,10 +37,12 @@ public abstract class Role {
         }
     }
 
-    boolean isMafiaSuspect() {
+    public boolean isMafiaSuspect() {
         if (winCond == WinCondition.MAFIA)
             return !(abilities.contains(Ability.CHARISMA));
         else return false;
     }
-    abstract boolean isUnholySuspect();
+    public boolean isUnholySuspect() {
+        return false; // TODO: Implement
+    }
 }

@@ -1,6 +1,8 @@
 package mddev0.mafiacraft;
 
 import mddev0.mafiacraft.abilities.Protection;
+import mddev0.mafiacraft.abilities.Succession;
+import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -17,6 +19,7 @@ public class MafiaCraft extends JavaPlugin {
 
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(new Protection(this), this);
+        this.getServer().getPluginManager().registerEvents(new Succession(this), this);
     }
 
     public void onDisable() {
