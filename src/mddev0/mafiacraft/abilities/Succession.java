@@ -2,16 +2,18 @@ package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.Godfather;
+import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.UUID;
+import java.util.Random;
 
-public class Succession implements Listener {
+public final class Succession implements Listener {
 
     private final MafiaCraft plugin;
 
@@ -25,15 +27,15 @@ public class Succession implements Listener {
     public void onGodfatherDeath(PlayerDeathEvent death) {
         if (plugin.getPlayerList().get(death.getEntity().getUniqueId()).getRole() instanceof Godfather) {
             // Godfather has died, select a new one.
-            List<UUID> eligible = new ArrayList<>();
-            for (UUID key : plugin.getPlayerList().keySet()) {
-                if (plugin.getPlayerList().get(key).getRole().hasAbility(Ability.SUCCESSION))
-                    eligible.add(key);
+            List<MafiaPlayer> eligible = new ArrayList<>();
+            for (Map.Entry<UUID, MafiaPlayer> p : plugin.getLivingPlayers().entrySet()) {
+                if (p.getValue().getRole().hasAbility(Ability.SUCCESSION))
+                    eligible.add(p.getValue());
             }
             if (eligible.size() != 0) {
                 // Only act if more than one eligible player is in the game
                 int selection = new Random().nextInt(eligible.size());
-                plugin.getPlayerList().get(eligible.get(selection)).changeRole(new Godfather());
+                eligible.get(selection).changeRole(new Godfather());
             }
         }
     }

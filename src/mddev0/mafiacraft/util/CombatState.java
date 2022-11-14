@@ -7,13 +7,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
-import java.util.UUID;
 
 public class CombatState implements Listener {
 
@@ -23,13 +22,13 @@ public class CombatState implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGH) // execute AFTER normal damage handlers
     public void onAttackPlayer(EntityDamageByEntityEvent damage) {
         if (damage.getEntityType() == EntityType.PLAYER) {
             // Know the damaged entity is a player
             Player attacker = findAttackingPlayer(damage);
             if (attacker != null) {
-                plugin.getPlayerList().get(attacker.getUniqueId());
+                plugin.getPlayerList().get(attacker.getUniqueId()).setAttacker();
             }
             // If null do nothing
         }

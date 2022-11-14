@@ -2,10 +2,10 @@ package mddev0.mafiacraft.roles;
 
 import mddev0.mafiacraft.abilities.Ability;
 
-public class Godfather extends Role {
+public final class Godfather extends Role {
 
     public Godfather() {
-        super(WinCondition.MAFIA);
+        super(WinCondition.MAFIA, true);
         abilities.add(Ability.PROTECTION);
         abilities.add(Ability.CHARISMA);
     }

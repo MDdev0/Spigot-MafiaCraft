@@ -2,9 +2,7 @@ package mddev0.mafiacraft.roles;
 
 import mddev0.mafiacraft.abilities.Ability;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public abstract class Role {
@@ -14,12 +12,13 @@ public abstract class Role {
         ALONE,
         SURVIVING
     }
-    final WinCondition winCond;
-    Set<Ability> abilities = new HashSet<>();
-    Map<Ability, Integer> cooldowns = new HashMap<>();
+    private final WinCondition winCond;
+    protected final Set<Ability> abilities = new HashSet<>();
+    private final boolean unique;
 
-    protected Role(WinCondition win) {
+    public Role(WinCondition win, boolean uniqueness) {
         winCond = win;
+        unique = uniqueness;
     }
 
     public Set<Ability> getAbilities() {
@@ -30,19 +29,11 @@ public abstract class Role {
         return abilities.contains(a);
     }
 
-    public void tickCooldowns() {
-        for (Ability a : cooldowns.keySet()) {
-            if (cooldowns.get(a) > 0) cooldowns.put(a, cooldowns.get(a) - 1);
-            else cooldowns.remove(a);
-        }
+    public boolean isUnique() {
+        return unique;
     }
 
-    public boolean isMafiaSuspect() {
-        if (winCond == WinCondition.MAFIA)
-            return !(abilities.contains(Ability.CHARISMA));
-        else return false;
-    }
-    public boolean isUnholySuspect() {
-        return false; // TODO: Implement
+    public WinCondition getWinCond() {
+        return winCond;
     }
 }

@@ -2,10 +2,10 @@ package mddev0.mafiacraft.roles;
 
 import mddev0.mafiacraft.abilities.Ability;
 
-public final class Mafioso extends Role {
+public final class Assassin extends Role {
 
-    public Mafioso() {
+    public Assassin() {
         super(WinCondition.MAFIA, false);
-        abilities.add(Ability.SUCCESSION);
+        abilities.add(Ability.ASSASSINATION);
     }
 }
