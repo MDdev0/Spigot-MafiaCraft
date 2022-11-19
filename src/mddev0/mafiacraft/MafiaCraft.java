@@ -32,6 +32,7 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Retaliation(this), this);
         abilityHighNoon.runTaskTimer(this, 0L, 1L);
         this.getServer().getPluginManager().registerEvents(new Marksman(this), this);
+        this.getServer().getPluginManager().registerEvents(new Investigate(this), this);
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
         // GUI events are handled every time a GUI is instantiated

@@ -19,14 +19,17 @@ public class MafiaPlayer {
     private final Role originalRole;
     // Ticked Flags
     private final Map<Ability, CooldownLength> cooldowns = new HashMap<>();
-    private int attackerTicks;
-    private boolean framed;
+    private int attackerTicks = 0;
+    private boolean framed = false;
     private final PlayerTicker onTick;
+    private final SpyglassUtil spyglass;
 
     public MafiaPlayer(MafiaCraft plugin, UUID id, Role startingRole) {
         this.plugin = plugin;
         onTick = new PlayerTicker();
         onTick.runTaskTimer(plugin,0,1); // runs every tick
+        spyglass = new SpyglassUtil(plugin, plugin.getServer().getPlayer(id));
+        spyglass.runTaskTimer(plugin,0,1); // runs every tick
         uuid = id;
         living = true;
         role = originalRole = startingRole;
@@ -113,6 +116,10 @@ public class MafiaPlayer {
 
     public boolean onCooldown(Ability a) {
         return cooldowns.containsKey(a);
+    }
+
+    public SpyglassUtil getSpyglass() {
+        return spyglass;
     }
 
     // Support Classes
