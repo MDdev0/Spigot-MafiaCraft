@@ -1,5 +1,7 @@
 package mddev0.mafiacraft;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
 import mddev0.mafiacraft.util.CombatState;
 import mddev0.mafiacraft.util.MafiaPlayer;
@@ -23,6 +25,8 @@ public class MafiaCraft extends JavaPlugin {
     private final HighNoon abilityHighNoon = new HighNoon(this);
 
     public void onEnable() {
+        // ProtocolLib
+        ProtocolManager manager = ProtocolLibrary.getProtocolManager();
         // Register abilities
         this.getServer().getPluginManager().registerEvents(new Protection(this), this);
         this.getServer().getPluginManager().registerEvents(new Succession(this), this);
@@ -33,6 +37,9 @@ public class MafiaCraft extends JavaPlugin {
         abilityHighNoon.runTaskTimer(this, 0L, 1L);
         this.getServer().getPluginManager().registerEvents(new Marksman(this), this);
         this.getServer().getPluginManager().registerEvents(new Investigate(this), this);
+        this.getServer().getPluginManager().registerEvents(new Watch(this, manager), this);
+        this.getServer().getPluginManager().registerEvents(new Peripherals(this, manager), this);
+        this.getServer().getPluginManager().registerEvents(new ClearSight(this), this);
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
         // GUI events are handled every time a GUI is instantiated

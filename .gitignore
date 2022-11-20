@@ -1,3 +1,6 @@
+### LIBRARIES ###
+lib
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
