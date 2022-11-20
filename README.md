@@ -2,9 +2,9 @@
 
 ![](https://img.shields.io/badge/Project%20Phase-Implementation-yellow)  
 ![](https://img.shields.io/badge/Total%20Roles-19-lightgrey)
-![](https://img.shields.io/badge/Implemented%20Roles-7-red)  
+![](https://img.shields.io/badge/Implemented%20Roles-9-red)  
 ![](https://img.shields.io/badge/Total%20Abilities-34-lightgrey)
-![](https://img.shields.io/badge/Implemented%20Abilities-9-red)  
+![](https://img.shields.io/badge/Implemented%20Abilities-13-red)  
 ![](https://img.shields.io/badge/Commands-Not%20Started-darkred)  
 ![](https://img.shields.io/badge/Game%20Flow-Not%20Started-darkred)  
 ![](https://img.shields.io/badge/Testing-None-black)  
