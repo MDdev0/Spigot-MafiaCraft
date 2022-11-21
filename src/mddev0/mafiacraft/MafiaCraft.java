@@ -19,6 +19,8 @@ public class MafiaCraft extends JavaPlugin {
      * - reanimateSacrifice
      */
 
+    // TODO: find all uses of getPlayers(), should it be replaced with getLivingPlayers() or getDeadPlayers()?
+
     private final Map<UUID, MafiaPlayer> players = new HashMap<>();
 
     // Timed abilities
@@ -40,6 +42,7 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Watch(this, manager), this);
         this.getServer().getPluginManager().registerEvents(new Peripherals(this, manager), this);
         this.getServer().getPluginManager().registerEvents(new ClearSight(this), this);
+        this.getServer().getPluginManager().registerEvents(new Rescue(this), this);
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
         // GUI events are handled every time a GUI is instantiated
