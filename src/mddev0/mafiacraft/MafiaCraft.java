@@ -25,6 +25,7 @@ public class MafiaCraft extends JavaPlugin {
 
     // Timed abilities
     private final HighNoon abilityHighNoon = new HighNoon(this);
+    private final Ambrosia abilityAmbrosia = new Ambrosia(this);
 
     public void onEnable() {
         // ProtocolLib
@@ -36,13 +37,15 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Assassination(this), this);
         this.getServer().getPluginManager().registerEvents(new Reanimation(this), this);
         this.getServer().getPluginManager().registerEvents(new Retaliation(this), this);
-        abilityHighNoon.runTaskTimer(this, 0L, 1L);
+        abilityHighNoon.runTaskTimer(this, 0L, 1L); // checks every tick
         this.getServer().getPluginManager().registerEvents(new Marksman(this), this);
         this.getServer().getPluginManager().registerEvents(new Investigate(this), this);
         this.getServer().getPluginManager().registerEvents(new Watch(this, manager), this);
         this.getServer().getPluginManager().registerEvents(new Peripherals(this, manager), this);
         this.getServer().getPluginManager().registerEvents(new ClearSight(this), this);
         this.getServer().getPluginManager().registerEvents(new Rescue(this), this);
+        abilityAmbrosia.runTaskTimer(this, 0L, 100L); // checks every 5 seconds
+        this.getServer().getPluginManager().registerEvents(abilityAmbrosia,this);
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
         // GUI events are handled every time a GUI is instantiated

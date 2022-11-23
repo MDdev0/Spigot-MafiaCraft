@@ -35,6 +35,10 @@ public class MafiaPlayer {
         role = originalRole = startingRole;
     }
 
+    public UUID getID() {
+        return uuid;
+    }
+
     public void cancelTasks() {
         onTick.cancel();
     }
