@@ -85,6 +85,7 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                         spawned.setItemStack(ambrosiaItem);
                                         // Add cooldown to thrower
                                         plugin.getPlayerList().get(i.getThrower()).startCooldown(Ability.AMBROSIA, 0L, 6);
+                                        plugin.getPlayerList().get(i.getThrower()).setUnholy();
                                     }
                                 }
                             }

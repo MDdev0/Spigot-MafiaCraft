@@ -21,6 +21,7 @@ public class MafiaPlayer {
     private final Map<Ability, CooldownLength> cooldowns = new HashMap<>();
     private int attackerTicks = 0;
     private boolean framed = false;
+    private long unholyTicks = 0L;
     private final PlayerTicker onTick;
     private final SpyglassUtil spyglass;
 
@@ -74,7 +75,7 @@ public class MafiaPlayer {
     }
 
     public boolean isUnholySuspect() {
-        return false; // TODO: Implement
+        return (unholyTicks > 0);
     }
 
     // Attack and Framed effect cooldowns
@@ -88,6 +89,10 @@ public class MafiaPlayer {
 
     public void setFramed() {
         framed = true;
+    }
+
+    public void setUnholy() {
+        unholyTicks = 24000L * 2;
     }
 
     // Ability cooldowns
@@ -130,10 +135,13 @@ public class MafiaPlayer {
     private class PlayerTicker extends BukkitRunnable {
         @Override
         public void run() {
+            // Decrease attacker ticks
             attackerTicks = (attackerTicks>0) ? attackerTicks-1 : 0;
             // Framed players reset at sunrise
             if (framed && plugin.getServer().getWorlds().get(0).getTime() == 0L)
                 framed = false;
+            // Decrease unholy marked ticks
+            unholyTicks = (unholyTicks>0) ? unholyTicks-1 : 0;
             // Cooldowns
             for (Map.Entry<Ability, CooldownLength> a : cooldowns.entrySet()) {
                 a.getValue().decrement();
