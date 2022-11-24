@@ -26,6 +26,7 @@ public class MafiaCraft extends JavaPlugin {
     // Timed abilities
     private final HighNoon abilityHighNoon = new HighNoon(this);
     private final Ambrosia abilityAmbrosia = new Ambrosia(this);
+    private final Inquisition abilityInquisition = new Inquisition(this);
 
     public void onEnable() {
         // ProtocolLib
@@ -46,6 +47,7 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Rescue(this), this);
         abilityAmbrosia.runTaskTimer(this, 0L, 100L); // checks every 5 seconds
         this.getServer().getPluginManager().registerEvents(abilityAmbrosia,this);
+        abilityInquisition.runTaskTimer(this, 0L, 200L); // show particles every 10 seconds
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
         // GUI events are handled every time a GUI is instantiated
@@ -54,6 +56,9 @@ public class MafiaCraft extends JavaPlugin {
     public void onDisable() {
         for (Map.Entry<UUID,MafiaPlayer> p : players.entrySet())
             p.getValue().cancelTasks();
+        abilityHighNoon.cancel();
+        abilityAmbrosia.cancel();
+        abilityInquisition.cancel();
     }
 
     public Map<UUID, MafiaPlayer> getPlayerList() {
