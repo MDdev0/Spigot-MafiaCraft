@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public final class ClearSight implements Listener {
 
-    private MafiaCraft plugin;
+    private final MafiaCraft plugin;
 
     public ClearSight(MafiaCraft plugin) {
         this.plugin = plugin;

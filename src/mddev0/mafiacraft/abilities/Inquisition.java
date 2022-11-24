@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public final class Inquisition extends BukkitRunnable {
 
-    private MafiaCraft plugin;
+    private final MafiaCraft plugin;
 
     public Inquisition(MafiaCraft plugin) {
         this.plugin = plugin;

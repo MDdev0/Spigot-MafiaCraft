@@ -8,7 +8,6 @@ import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -22,7 +21,7 @@ import java.util.Objects;
 
 public final class Ambrosia extends BukkitRunnable implements Listener {
 
-    private MafiaCraft plugin;
+    private final MafiaCraft plugin;
 
     public Ambrosia(MafiaCraft plugin) {
         this.plugin = plugin;
@@ -102,7 +101,6 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
         ItemStack original = splash.getPotion().getItem();
         if (Objects.requireNonNull(original.getItemMeta()).getDisplayName().equals(ChatColor.GOLD + "Ambrosia")) {
             // Is an ambrosia potion
-            List<Player> hits = new ArrayList<>();
             for (Entity ent : splash.getAffectedEntities())
                 if (ent.getType() == EntityType.PLAYER) {
                     MafiaPlayer player = plugin.getLivingPlayers().get(ent.getUniqueId());
