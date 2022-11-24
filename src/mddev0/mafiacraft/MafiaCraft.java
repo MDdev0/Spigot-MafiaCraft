@@ -47,9 +47,11 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ClearSight(this), this);
         this.getServer().getPluginManager().registerEvents(new Rescue(this), this);
         abilityAmbrosia.runTaskTimer(this, 0L, 100L); // checks every 5 seconds
-        this.getServer().getPluginManager().registerEvents(abilityAmbrosia,this);
+        this.getServer().getPluginManager().registerEvents(abilityAmbrosia, this);
         abilityInquisition.runTaskTimer(this, 0L, 200L); // show particles every 10 seconds
-        this.getServer().getPluginManager().registerEvents(new Ambush(this),this);
+        this.getServer().getPluginManager().registerEvents(new Ambush(this), this);
+        this.getServer().getPluginManager().registerEvents(new ThisIsFine(this), this);
+        this.getServer().getPluginManager().registerEvents(new DodgeRoll(this), this);
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
