@@ -31,6 +31,7 @@ public class MafiaCraft extends JavaPlugin {
     public void onEnable() {
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+
         // Register abilities
         this.getServer().getPluginManager().registerEvents(new Protection(this), this);
         this.getServer().getPluginManager().registerEvents(new Succession(this), this);
@@ -48,8 +49,11 @@ public class MafiaCraft extends JavaPlugin {
         abilityAmbrosia.runTaskTimer(this, 0L, 100L); // checks every 5 seconds
         this.getServer().getPluginManager().registerEvents(abilityAmbrosia,this);
         abilityInquisition.runTaskTimer(this, 0L, 200L); // show particles every 10 seconds
+        this.getServer().getPluginManager().registerEvents(new Ambush(this),this);
+
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
+
         // GUI events are handled every time a GUI is instantiated
     }
 
