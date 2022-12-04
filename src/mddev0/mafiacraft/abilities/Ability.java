@@ -20,8 +20,8 @@ public enum Ability { // TODO: if grayed out, not implemented yet.
     AMBUSH,
     THIS_IS_FINE,
     DODGE_ROLL,
-    TARGET,
-    TRACKING,
+    TARGET, // Has no class
+    TRACKING, // Has no class
     SCATTER,
     TOADIFY,
     FOG_OF_WAR,
