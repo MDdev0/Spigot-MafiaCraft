@@ -2,19 +2,19 @@ package mddev0.mafiacraft.roles;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.abilities.Ability;
-import mddev0.mafiacraft.util.Targeter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public final class Hunter extends Role implements Targeter {
+public final class Hunter extends Role {
 
     private final MafiaCraft plugin;
 
     private final UUID self;
 
-    private List<UUID> targets;
+    private final List<UUID> targets;
 
     public Hunter(MafiaCraft plugin, UUID self) {
         super(WinCondition.SURVIVING, false);
@@ -22,14 +22,13 @@ public final class Hunter extends Role implements Targeter {
         this.self = self;
         abilities.add(Ability.TARGET);
         abilities.add(Ability.TRACKING);
+        targets = new ArrayList<>();
     }
 
-    @Override
     public List<UUID> getTargets() {
         return targets;
     }
 
-    @Override
     public void getTargets(int num) {
         Random rand = new Random();
         List<UUID> players = new java.util.ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
@@ -41,7 +40,6 @@ public final class Hunter extends Role implements Targeter {
         }
     }
 
-    @Override
     public boolean targetsKilled() {
         boolean dead = true;
         for (UUID t : targets) {

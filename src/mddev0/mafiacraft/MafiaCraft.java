@@ -52,6 +52,11 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Ambush(this), this);
         this.getServer().getPluginManager().registerEvents(new ThisIsFine(this), this);
         this.getServer().getPluginManager().registerEvents(new DodgeRoll(this), this);
+        this.getServer().getPluginManager().registerEvents(new SpellBook(this), this);
+        this.getServer().getPluginManager().registerEvents(new Scatter(this), this);
+        this.getServer().getPluginManager().registerEvents(new Toadify(this), this);
+        this.getServer().getPluginManager().registerEvents(new FogOfWar(this), this);
+        this.getServer().getPluginManager().registerEvents(new Vanish(this), this);
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);

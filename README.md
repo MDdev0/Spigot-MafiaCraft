@@ -2,9 +2,9 @@
 
 ![](https://img.shields.io/badge/Project%20Phase-Implementation-yellow)  
 ![](https://img.shields.io/badge/Total%20Roles-19-lightgrey)
-![](https://img.shields.io/badge/Implemented%20Roles-14-red)  
-![](https://img.shields.io/badge/Total%20Abilities-34-lightgrey)
-![](https://img.shields.io/badge/Implemented%20Abilities-19-red)  
+![](https://img.shields.io/badge/Implemented%20Roles-16-red)  
+![](https://img.shields.io/badge/Total%20Abilities-35-lightgrey)
+![](https://img.shields.io/badge/Implemented%20Abilities-26-red)  
 ![](https://img.shields.io/badge/Commands-Not%20Started-darkred)  
 ![](https://img.shields.io/badge/Game%20Flow-Not%20Started-darkred)  
 ![](https://img.shields.io/badge/Testing-None-black)  
@@ -57,15 +57,15 @@ Alone and Same Role mean only themselves (or those who share their role) and tho
 who win by Surviving remaining alive.  
 Win by Surviving roles can win with anyone, as long as they survive until the end of the game._
 
-| Role          | Description                                                                                 | Abilities                                             | Win Conditions | Tasks                                                                      |
-|---------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------|----------------|----------------------------------------------------------------------------|
-| Serial Killer | An insane murderer who wants nothing more than to be alone.                                 | Protection,<br/>Ambush                                | Alone          | Kill everyone without being caught.                                        |
-| Trapmaker     | Some people just want to see the world burn.                                                | This is Fine,<br/>Dodge Roll                          | Alone          | Use traps and fire to kill everyone without being caught.                  |
-| Hunter        | Ensure that the targets you are given die by the end of the game, and remain dead.          | Target,<br/>Tracking                                  | Surviving      | Use any means necessary to ensure your target players die.<p/>Avoid dying. |
-| Sorcerer      | A powerful spell-caster bound by no allegiances.                                            | Scatter,<br/>Toadify,<br/>Fog of War,<br/>Vanish      | Surviving      | Use your abilities to survive.                                             |
-| *Werewolf*    | A regular person who suddenly transforms under the Full Moon.                               | Transform,<br/>Rampage,<br/>Bite,<br/>Nemesis         | Same Role      | Convert or kill all others.<p/>Do not get caught.                          |
-| *Vampire*     | A mythical creature whose only goal is to spread their reach to as many people as possible. | Convert,<br/>Hunting Night,<br/>Night Owl,<br/>Staked | Same Role      | Convert or kill all others.<p/>Do not get caught.                          |
-| *Jester*      | A clown who just wants to trick the Village into making a grave mistake.                    | Just a Prank                                          | Surviving*     | Be killed by a member of the Village.                                      |
+| Role          | Description                                                                                 | Abilities                                                        | Win Conditions | Tasks                                                                      |
+|---------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------|----------------|----------------------------------------------------------------------------|
+| Serial Killer | An insane murderer who wants nothing more than to be alone.                                 | Protection,<br/>Ambush                                           | Alone          | Kill everyone without being caught.                                        |
+| Trapmaker     | Some people just want to see the world burn.                                                | This is Fine,<br/>Dodge Roll                                     | Alone          | Use traps and fire to kill everyone without being caught.                  |
+| Hunter        | Ensure that the targets you are given die by the end of the game, and remain dead.          | Target,<br/>Tracking                                             | Surviving      | Use any means necessary to ensure your target players die.<p/>Avoid dying. |
+| Sorcerer      | A powerful spell-caster bound by no allegiances.                                            | Scatter,<br/>Toadify,<br/>Fog of War,<br/>Vanish,<br/>Spell Book | Surviving      | Use your abilities to survive.                                             |
+| *Werewolf*    | A regular person who suddenly transforms under the Full Moon.                               | Transform,<br/>Rampage,<br/>Bite,<br/>Nemesis                    | Same Role      | Convert or kill all others.<p/>Do not get caught.                          |
+| *Vampire*     | A mythical creature whose only goal is to spread their reach to as many people as possible. | Convert,<br/>Hunting Night,<br/>Night Owl,<br/>Staked            | Same Role      | Convert or kill all others.<p/>Do not get caught.                          |
+| *Jester*      | A clown who just wants to trick the Village into making a grave mistake.                    | Just a Prank                                                     | Surviving*     | Be killed by a member of the Village.                                      |
 
 _* A Jester only wins if they survive and get their **Just a Prank** ability is triggered._
 
@@ -94,6 +94,7 @@ _* A Jester only wins if they survive and get their **Just a Prank** ability is 
 | Dodge Roll    | Take significantly less damage from explosions and fall damage.                                                                                                                                                               |                                      |
 | Target        | Receive a list at the beginning of the game of targets.                                                                                                                                                                       | At the start of the game.            |
 | Tracking      | See whether your targets are dead or alive.                                                                                                                                                                                   |                                      |
+| Spell Book    | Craft a spell book by throwing any enchanted book into normal fire.                                                                                                                                                           |                                      |
 | Scatter       | Using the spell book, effect one person with Speed IV for 20 seconds. Costs 5 levels of experience.                                                                                                                           |                                      |
 | Toadify       | Using the spell book, effect one person with Slowness V and Jump Boost V for 15 seconds. Costs 5 levels of experience.                                                                                                        |                                      |
 | Fog of War    | Using the spell book, effect everyone within 30 blocks with Blindness I for 30 seconds. Costs 10 levels of experience.                                                                                                        |                                      |
@@ -114,6 +115,6 @@ _* A Jester only wins if they survive and get their **Just a Prank** ability is 
 * **Attack**: Hit a player with a Sword, Axe, or Bow. Punches do not count to prevent false triggers.
 * **Attacked First**: Be attacked when not attacking anyone for 30 seconds prior.
 * **Attacking First**: Attack someone who has not attacked anyone for 30 seconds.
-* **Unholy Abilities**: Reanimation, Ambrosia, Scatter, Toadify, Fog of War, Vanish, Transform, Convert, Hunting Night
+* **Unholy Abilities**: Reanimation, Ambrosia, Spell Book, Scatter, Toadify, Fog of War, Vanish, Transform, Convert, Hunting Night
   * Unholy Abilities display to Deacons for two complete in-game days (does not reset at sunrise). This is refreshed every time an unholy ability is used.
 * Wins by Surviving roles win with **anyone**, even Wins Alone roles.

@@ -22,6 +22,7 @@ public enum Ability { // TODO: if grayed out, not implemented yet.
     DODGE_ROLL,
     TARGET, // Has no class
     TRACKING, // Has no class
+    SPELL_BOOK,
     SCATTER,
     TOADIFY,
     FOG_OF_WAR,

@@ -29,7 +29,8 @@ public final class Reanimation implements Listener {
             if (item.getItemStack().getType() == Material.getMaterial(Objects.requireNonNull(plugin.getConfig().getString("reanimateSacrifice")))) {
                 // Valid item, check player and cooldown
                 MafiaPlayer thrower = plugin.getLivingPlayers().get(item.getThrower());
-                if (thrower.getRole().hasAbility(Ability.REANIMATION) && !thrower.onCooldown(Ability.REANIMATION)){
+                if (thrower.getRole().hasAbility(Ability.REANIMATION) && !thrower.onCooldown(Ability.REANIMATION)) {
+                    item.remove();
                     ReanimationGUI gui = new ReanimationGUI(plugin);
                     gui.open(Objects.requireNonNull(Bukkit.getPlayer(Objects.requireNonNull(item.getThrower()))));
                 }
