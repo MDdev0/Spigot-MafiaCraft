@@ -32,12 +32,14 @@ public final class nightOwl extends BukkitRunnable {
             for (Map.Entry<UUID, MafiaPlayer> p : living.entrySet()) {
               
                 if (p.getValue().getRole().hasAbility(Ability.nightOwl)) {
+                
+                    int nightDifference = 13000 - worldTime; //Difference between current time and Night
                   
                     Player affected = plugin.getServer().getPlayer(p.getKey());
                   
                     if (affected != null && affected.isOnline()) {
                       
-                        affected.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 1, false, false, true)); //Repeatedly apply until night
+                        affected.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, nightDifference, 1, false, false, true)); //Repeatedly apply until night
                     }
                 }
             }
