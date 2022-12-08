@@ -4,7 +4,7 @@
 ![](https://img.shields.io/badge/Total%20Roles-19-lightgrey)
 ![](https://img.shields.io/badge/Implemented%20Roles-16-red)  
 ![](https://img.shields.io/badge/Total%20Abilities-35-lightgrey)
-![](https://img.shields.io/badge/Implemented%20Abilities-28-red)  
+![](https://img.shields.io/badge/Implemented%20Abilities-29-red)  
 ![](https://img.shields.io/badge/Commands-Not%20Started-darkred)  
 ![](https://img.shields.io/badge/Game%20Flow-Not%20Started-darkred)    
 ![](https://img.shields.io/badge/Serialization-Not%20Started-darkred)  

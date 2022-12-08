@@ -66,6 +66,7 @@ public class MafiaCraft extends JavaPlugin {
         abilityTransform.runTaskTimer(this, 0L, 100L); // Check night for Werewolves every 5 seconds
         this.getServer().getPluginManager().registerEvents(abilityRampage, this);
         abilityRampage.runTaskTimer(this, 0L, 100L); // Apply strength every 5 seconds
+        this.getServer().getPluginManager().registerEvents(new Nemesis(this), this);
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
