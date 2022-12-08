@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SpellBook implements Listener {
+public final class SpellBook implements Listener {
 
     private final MafiaCraft plugin;
 
@@ -65,7 +65,7 @@ public class SpellBook implements Listener {
                         ((Sorcerer) sorcerer.getRole()).nextAbility();
                         click.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE +
                                 "Changed spells to " + ChatColor.GRAY +
-                                ((Sorcerer) sorcerer.getRole()).getSelected().toString().toLowerCase());
+                                ((Sorcerer) sorcerer.getRole()).getSelected().NAME);
                     }
                 }
             }

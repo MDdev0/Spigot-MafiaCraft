@@ -161,7 +161,7 @@ public class MafiaPlayer {
             this.dayTime = dayTime;
             this.days = 0;
         }
-        void decrement() {
+        void decrement() { //XXX: Change this so DayTime is the time of day
             if (days == 0 && dayTime == 0) return; // Do nothing
             dayTime--;
             if (dayTime < 0) {

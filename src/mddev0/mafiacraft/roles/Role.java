@@ -10,7 +10,8 @@ public abstract class Role {
         MAFIA, // TODO: make mafia able to see other mafia
         VILLAGE,
         ALONE,
-        SURVIVING
+        SURVIVING,
+        TEAM
     }
     private final WinCondition winCond;
     protected final Set<Ability> abilities = new HashSet<>();

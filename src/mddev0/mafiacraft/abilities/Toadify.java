@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
-public class Toadify implements Listener {
+public final class Toadify implements Listener {
 
     private final MafiaCraft plugin;
 

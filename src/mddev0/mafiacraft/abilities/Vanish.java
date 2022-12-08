@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
-public class Vanish implements Listener {
+public final class Vanish implements Listener {
 
     private final MafiaCraft plugin;
 

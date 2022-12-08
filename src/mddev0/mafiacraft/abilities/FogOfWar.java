@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
-public class FogOfWar implements Listener {
+public final class FogOfWar implements Listener {
 
     private final MafiaCraft plugin;
 

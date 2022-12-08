@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
+import mddev0.mafiacraft.roles.Werewolf;
 import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;

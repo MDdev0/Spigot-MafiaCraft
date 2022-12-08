@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
-public class Scatter implements Listener {
+public final class Scatter implements Listener {
 
     private final MafiaCraft plugin;
 
