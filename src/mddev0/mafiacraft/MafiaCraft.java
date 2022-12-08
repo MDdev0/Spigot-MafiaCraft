@@ -27,6 +27,7 @@ public class MafiaCraft extends JavaPlugin {
     private final HighNoon abilityHighNoon = new HighNoon(this);
     private final Ambrosia abilityAmbrosia = new Ambrosia(this);
     private final Inquisition abilityInquisition = new Inquisition(this);
+    private final Transform abilityTransform = new Transform(this);
 
     public void onEnable() {
         // ProtocolLib
@@ -57,6 +58,7 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Toadify(this), this);
         this.getServer().getPluginManager().registerEvents(new FogOfWar(this), this);
         this.getServer().getPluginManager().registerEvents(new Vanish(this), this);
+        abilityTransform.runTaskTimer(this, 0L, 100L); // Check night for Werewolves every 5 seconds
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
@@ -70,6 +72,7 @@ public class MafiaCraft extends JavaPlugin {
         abilityHighNoon.cancel();
         abilityAmbrosia.cancel();
         abilityInquisition.cancel();
+        abilityTransform.cancel();
     }
 
     public Map<UUID, MafiaPlayer> getPlayerList() {
