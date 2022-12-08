@@ -5,6 +5,7 @@ import mddev0.mafiacraft.abilities.Ability;
 public final class Werewolf extends Role {
 
     private boolean transformed;
+    private int killedWhileTransformed;
 
     public Werewolf() {
         super(WinCondition.TEAM, true);
@@ -20,5 +21,14 @@ public final class Werewolf extends Role {
 
     public void setTransformed(boolean t) {
         transformed = t;
+        if (t) killedWhileTransformed = 0; // reset kills
+    }
+
+    public void incrementKills() {
+        killedWhileTransformed++;
+    }
+
+    public int getKills() {
+        return killedWhileTransformed;
     }
 }

@@ -4,6 +4,7 @@ import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.Werewolf;
 import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -43,7 +44,8 @@ public final class Transform extends BukkitRunnable {
                 if (((Werewolf) play.getRole()).getTransformed()) {
                     Objects.requireNonNull(plugin.getServer().getPlayer(play.getID())).sendMessage(ChatColor.DARK_GRAY + "You feel normal again.");
                     ((Werewolf) play.getRole()).setTransformed(false);
-                    play.setUnholy();
+                    Objects.requireNonNull(plugin.getServer().getPlayer(play.getID())).removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                    // see Rampage.java
                 }
             }
         }
