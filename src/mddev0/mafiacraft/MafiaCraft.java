@@ -4,6 +4,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
 import mddev0.mafiacraft.util.CombatState;
+import mddev0.mafiacraft.util.DeathManager;
 import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,10 +29,14 @@ public class MafiaCraft extends JavaPlugin {
     private final Ambrosia abilityAmbrosia = new Ambrosia(this);
     private final Inquisition abilityInquisition = new Inquisition(this);
     private final Transform abilityTransform = new Transform(this);
+    private final Rampage abilityRampage = new Rampage(this);
 
     public void onEnable() {
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+
+        // Register death state manager. This will trigger before all abilities. (Priority = Low, whereas others are Normal)
+        this.getServer().getPluginManager().registerEvents(new DeathManager(this), this);
 
         // Register abilities
         this.getServer().getPluginManager().registerEvents(new Protection(this), this);
@@ -59,6 +64,8 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new FogOfWar(this), this);
         this.getServer().getPluginManager().registerEvents(new Vanish(this), this);
         abilityTransform.runTaskTimer(this, 0L, 100L); // Check night for Werewolves every 5 seconds
+        this.getServer().getPluginManager().registerEvents(abilityRampage, this);
+        abilityRampage.runTaskTimer(this, 0L, 100L); // Apply strength every 5 seconds
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
