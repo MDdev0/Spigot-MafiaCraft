@@ -25,7 +25,7 @@ public final class nightOwl extends BukkitRunnable {
     public void run() {
         worldTime = plugin.getServer().getWorlds().get(0).getTime();
        
-        if (plugin.getServer().getWorlds().get(0).getTime() >= 0 || worldTime <= 13000) { //At 7:00 AM through 7:00 PM
+        if (plugin.getServer().getWorlds().get(0).getTime() >= 0 || worldTime <= 13000) { //At 6:00 AM through 7:00 PM
             /
             Map<UUID, MafiaPlayer> living = plugin.getLivingPlayers();
           
@@ -39,7 +39,7 @@ public final class nightOwl extends BukkitRunnable {
                   
                     if (affected != null && affected.isOnline()) {
                       
-                        affected.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, nightDifference, 1, false, false, true)); //Repeatedly apply until night
+                        affected.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, nightDifference, 1, false, false, true)); //Apply until Night
                     }
                 }
             }
