@@ -31,6 +31,9 @@ public class MafiaCraft extends JavaPlugin {
     private final Transform abilityTransform = new Transform(this);
     private final Rampage abilityRampage = new Rampage(this);
 
+
+    private final NightOwl abilityNightOwl = new NightOwl(this);
+
     public void onEnable() {
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
@@ -72,6 +75,9 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new HuntingNight(this), this);
 
         this.getServer().getPluginManager().registerEvents(new Staked(this), this);
+
+
+        abilityNightOwl.runTaskTimer(this, 0L, 100L); // Check Day for Vampires every 5 seconds
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
