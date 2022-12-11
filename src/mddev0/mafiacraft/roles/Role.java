@@ -11,7 +11,7 @@ public abstract class Role {
         VILLAGE,
         ALONE,
         SURVIVING,
-        TEAM
+        ROLE
     }
     private final WinCondition winCond;
     protected final Set<Ability> abilities = new HashSet<>();

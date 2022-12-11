@@ -68,6 +68,8 @@ public class MafiaCraft extends JavaPlugin {
         abilityRampage.runTaskTimer(this, 0L, 100L); // Apply strength every 5 seconds
         this.getServer().getPluginManager().registerEvents(new Bite(this), this);
         this.getServer().getPluginManager().registerEvents(new Nemesis(this), this);
+        this.getServer().getPluginManager().registerEvents(new Convert(this), this);
+        this.getServer().getPluginManager().registerEvents(new HuntingNight(this), this);
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
