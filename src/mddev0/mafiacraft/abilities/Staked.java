@@ -28,7 +28,7 @@ public final class Staked implements Listener {
             // do nothing if hand item is empty
             if (switch (item.getType()) {
                 // Damage source
-                case WOODEN_AXE,WOODEN_HOE,WOODEN_PICKAXE,WOODEN_SHOVEL,WOODEN_SWORD -> true;
+                case WOODEN_AXE,WOODEN_HOE,WOODEN_PICKAXE,WOODEN_SHOVEL,WOODEN_SWORD,STICK -> true;
                 default -> false;
             }) {
                 // add one heart to damage dealt
