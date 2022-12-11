@@ -22,11 +22,13 @@ public class DeathManager implements Listener {
      */
     @EventHandler (priority = EventPriority.LOW)
     public void onPlayerDeathEarly(PlayerDeathEvent death) {
+        if (!plugin.getActive()) return;
         plugin.getPlayerList().get(death.getEntity().getUniqueId()).makeDead();
     }
 
     @EventHandler (priority = EventPriority.HIGH)
     public void onPlayerDeathLate(PlayerDeathEvent death) {
+        if (!plugin.getActive()) return;
         MafiaPlayer dead = plugin.getPlayerList().get(death.getEntity().getUniqueId());
         if (dead != null && !dead.isLiving()) {
             Player died = death.getEntity();
