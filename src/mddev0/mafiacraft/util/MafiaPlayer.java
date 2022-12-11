@@ -51,12 +51,10 @@ public class MafiaPlayer {
 
     public void makeDead() {
         living = false;
-        // TODO: Logic to kill players
     }
 
     public void makeAlive() {
         living = true;
-        // TODO: Logic to reanimate players
     }
 
     // Role Info

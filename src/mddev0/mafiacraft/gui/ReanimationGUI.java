@@ -3,11 +3,9 @@ package mddev0.mafiacraft.gui;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.abilities.Ability;
 import mddev0.mafiacraft.util.MafiaPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -63,6 +61,25 @@ public final class ReanimationGUI implements Listener {
         plugin.getPlayerList().get(click.getWhoClicked().getUniqueId()).startCooldown(Ability.REANIMATION, 0L, 6);
         plugin.getPlayerList().get(click.getWhoClicked().getUniqueId()).setUnholy();
         plugin.getPlayerList().get(toReanimate).makeAlive();
+        // Code to make player living again if they are currently online
+        OfflinePlayer offp = ((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer();
+        if (offp.isOnline()) {
+            Player p = offp.getPlayer();
+            assert p != null;
+            if (p.getGameMode() == GameMode.SPECTATOR) {
+                // player needs to be respawned
+                Location toSpawn = (p.getBedSpawnLocation() == null) ? plugin.getServer().getWorlds().get(0).getSpawnLocation() : p.getBedSpawnLocation();
+                p.teleport(toSpawn);
+            }
+            p.setGameMode(GameMode.SURVIVAL);
+            // all dead players should be hidden
+            for (Player other : plugin.getServer().getOnlinePlayers()) {
+                MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
+                if (spec == null || !spec.isLiving()) {
+                    p.hidePlayer(plugin, other);
+                }
+            }
+        }
     }
 
     @EventHandler

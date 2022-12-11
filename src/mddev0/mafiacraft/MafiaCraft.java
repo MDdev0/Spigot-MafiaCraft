@@ -3,8 +3,10 @@ package mddev0.mafiacraft;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
+import mddev0.mafiacraft.commands.MafiaCraftAdminCMD;
 import mddev0.mafiacraft.util.CombatState;
 import mddev0.mafiacraft.util.DeathManager;
+import mddev0.mafiacraft.util.JoinManager;
 import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,8 +40,13 @@ public class MafiaCraft extends JavaPlugin {
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 
-        // Register death state manager. This will trigger before all abilities. (Priority = Low, whereas others are Normal)
+        // Register death state manager. This has two different triggers.
+        // FIRST TRIGGER: (Priority = Low, whereas others are Normal) recognizes death and flags player as dead.
+        // SECOND TRIGGER: (Priority = High, whereas others are Normal) puts player in spectator and hides them from living players if they are still flagged.
         this.getServer().getPluginManager().registerEvents(new DeathManager(this), this);
+
+        // Manager for joining and leaving
+        this.getServer().getPluginManager().registerEvents(new JoinManager(this), this);
 
         // Register abilities
         this.getServer().getPluginManager().registerEvents(new Protection(this), this);
@@ -82,6 +89,8 @@ public class MafiaCraft extends JavaPlugin {
 
         // GUI events are handled every time a GUI is instantiated
 
+        // COMMANDS
+        this.getCommand("mafiacraftadmin").setExecutor(new MafiaCraftAdminCMD(this));
 
         // TODO: ACTIVE IS SET TO FALSE FOR TESTING! CHANGE THIS LATER!!!!!!!
         active = false;

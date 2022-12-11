@@ -3,3 +3,7 @@ main: mddev0.mafiacraft.MafiaCraft
 version: 0.0
 api-version: 1.19
 depend: [ProtocolLib]
+commands:
+  mafiacraftadmin:
+    description: Command for Administrators to manage and start MafiaCraft games.
+    aliases: [mca, mafiacrafta, mcadmin, mafcraftadmin, mafcrafta, mafiaadmin]
