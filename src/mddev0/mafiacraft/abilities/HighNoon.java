@@ -20,6 +20,7 @@ public final class HighNoon extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         // Do nothing if it is not noon
         if (plugin.getServer().getWorlds().get(0).getTime() == 6000L) {
             // IT'S HIGH NOON!

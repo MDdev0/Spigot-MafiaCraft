@@ -25,6 +25,7 @@ public final class Rampage extends BukkitRunnable implements Listener {
 
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent death) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         Player killer = death.getEntity().getKiller();
         if (killer != null && killer.getType() == EntityType.PLAYER) {
             MafiaPlayer killerMP = plugin.getLivingPlayers().get(killer.getUniqueId());
@@ -40,6 +41,7 @@ public final class Rampage extends BukkitRunnable implements Listener {
     @Override
     public void run() {
         for (MafiaPlayer p : plugin.getLivingPlayers().values()) {
+            if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
             if (p.getRole().hasAbility(Ability.RAMPAGE)) {
                 if (((Werewolf) p.getRole()).getTransformed()) {
                     int level = Math.min(5, ((Werewolf) p.getRole()).getKills() - 1);

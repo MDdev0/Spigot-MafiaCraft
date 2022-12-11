@@ -32,6 +32,7 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
     // To create potion
     @Override
     public void run() {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         for (World w : plugin.getServer().getWorlds()) {
             for (Item i : w.getEntitiesByClass(Item.class)) {
                 // Test for one of the four required items in the ambrosia recipe
@@ -101,6 +102,7 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
     // When potion lands
     @EventHandler
     public void onPotionLand(PotionSplashEvent splash) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         ItemStack original = splash.getPotion().getItem();
         if (Objects.requireNonNull(original.getItemMeta()).getDisplayName().equals(ChatColor.GOLD + "Ambrosia")) {
             // Is an ambrosia potion

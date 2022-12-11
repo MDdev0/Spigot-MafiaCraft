@@ -19,6 +19,7 @@ public final class ClearSight implements Listener {
 
     @EventHandler
     public void onBlindnessApplied(EntityPotionEffectEvent potion) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (potion.getEntity().getType() == EntityType.PLAYER &&
                 plugin.getPlayerList().get(potion.getEntity().getUniqueId()).getRole().hasAbility(Ability.CLEAR_SIGHT) &&
                 Objects.requireNonNull(potion.getNewEffect()).getType() == PotionEffectType.BLINDNESS)

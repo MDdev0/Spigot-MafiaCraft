@@ -22,6 +22,7 @@ public final class Succession implements Listener {
     // XXX: Can godfathers be resurrected?
     @EventHandler
     public void onGodfatherDeath(PlayerDeathEvent death) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (plugin.getPlayerList().get(death.getEntity().getUniqueId()).getRole() instanceof Godfather) {
             // Godfather has died, select a new one.
             List<MafiaPlayer> eligible = new ArrayList<>();

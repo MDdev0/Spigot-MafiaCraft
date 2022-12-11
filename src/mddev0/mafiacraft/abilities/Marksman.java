@@ -17,6 +17,7 @@ public final class Marksman implements Listener {
 
     @EventHandler
     public void onArrowShoot(EntityShootBowEvent shot) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (shot.getEntity().getType() != EntityType.ARROW) return;
         // Only shots from players allowed
         if (plugin.getPlayerList().get(shot.getEntity().getUniqueId()).getRole().hasAbility(Ability.MARKSMAN)

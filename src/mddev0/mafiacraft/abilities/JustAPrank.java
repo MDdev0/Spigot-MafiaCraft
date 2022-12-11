@@ -23,6 +23,7 @@ public final class JustAPrank implements Listener {
 
     @EventHandler
     public void onJesterKill(PlayerDeathEvent death) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (death.getEntity().getKiller() != null) {
             MafiaPlayer jest = plugin.getPlayerList().get(death.getEntity().getUniqueId());
             MafiaPlayer killer = plugin.getPlayerList().get(death.getEntity().getKiller().getUniqueId());

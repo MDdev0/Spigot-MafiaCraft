@@ -19,6 +19,7 @@ public final class Transform extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         // Do nothing if it is not night
         long dayTime = plugin.getServer().getWorlds().get(0).getTime();
         if (dayTime >= 19000 && dayTime < 23000) {

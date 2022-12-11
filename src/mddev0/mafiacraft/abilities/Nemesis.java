@@ -19,7 +19,7 @@ public final class Nemesis implements Listener {
 
     @EventHandler
     public void onDamageTaken(EntityDamageByEntityEvent hit) {
-      
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (plugin.getPlayerList().get(hit.getEntity().getUniqueId()).getRole().hasAbility(Ability.NEMESIS) && hit.getDamager() instanceof LivingEntity ) {
             // null check
             if (((LivingEntity) hit.getDamager()).getEquipment() == null) return;

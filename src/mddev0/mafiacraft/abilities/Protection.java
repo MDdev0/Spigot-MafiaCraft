@@ -21,6 +21,7 @@ public final class Protection implements Listener {
 
     @EventHandler
     public void onPlayerAttacked(EntityDamageByEntityEvent damage) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntityType() == EntityType.PLAYER &&
                 plugin.getPlayerList().get(damage.getEntity().getUniqueId()).getRole().hasAbility(Ability.PROTECTION)) {
             // Player attacked has protection ability

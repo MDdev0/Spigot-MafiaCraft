@@ -17,6 +17,7 @@ public final class HuntingNight implements Listener {
 
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent death) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (death.getEntity().getKiller() != null) {
             // if the player doing the killing
             MafiaPlayer killer = plugin.getLivingPlayers().get(death.getEntity().getKiller().getUniqueId());

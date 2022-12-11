@@ -32,6 +32,8 @@ public class MafiaCraft extends JavaPlugin {
     private final Rampage abilityRampage = new Rampage(this);
     private final NightOwl abilityNightOwl = new NightOwl(this);
 
+    private boolean active;
+
     public void onEnable() {
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
@@ -79,6 +81,10 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
 
         // GUI events are handled every time a GUI is instantiated
+
+
+        // TODO: ACTIVE IS SET TO FALSE FOR TESTING! CHANGE THIS LATER!!!!!!!
+        active = false;
     }
 
     public void onDisable() {
@@ -92,6 +98,12 @@ public class MafiaCraft extends JavaPlugin {
         abilityNightOwl.cancel();
     }
 
+    public boolean getActive() {
+        return active;
+    }
+    public void setActive(boolean state) {
+        this.active = state;
+    }
     public Map<UUID, MafiaPlayer> getPlayerList() {
         return players;
     }

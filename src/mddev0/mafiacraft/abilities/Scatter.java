@@ -28,6 +28,7 @@ public final class Scatter implements Listener {
 
     @EventHandler
     public void onItemSwing(PlayerInteractEvent click) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (click.getAction().equals(Action.LEFT_CLICK_AIR)) {
             if (click.getItem() != null && click.getItem().getType() == Material.ENCHANTED_BOOK) {
                 ItemStack book = click.getItem();

@@ -19,6 +19,7 @@ public final class Assassination implements Listener {
     }
 
     public void onAttackPlayer(EntityDamageByEntityEvent damage) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntityType() == EntityType.PLAYER &&
                 !plugin.getPlayerList().get(damage.getEntity().getUniqueId()).isAttacker()) {
             // Attacked entity is a player who has not attacked

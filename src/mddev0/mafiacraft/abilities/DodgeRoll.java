@@ -17,6 +17,7 @@ public final class DodgeRoll implements Listener {
 
     @EventHandler
     public void onFallOrExplodeDamage(EntityDamageEvent damage) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntity().getType() == EntityType.PLAYER) {
             MafiaPlayer p = plugin.getPlayerList().get(damage.getEntity().getUniqueId());
             if (p.getRole().hasAbility(Ability.DODGE_ROLL)) {

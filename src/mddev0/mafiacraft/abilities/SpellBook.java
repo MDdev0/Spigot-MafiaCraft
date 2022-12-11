@@ -30,6 +30,7 @@ public final class SpellBook implements Listener {
 
     @EventHandler
     public void onItemDamage(EntityDamageByBlockEvent damage) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntityType() == EntityType.DROPPED_ITEM) {
             Item item = (Item) damage.getEntity();
             if (item.getItemStack().getType() == Material.ENCHANTED_BOOK) {
@@ -56,6 +57,7 @@ public final class SpellBook implements Listener {
 
     @EventHandler
     public void onBookClick(PlayerInteractEvent click) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (click.getAction().equals(Action.RIGHT_CLICK_AIR)) {
             if (click.getItem() != null && click.getItem().getType() == Material.ENCHANTED_BOOK) {
                 ItemStack book = click.getItem();

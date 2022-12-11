@@ -19,6 +19,7 @@ public final class Inquisition extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         for (Map.Entry<UUID, MafiaPlayer> seer : plugin.getPlayerList().entrySet()) {
             if (seer.getValue().getRole().hasAbility(Ability.INQUISITION)) {
                 Player s = plugin.getServer().getPlayer(seer.getKey());

@@ -20,6 +20,7 @@ public final class NightOwl extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         long worldTime = plugin.getServer().getWorlds().get(0).getTime();
         if (plugin.getServer().getWorlds().get(0).getTime() >= 0 || worldTime <= 12000) { //At 6:00 AM through 6:00 PM
             for (Map.Entry<UUID, MafiaPlayer> p : plugin.getLivingPlayers().entrySet()) {

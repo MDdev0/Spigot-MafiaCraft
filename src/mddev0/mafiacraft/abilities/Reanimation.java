@@ -24,6 +24,7 @@ public final class Reanimation implements Listener {
 
     @EventHandler
     public void onItemDestroy(EntityDamageByBlockEvent damage) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntityType() == EntityType.DROPPED_ITEM) {
             Item item = (Item) damage.getEntity();
             if (item.getItemStack().getType() == Material.getMaterial(Objects.requireNonNull(plugin.getConfig().getString("reanimateSacrifice")))) {

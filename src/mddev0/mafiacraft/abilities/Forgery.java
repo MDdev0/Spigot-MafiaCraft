@@ -18,6 +18,7 @@ public final class Forgery implements Listener {
 
     @EventHandler
     public void onItemPickup(EntityPickupItemEvent pickup) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (pickup.getEntityType() == EntityType.PLAYER &&
                 Objects.equals(pickup.getItem().getCustomName(), plugin.getConfig().getString("forgeItemName"))) {
             // Check that thrower has ability

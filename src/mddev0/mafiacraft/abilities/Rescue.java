@@ -23,6 +23,7 @@ public final class Rescue implements Listener {
 
     @EventHandler
     public void onPlayerDamaged(EntityDamageEvent damage) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntityType() == EntityType.PLAYER) {
             // Damaged entity is a player
             Player damaged = (Player) damage.getEntity();

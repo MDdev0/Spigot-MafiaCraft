@@ -29,6 +29,7 @@ public final class Watch implements Listener {
 
     @EventHandler
     public void onSpyglassLook(PlayerInteractEvent click) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (click.getItem() != null && click.getItem().getType() == Material.SPYGLASS) {
             // Material is spyglass, check player
             MafiaPlayer clicker = plugin.getPlayerList().get(click.getPlayer().getUniqueId());

@@ -32,6 +32,7 @@ public final class Peripherals implements Listener {
 
     @EventHandler
     public void onPlayerApproach(PlayerMoveEvent move) {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         // Scuffed: Yeah it just checks all players every time someone moves. "This is terrible. Oh well."
         for (Map.Entry<UUID, MafiaPlayer> executor : plugin.getLivingPlayers().entrySet()) {
             if (executor.getValue().getRole().hasAbility(Ability.PERIPHERALS)) {
