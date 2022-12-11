@@ -30,8 +30,6 @@ public class MafiaCraft extends JavaPlugin {
     private final Inquisition abilityInquisition = new Inquisition(this);
     private final Transform abilityTransform = new Transform(this);
     private final Rampage abilityRampage = new Rampage(this);
-
-
     private final NightOwl abilityNightOwl = new NightOwl(this);
 
     public void onEnable() {
@@ -73,11 +71,8 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Nemesis(this), this);
         this.getServer().getPluginManager().registerEvents(new Convert(this), this);
         this.getServer().getPluginManager().registerEvents(new HuntingNight(this), this);
-
-        this.getServer().getPluginManager().registerEvents(new Staked(this), this);
-
-
         abilityNightOwl.runTaskTimer(this, 0L, 100L); // Check Day for Vampires every 5 seconds
+        this.getServer().getPluginManager().registerEvents(new Staked(this), this);
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
         this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
@@ -92,6 +87,8 @@ public class MafiaCraft extends JavaPlugin {
         abilityAmbrosia.cancel();
         abilityInquisition.cancel();
         abilityTransform.cancel();
+        abilityRampage.cancel();
+        abilityNightOwl.cancel();
     }
 
     public Map<UUID, MafiaPlayer> getPlayerList() {
