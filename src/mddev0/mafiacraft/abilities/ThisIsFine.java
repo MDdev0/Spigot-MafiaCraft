@@ -19,8 +19,8 @@ public final class ThisIsFine implements Listener {
     public void onFireDamage(EntityDamageEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntity().getType() == EntityType.PLAYER) {
-            MafiaPlayer p = plugin.getPlayerList().get(damage.getEntity().getUniqueId());
-            if (p.getRole().hasAbility(Ability.THIS_IS_FINE)) {
+            MafiaPlayer p = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());
+            if (p != null && p.getRole().hasAbility(Ability.THIS_IS_FINE)) {
                 if (switch (damage.getCause()) {
                     case FIRE,LAVA,FIRE_TICK,HOT_FLOOR -> true;
                     default -> false;

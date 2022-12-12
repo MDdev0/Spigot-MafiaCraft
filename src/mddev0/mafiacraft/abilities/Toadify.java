@@ -35,14 +35,14 @@ public final class Toadify implements Listener {
                 if (Objects.requireNonNull(book.getItemMeta()).isUnbreakable()) {
                     MafiaPlayer sorcerer = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
                     if (sorcerer.getRole() instanceof Sorcerer && ((Sorcerer) sorcerer.getRole()).getSelected() == Ability.TOADIFY) { // dirty check but it works
-                        if (click.getPlayer().getLevel() < 5) { //TODO: CONFIG
+                        if (click.getPlayer().getLevel() < plugin.getConfig().getInt("toadifyCost")) {
                             click.getPlayer().sendMessage(ChatColor.RED + "You don't have enough levels to use this spell!");
                         } else {
                             // Activate Spell
                             Player p = null;
                             for (Player target : plugin.getServer().getOnlinePlayers()) {
                                 if (target == click.getPlayer()) continue;
-                                if (SpyglassUtil.lookingAtPlayer(click.getPlayer(), target)) {
+                                if (SpyglassUtil.lookingAtPlayer(plugin, click.getPlayer(), target)) {
                                     p = target;
                                     break;
                                 }
@@ -51,7 +51,7 @@ public final class Toadify implements Listener {
                             // apply effect
                             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 300, 4, false, false, true));
                             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 300, 4, false, false, true));
-                            click.getPlayer().setLevel(click.getPlayer().getLevel() - 5); // TODO: Config
+                            click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("toadifyCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Toadify" +
                                     ChatColor.GREEN + " on " + ChatColor.AQUA + p.getName());
                             sorcerer.setUnholy();

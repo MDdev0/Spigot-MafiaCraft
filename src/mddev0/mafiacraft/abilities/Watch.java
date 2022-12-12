@@ -32,8 +32,8 @@ public final class Watch implements Listener {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (click.getItem() != null && click.getItem().getType() == Material.SPYGLASS) {
             // Material is spyglass, check player
-            MafiaPlayer clicker = plugin.getPlayerList().get(click.getPlayer().getUniqueId());
-            if (clicker.getRole().hasAbility(Ability.WATCH)) {
+            MafiaPlayer clicker = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
+            if (clicker != null && clicker.getRole().hasAbility(Ability.WATCH)) {
                 // Player has right ability
                 SpyglassUtil spyglass = clicker.getSpyglass();
                 spyglass.refresh();

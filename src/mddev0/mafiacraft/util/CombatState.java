@@ -28,7 +28,9 @@ public class CombatState implements Listener {
             // Know the damaged entity is a player
             Player attacker = findAttackingPlayer(damage);
             if (attacker != null) {
-                plugin.getPlayerList().get(attacker.getUniqueId()).setAttacker();
+                MafiaPlayer attackerMP = plugin.getPlayerList().get(attacker.getUniqueId());
+                if (attackerMP != null)
+                    attackerMP.setAttacker();
             }
             // If null do nothing
         }
@@ -51,8 +53,9 @@ public class CombatState implements Listener {
                 switch (((Player) damage.getDamager()).getInventory().getItemInMainHand().getType()) { // Get main hand of attacker
                     // These are the melee types that trigger an attack
                     case WOODEN_SWORD, WOODEN_AXE, STONE_SWORD, STONE_AXE, IRON_SWORD, IRON_AXE,
-                            GOLDEN_SWORD, GOLDEN_AXE, DIAMOND_SWORD, DIAMOND_AXE, NETHERITE_SWORD, NETHERITE_AXE, TRIDENT:
-                            yield (Player) damage.getDamager();
+                            GOLDEN_SWORD, GOLDEN_AXE, DIAMOND_SWORD, DIAMOND_AXE, NETHERITE_SWORD, NETHERITE_AXE, TRIDENT -> {
+                        yield (Player) damage.getDamager();
+                    }
                 }
             case ARROW:
                 // This is a lot easier, just see who shot it

@@ -3,6 +3,7 @@ package mddev0.mafiacraft.util;
 import mddev0.mafiacraft.MafiaCraft;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -13,17 +14,17 @@ import org.bukkit.util.Vector;
  * is scoped in on another player with a spyglass for 10 seconds.
  */
 public class SpyglassUtil extends BukkitRunnable {
-    MafiaCraft plugin;
-    int ticks = 0;
-    Player holder;
-    Player targeted;
-    int secsTargeted = 0;
+    private final MafiaCraft plugin;
+    private int ticks = 0;
+    private final Player holder;
+    private Player targeted;
+    private int secsTargeted = 0;
     BukkitRunnable timer = new BukkitRunnable() {
         @Override
         public void run() {
             Player found = null;
             for (Player t : holder.getWorld().getPlayers()) {
-                if (lookingAtPlayer(holder, t)) {
+                if (lookingAtPlayer(plugin, holder, t)) {
                     found = t;
                 }
             }
@@ -65,7 +66,7 @@ public class SpyglassUtil extends BukkitRunnable {
     }
 
     public boolean finished() {
-        if (secsTargeted >= 10) { // TODO: MAKE CONFIG VAL
+        if (secsTargeted >= plugin.getConfig().getInt("spyglassTargetTime")) {
             // timer is done, close up shop
             timer.cancel();
             return true;
@@ -77,12 +78,12 @@ public class SpyglassUtil extends BukkitRunnable {
         return targeted;
     }
 
-    public static boolean lookingAtPlayer(Player p, Player target) {
+    public static boolean lookingAtPlayer(Plugin plugin, Player p, Player target) {
         // "Inspired" by this thread: (I pretty much ripped it let's be honest)
         // https://www.spigotmc.org/threads/how-to-detect-an-entity-the-player-is-looking-at.139310/
         Location eye = p.getEyeLocation();
         Vector toEntity = target.getEyeLocation().toVector().subtract(eye.toVector());
         double dotProd = toEntity.normalize().dot(eye.getDirection());
-        return dotProd > 0.99D; //TODO: Sensitivity in config
+        return dotProd > (1.00D - plugin.getConfig().getDouble("spyglassSensitivity"));
     }
 }

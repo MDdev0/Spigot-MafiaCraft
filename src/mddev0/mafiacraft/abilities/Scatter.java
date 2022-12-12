@@ -35,14 +35,14 @@ public final class Scatter implements Listener {
                 if (Objects.requireNonNull(book.getItemMeta()).isUnbreakable()) {
                     MafiaPlayer sorcerer = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
                     if (sorcerer.getRole() instanceof Sorcerer && ((Sorcerer) sorcerer.getRole()).getSelected() == Ability.SCATTER) { // dirty check but it works
-                        if (click.getPlayer().getLevel() < 5) { //TODO: CONFIG
+                        if (click.getPlayer().getLevel() < plugin.getConfig().getInt("scatterCost")) {
                             click.getPlayer().sendMessage(ChatColor.RED + "You don't have enough levels to use this spell!");
                         } else {
                             // Activate Spell
                             Player p = null;
                             for (Player target : plugin.getServer().getOnlinePlayers()) {
                                 if (target == click.getPlayer()) continue;
-                                if (SpyglassUtil.lookingAtPlayer(click.getPlayer(), target)) {
+                                if (SpyglassUtil.lookingAtPlayer(plugin, click.getPlayer(), target)) {
                                     p = target;
                                     break;
                                 }
@@ -50,7 +50,7 @@ public final class Scatter implements Listener {
                             if (p == null) p = click.getPlayer();
                             // apply effect
                             p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 400, 3, false, false, true));
-                            click.getPlayer().setLevel(click.getPlayer().getLevel() - 5); // TODO: Config
+                            click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("scatterCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Scatter" +
                                     ChatColor.GREEN + " on " + ChatColor.AQUA + p.getName());
                             sorcerer.setUnholy();

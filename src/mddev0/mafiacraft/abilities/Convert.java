@@ -28,6 +28,7 @@ public final class Convert implements Listener {
                 int phase = (int) (fullTime/24000)%8;
                 if (dayTime < 19000 || dayTime >= 23000 || phase != 4) { // NOT New Moon Night
                     MafiaPlayer killed = plugin.getPlayerList().get(death.getEntity().getUniqueId());
+                    if (killed == null) return;
                     killed.makeAlive();
                     killed.changeRole(new Vampire());
                     death.getEntity().sendMessage(ChatColor.DARK_PURPLE + "You are now a " + ChatColor.DARK_GRAY + "Vampire" + ChatColor.DARK_PURPLE + ".");

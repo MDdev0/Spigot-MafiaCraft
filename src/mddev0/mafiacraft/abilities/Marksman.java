@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
+import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -20,7 +21,8 @@ public final class Marksman implements Listener {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (shot.getEntity().getType() != EntityType.ARROW) return;
         // Only shots from players allowed
-        if (plugin.getPlayerList().get(shot.getEntity().getUniqueId()).getRole().hasAbility(Ability.MARKSMAN)
+        MafiaPlayer shooter = plugin.getLivingPlayers().get(shot.getEntity().getUniqueId());
+        if (shooter != null && shooter.getRole().hasAbility(Ability.MARKSMAN)
                 && shot.getProjectile().getType() != EntityType.ARROW) {
             Arrow arrow = (Arrow) shot.getProjectile();
             arrow.setDamage(arrow.getDamage() + 2.0); // Add one heart

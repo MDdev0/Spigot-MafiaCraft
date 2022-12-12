@@ -23,8 +23,8 @@ public final class Investigate implements Listener {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (click.getItem() != null && click.getItem().getType() == Material.SPYGLASS) {
             // Material is spyglass, check player
-            MafiaPlayer clicker = plugin.getPlayerList().get(click.getPlayer().getUniqueId());
-            if (clicker.getRole().hasAbility(Ability.INVESTIGATE)) {
+            MafiaPlayer clicker = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
+            if (clicker != null && clicker.getRole().hasAbility(Ability.INVESTIGATE)) {
                 // Can investigate
                 SpyglassUtil spyglass = clicker.getSpyglass();
                 // Always refresh the spyglass
@@ -38,11 +38,12 @@ public final class Investigate implements Listener {
                     if (spyglass.finished()) {
                         // TELL PLAYER!
                         Player toTell = click.getPlayer();
-                        if (plugin.getLivingPlayers().get(spyglass.getTargeted().getUniqueId()).isMafiaSuspect())
+                        MafiaPlayer targeted = plugin.getLivingPlayers().get(spyglass.getTargeted().getUniqueId());
+                        if (targeted != null && targeted.isMafiaSuspect())
                             toTell.sendMessage(ChatColor.GRAY + "This player seems to be "
                                 + ChatColor.RED + "" + ChatColor.BOLD + "suspicious" +
                                     ChatColor.RESET + "" + ChatColor.GRAY + ".");
-                        else
+                        else if (targeted != null)
                             toTell.sendMessage(ChatColor.GRAY + "This player seems to be "
                                     + ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "not suspicious" +
                                     ChatColor.RESET + "" + ChatColor.GRAY + ".");

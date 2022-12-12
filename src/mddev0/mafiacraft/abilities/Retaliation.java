@@ -22,10 +22,10 @@ public final class Retaliation implements Listener {
     @EventHandler
     public void onPlayerAttacked(EntityDamageByEntityEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
-        if (damage.getEntityType() == EntityType.PLAYER &&
-                plugin.getPlayerList().get(damage.getEntity().getUniqueId()).getRole().hasAbility(Ability.RETALIATION)) {
+        MafiaPlayer attacked = plugin.getPlayerList().get(damage.getEntity().getUniqueId());
+        if (damage.getEntityType() == EntityType.PLAYER && attacked != null &&
+                attacked.getRole().hasAbility(Ability.RETALIATION)) {
             // Player attacked has retaliation ability
-            MafiaPlayer attacked = plugin.getPlayerList().get(damage.getEntity().getUniqueId());
             if (!attacked.isAttacker() && !attacked.onCooldown(Ability.RETALIATION)) {
                 // Does not trigger if player was the attacker or if ability is on cooldown
                 if (CombatState.findAttackingPlayer(damage) != null) {

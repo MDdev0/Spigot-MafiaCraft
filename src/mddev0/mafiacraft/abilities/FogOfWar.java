@@ -35,18 +35,19 @@ public final class FogOfWar implements Listener {
                 if (Objects.requireNonNull(book.getItemMeta()).isUnbreakable()) {
                     MafiaPlayer sorcerer = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
                     if (sorcerer.getRole() instanceof Sorcerer && ((Sorcerer) sorcerer.getRole()).getSelected() == Ability.FOG_OF_WAR) { // dirty check but it works
-                        if (click.getPlayer().getLevel() < 10) { //TODO: CONFIG
+                        if (click.getPlayer().getLevel() < plugin.getConfig().getInt("fogOfWarCost")) {
                             click.getPlayer().sendMessage(ChatColor.RED + "You don't have enough levels to use this spell!");
                         } else {
                             // Activate Spell
-                            for (Entity target : click.getPlayer().getNearbyEntities(30,30,30)) { //TODO: CONFIG
+                            int range = plugin.getConfig().getInt("fogOfWarRange");
+                            for (Entity target : click.getPlayer().getNearbyEntities(range,range,range)) {
                                 if (!(target instanceof Player)) continue;
                                 if (target == click.getPlayer()) continue;
                                 ((Player) target).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 600, 0, false, false, true));
                                 plugin.getServer().getWorlds().get(0).spawnParticle(Particle.SQUID_INK, target.getLocation().add(0,1,0), 10, 1, 1, 1);
                             }
                             // apply effect
-                            click.getPlayer().setLevel(click.getPlayer().getLevel() - 10); // TODO: Config
+                            click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("fogOfWarCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Fog of War");
                             sorcerer.setUnholy();
                             plugin.getServer().getWorlds().get(0).spawnParticle(Particle.SPELL_WITCH, click.getPlayer().getLocation().add(0,1,0), 10, 1, 1, 1);

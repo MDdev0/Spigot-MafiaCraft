@@ -20,8 +20,7 @@ public class HardcoreHearts extends PacketAdapter {
     public void onPacketSending(PacketEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.LOGIN) {
             PacketContainer pack = event.getPacket();
-            // TODO: SET THIS UP IN CONFIG!
-            boolean toSet = true;
+            boolean toSet = plugin.getConfig().getBoolean("hardcoreStyle");
             pack.getBooleans().write(0, toSet);
         }
     }

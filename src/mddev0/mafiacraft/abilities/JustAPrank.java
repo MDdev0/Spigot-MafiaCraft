@@ -26,8 +26,8 @@ public final class JustAPrank implements Listener {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (death.getEntity().getKiller() != null) {
             MafiaPlayer jest = plugin.getPlayerList().get(death.getEntity().getUniqueId());
-            MafiaPlayer killer = plugin.getPlayerList().get(death.getEntity().getKiller().getUniqueId());
-            if (jest.getRole().hasAbility(Ability.JUST_A_PRANK) && killer.getRole().getWinCond() == Role.WinCondition.VILLAGE) {
+            MafiaPlayer killer = plugin.getLivingPlayers().get(death.getEntity().getKiller().getUniqueId());
+            if (jest != null && jest.getRole().hasAbility(Ability.JUST_A_PRANK) && killer != null && killer.getRole().getWinCond() == Role.WinCondition.VILLAGE) {
                 if (!jest.isAttacker()) {
                     jest.makeAlive();
                     Player jester = plugin.getServer().getPlayer(jest.getID());

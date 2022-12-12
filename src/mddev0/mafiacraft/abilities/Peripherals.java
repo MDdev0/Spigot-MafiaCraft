@@ -50,8 +50,9 @@ public final class Peripherals implements Listener {
                     }
                 }
                 // Now remove invis for nearby players
+                int range = plugin.getConfig().getInt("peripheralsRange");
                 for (Entity ent : Objects.requireNonNull(plugin.getServer().getPlayer(executor.getKey()))
-                        .getNearbyEntities(10,10,10)) { // TODO: CONFIG FOR PERIPHERALS SIZE
+                        .getNearbyEntities(range,range,range)) {
                     if (ent.getType() != EntityType.PLAYER) continue;
                     Player found = (Player) ent;
                     if (found.hasPotionEffect(PotionEffectType.INVISIBILITY)) {

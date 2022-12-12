@@ -25,6 +25,7 @@ public final class Bite implements Listener {
             if (killer.getRole().hasAbility(Ability.BITE) && killer.getRole() instanceof Werewolf) {
                 if (((Werewolf) killer.getRole()).getTransformed()) {
                     MafiaPlayer killed = plugin.getPlayerList().get(death.getEntity().getUniqueId());
+                    if (killed == null) return;
                     killed.makeAlive();
                     killed.changeRole(new Werewolf());
                     death.getEntity().sendMessage(ChatColor.DARK_PURPLE + "You are now a " + ChatColor.DARK_AQUA + "Werewolf" + ChatColor.DARK_PURPLE + ".");

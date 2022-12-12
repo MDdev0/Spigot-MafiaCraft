@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
+import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,8 +23,10 @@ public final class Forgery implements Listener {
         if (pickup.getEntityType() == EntityType.PLAYER &&
                 Objects.equals(pickup.getItem().getCustomName(), plugin.getConfig().getString("forgeItemName"))) {
             // Check that thrower has ability
-            if (plugin.getPlayerList().get(pickup.getItem().getThrower()).getRole().hasAbility(Ability.FORGERY))
-                plugin.getPlayerList().get(pickup.getEntity().getUniqueId()).setFramed(); // Frame player
+            MafiaPlayer thrower = plugin.getLivingPlayers().get(pickup.getItem().getThrower());
+            MafiaPlayer toFrame = plugin.getLivingPlayers().get(pickup.getEntity().getUniqueId());
+            if (thrower != null && thrower.getRole().hasAbility(Ability.FORGERY) && toFrame != null)
+                toFrame.setFramed(); // Frame player
         }
     }
 }

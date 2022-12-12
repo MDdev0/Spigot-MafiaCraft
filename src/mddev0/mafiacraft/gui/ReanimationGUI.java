@@ -58,8 +58,8 @@ public final class ReanimationGUI implements Listener {
         if (clicked == null || clicked.getType().isAir()) return;
         // SCUFFED: So many requireNonNull... am I doing this wrong?
         UUID toReanimate = Objects.requireNonNull(((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer()).getUniqueId();
-        plugin.getPlayerList().get(click.getWhoClicked().getUniqueId()).startCooldown(Ability.REANIMATION, 0L, 6);
-        plugin.getPlayerList().get(click.getWhoClicked().getUniqueId()).setUnholy();
+        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).startCooldown(Ability.REANIMATION, 0L, 6);
+        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).setUnholy();
         plugin.getPlayerList().get(toReanimate).makeAlive();
         // Code to make player living again if they are currently online
         OfflinePlayer offp = ((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer();

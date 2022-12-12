@@ -5,19 +5,16 @@ import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
 import mddev0.mafiacraft.commands.MafiaCraftAdminCMD;
 import mddev0.mafiacraft.util.*;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class MafiaCraft extends JavaPlugin {
-    /*
-     * TODO: CONFIG ITEMS TO ADD:
-     * - forgeItemName
-     * - attackDuration
-     * - reanimateSacrifice
-     */
 
     // TODO: find all uses of getPlayers(), should it be replaced with getLivingPlayers() or getDeadPlayers()?
 
@@ -34,6 +31,15 @@ public class MafiaCraft extends JavaPlugin {
     private boolean active;
 
     public void onEnable() {
+        // Config
+        saveDefaultConfig();
+        try {
+            getConfig().load(getConfig().getCurrentPath());
+        } catch (IOException | InvalidConfigurationException e) {
+            getLogger().log(Level.SEVERE, "Error loading config:\n");
+            e.printStackTrace();
+        }
+
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
         manager.addPacketListener(new HardcoreHearts(this));

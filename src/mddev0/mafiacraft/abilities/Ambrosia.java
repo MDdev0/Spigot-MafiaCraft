@@ -55,8 +55,8 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                 // cauldron is full
                                 // Since the Golden Apple is the trigger item, make sure that it was thrown
                                 // by a player with the correct ability
-                                if (plugin.getLivingPlayers().get(i.getThrower()).getRole().hasAbility(Ability.AMBROSIA) &&
-                                        !plugin.getLivingPlayers().get(i.getThrower()).onCooldown(Ability.AMBROSIA)) {
+                                MafiaPlayer thrower = plugin.getLivingPlayers().get(i.getThrower());
+                                if (thrower != null && thrower.getRole().hasAbility(Ability.AMBROSIA) && !thrower.onCooldown(Ability.AMBROSIA)) {
                                     // then get list of all items in cauldron
                                     List<Item> items = new ArrayList<>();
                                     for (Entity ent : b.getWorld().getNearbyEntities(b.getBoundingBox()))
@@ -87,8 +87,8 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                         Item spawned = (Item) i.getWorld().spawnEntity(b.getLocation(), EntityType.DROPPED_ITEM);
                                         spawned.setItemStack(ambrosiaItem);
                                         // Add cooldown to thrower
-                                        plugin.getPlayerList().get(i.getThrower()).startCooldown(Ability.AMBROSIA, 0L, 6);
-                                        plugin.getPlayerList().get(i.getThrower()).setUnholy();
+                                        thrower.startCooldown(Ability.AMBROSIA, 0L, 6);
+                                        thrower.setUnholy();
                                     }
                                 }
                             }

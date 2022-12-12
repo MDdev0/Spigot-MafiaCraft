@@ -17,9 +17,6 @@ public final class Succession implements Listener {
     public Succession(MafiaCraft plugin) {
         this.plugin = plugin;
     }
-
-    // XXX: If godfather dies and becomes vampire or something, should they be replaced?
-    // XXX: Can godfathers be resurrected?
     @EventHandler
     public void onGodfatherDeath(PlayerDeathEvent death) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

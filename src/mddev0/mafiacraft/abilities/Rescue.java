@@ -29,7 +29,8 @@ public final class Rescue implements Listener {
             Player damaged = (Player) damage.getEntity();
             if ((damaged.getHealth() - damage.getFinalDamage()) < 1.0) {
                 // Player would otherwise die
-                List<Entity> nearbyEntities = damaged.getNearbyEntities(8.0, 8.0, 8.0); // TODO: config for bounding box size
+                double range = plugin.getConfig().getDouble("rescueRange");
+                List<Entity> nearbyEntities = damaged.getNearbyEntities(range,range,range);
                 for (Entity e : nearbyEntities) {
                     if (e.getType() == EntityType.PLAYER &&
                             plugin.getLivingPlayers().get(e.getUniqueId()).getRole().hasAbility(Ability.RESCUE)) {

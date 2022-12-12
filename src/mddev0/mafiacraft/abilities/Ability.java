@@ -1,6 +1,6 @@
 package mddev0.mafiacraft.abilities;
 
-public enum Ability { // TODO: if grayed out, not implemented yet.
+public enum Ability {
     PROTECTION("Protection"),
     CHARISMA("Charisma"), // Has no class
     SUCCESSION("Succession"),
@@ -38,7 +38,6 @@ public enum Ability { // TODO: if grayed out, not implemented yet.
     JUST_A_PRANK("Just a Prank");
 
     public final String NAME;
-
 
     Ability(String name) {
         this.NAME = name;
