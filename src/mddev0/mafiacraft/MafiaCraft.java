@@ -4,10 +4,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
 import mddev0.mafiacraft.commands.MafiaCraftAdminCMD;
-import mddev0.mafiacraft.util.CombatState;
-import mddev0.mafiacraft.util.DeathManager;
-import mddev0.mafiacraft.util.JoinManager;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.util.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -39,6 +36,7 @@ public class MafiaCraft extends JavaPlugin {
     public void onEnable() {
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+        manager.addPacketListener(new HardcoreHearts(this));
 
         // Register death state manager. This has two different triggers.
         // FIRST TRIGGER: (Priority = Low, whereas others are Normal) recognizes death and flags player as dead.
