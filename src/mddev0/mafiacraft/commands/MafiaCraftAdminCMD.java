@@ -28,7 +28,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
         }
 
         if (args.length < 1) {
-            sender.sendMessage(ChatColor.RED + "Missing argument: <setrole | removeplayer | randomize | start | stop | revive>");
+            sender.sendMessage(ChatColor.RED + "Missing argument: <setrole | removeplayer | randomize | start | stop | revive | list>");
             return false;
         }
 
@@ -65,7 +65,12 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                         case "werewolf" -> new Werewolf();
                         case "vampire" -> new Vampire();
                         case "jester" -> new Jester();
+                        default -> null;
                     });
+                    if (play.getRole() == null) {
+                        sender.sendMessage(ChatColor.RED + "Invalid role name provided.");
+                        return true;
+                    }
                     sender.sendMessage(ChatColor.YELLOW + "Changed " + args[1] + "'s role to " + play.getRole().getClass().getName() + ".");
                 } else {
                     MafiaPlayer play = new MafiaPlayer(plugin, p.getUniqueId(), switch (args[2].toLowerCase()) {
@@ -88,7 +93,12 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                         case "werewolf" -> new Werewolf();
                         case "vampire" -> new Vampire();
                         case "jester" -> new Jester();
+                        default -> null;
                     });
+                    if (play.getRole() == null) {
+                        sender.sendMessage(ChatColor.RED + "Invalid role name provided.");
+                        return true;
+                    }
                     plugin.getPlayerList().put(play.getID(), play);
                     sender.sendMessage(ChatColor.GREEN + "Added " + args[1] + " to the game with the role " + play.getRole().getClass().getName() + ".");
                 }
@@ -121,7 +131,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                 sender.sendMessage("The game has been stopped.");
                 return true;
             }
-            case "revive" -> {
+            case "revive" -> { // TODO: FIX?
                 if (args.length < 2) {
                     sender.sendMessage(ChatColor.RED + "Missing arguments: <player>");
                     return false;
@@ -139,15 +149,22 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                     p.teleport(toSpawn);
                 }
                 p.setGameMode(GameMode.SURVIVAL);
-                // all dead players should be hidden
+                // all dead players should be hidden, p should be unhidden
                 for (Player other : plugin.getServer().getOnlinePlayers()) {
+                    other.showPlayer(plugin, p);
                     MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
                     if (spec == null || !spec.isLiving()) {
                         p.hidePlayer(plugin, other);
                     }
                 }
+                plugin.getServer().broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
                 sender.sendMessage(ChatColor.GREEN + args[1] + " has been revived.");
                 return true;
+            }
+            case "list" -> {
+                for (MafiaPlayer p : plugin.getPlayerList().values()) {
+                    sender.sendMessage(ChatColor.GRAY + plugin.getServer().getPlayer(p.getID()).getName() + " | " + p.getRole().getClass().getName() + " | " + p.isLiving());
+                }
             }
         }
         return false;

@@ -3,8 +3,10 @@ package mddev0.mafiacraft.abilities;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.util.CombatState;
 import mddev0.mafiacraft.util.MafiaPlayer;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
@@ -18,6 +20,7 @@ public final class Assassination implements Listener {
         this.plugin = plugin;
     }
 
+    @EventHandler
     public void onAttackPlayer(EntityDamageByEntityEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         MafiaPlayer damaged = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());

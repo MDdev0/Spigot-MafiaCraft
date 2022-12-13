@@ -5,14 +5,11 @@ import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
 import mddev0.mafiacraft.commands.MafiaCraftAdminCMD;
 import mddev0.mafiacraft.util.*;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class MafiaCraft extends JavaPlugin {
 
@@ -33,12 +30,6 @@ public class MafiaCraft extends JavaPlugin {
     public void onEnable() {
         // Config
         saveDefaultConfig();
-        try {
-            getConfig().load(getConfig().getCurrentPath());
-        } catch (IOException | InvalidConfigurationException e) {
-            getLogger().log(Level.SEVERE, "Error loading config:\n");
-            e.printStackTrace();
-        }
 
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
@@ -50,7 +41,7 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new DeathManager(this), this);
 
         // Manager for joining and leaving
-        this.getServer().getPluginManager().registerEvents(new JoinManager(this), this);
+        this.getServer().getPluginManager().registerEvents(new JoinLeaveManager(this), this);
 
         // Register abilities
         this.getServer().getPluginManager().registerEvents(new Protection(this), this);
@@ -68,7 +59,7 @@ public class MafiaCraft extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Rescue(this), this);
         abilityAmbrosia.runTaskTimer(this, 0L, 100L); // checks every 5 seconds
         this.getServer().getPluginManager().registerEvents(abilityAmbrosia, this);
-        abilityInquisition.runTaskTimer(this, 0L, 200L); // show particles every 10 seconds
+        abilityInquisition.runTaskTimer(this, 0L, 600L); // show particles every 10 seconds
         this.getServer().getPluginManager().registerEvents(new Ambush(this), this);
         this.getServer().getPluginManager().registerEvents(new ThisIsFine(this), this);
         this.getServer().getPluginManager().registerEvents(new DodgeRoll(this), this);
@@ -96,8 +87,11 @@ public class MafiaCraft extends JavaPlugin {
         // COMMANDS
         this.getCommand("mafiacraftadmin").setExecutor(new MafiaCraftAdminCMD(this));
 
-        // TODO: ACTIVE IS SET TO FALSE FOR TESTING! CHANGE THIS LATER!!!!!!!
-        active = false;
+        // Chat
+        this.getServer().getPluginManager().registerEvents(new ChatBlocking(this), this);
+
+        // TODO: ACTIVE IS SET TO TRUE FOR TESTING! CHANGE THIS LATER!!!!!!!
+        active = true;
     }
 
     public void onDisable() {

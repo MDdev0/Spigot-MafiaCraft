@@ -8,15 +8,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class JoinManager implements Listener {
+public class JoinLeaveManager implements Listener {
 
     private final MafiaCraft plugin;
 
-    public JoinManager(MafiaCraft plugin) {
+    public JoinLeaveManager(MafiaCraft plugin) {
         this.plugin = plugin;
     }
 
@@ -52,6 +53,15 @@ public class JoinManager implements Listener {
                     p.hidePlayer(plugin, join.getPlayer());
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent leave) {
+        if (!plugin.getActive()) return;
+        MafiaPlayer left = plugin.getPlayerList().get(leave.getPlayer().getUniqueId());
+        if (left == null || !left.isLiving()) {
+            leave.setQuitMessage("");
         }
     }
 }

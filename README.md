@@ -8,9 +8,8 @@
 ![](https://img.shields.io/badge/Commands-WIP-yellow)  
 ![](https://img.shields.io/badge/Game%20Flow-WIP-yellow)    
 ![](https://img.shields.io/badge/Serialization-Not%20Started-darkred)  
-![](https://img.shields.io/badge/Testing-None-black)  
-![](https://img.shields.io/badge/Estimated%20Finish%20Date-No%20Clue-blue)
-![](https://img.shields.io/badge/December%20Hopefully!-teal)
+![](https://img.shields.io/badge/Testing-Started-orange)  
+![](https://img.shields.io/badge/Estimated%20Finish%20Date-December%2019-blue)
 
 ---
 

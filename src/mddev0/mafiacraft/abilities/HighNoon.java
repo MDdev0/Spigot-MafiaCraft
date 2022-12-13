@@ -29,7 +29,7 @@ public final class HighNoon extends BukkitRunnable {
                 if (p.getValue().getRole().hasAbility(Ability.HIGH_NOON)) {
                     Player affected = plugin.getServer().getPlayer(p.getKey());
                     if (affected != null && affected.isOnline()) {
-                        affected.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 12000, 1, false, false, true));
+                        affected.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1, false, false, true));
                     }
                 }
             }

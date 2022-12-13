@@ -2,6 +2,7 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,6 +20,7 @@ public class SpyglassUtil extends BukkitRunnable {
     private final Player holder;
     private Player targeted;
     private int secsTargeted = 0;
+    private boolean running = false;
     BukkitRunnable timer = new BukkitRunnable() {
         @Override
         public void run() {
@@ -30,8 +32,10 @@ public class SpyglassUtil extends BukkitRunnable {
             }
             if (found == null)
                 secsTargeted = 0;
-            else if (found.equals(targeted))
+            else if (found.equals(targeted)) {
+                holder.playSound(holder.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1.0f, 2.0f);
                 secsTargeted++;
+            }
             else {
                 secsTargeted = 0;
                 targeted = found;
@@ -49,7 +53,9 @@ public class SpyglassUtil extends BukkitRunnable {
         ticks = (ticks>0) ? ticks-1 : 0;
         if (ticks == 0) {
             secsTargeted = 0;
-            timer.cancel();
+            if (running) {
+                timer.cancel();
+            }
         }
     }
 
@@ -62,6 +68,7 @@ public class SpyglassUtil extends BukkitRunnable {
     }
 
     public void startTimer() {
+        running = true;
         timer.runTaskTimer(plugin, 0L, 20L); // checks every second
     }
 

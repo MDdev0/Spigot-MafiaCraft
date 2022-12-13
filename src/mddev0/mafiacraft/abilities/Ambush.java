@@ -5,6 +5,7 @@ import mddev0.mafiacraft.util.CombatState;
 import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
@@ -18,6 +19,7 @@ public final class Ambush implements Listener {
         this.plugin = plugin;
     }
 
+    @EventHandler
     public void onAttackPlayer(EntityDamageByEntityEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         MafiaPlayer damagerMP = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());

@@ -2,10 +2,7 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Trident;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -57,12 +54,11 @@ public class CombatState implements Listener {
                         yield (Player) damage.getDamager();
                     }
                 }
-            case ARROW:
+            case ARROW, TRIDENT:
                 // This is a lot easier, just see who shot it
-                yield (Player) Objects.requireNonNull(((Arrow) damage.getDamager()).getShooter());
-            case TRIDENT:
-                // This is a lot easier, just see who threw it
-                yield (Player) ((Trident) damage.getDamager()).getShooter();
+                if (((AbstractArrow) damage.getDamager()).getShooter() instanceof Player) {
+                    yield (Player) ((AbstractArrow) damage.getDamager()).getShooter();
+                } else yield null;
             default:
                 yield null;
         };

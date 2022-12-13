@@ -1,6 +1,9 @@
 # Determines whether hearts should be shown as hardcore-style or regular-style
 hardcoreStyle: true
 
+# If true, players in spectator mode will not be able to send messages to chat. Operators bypass this.
+blockSpectatorChat: true
+
 # Amount of time in seconds players will be considered as "attacking" after attempting to kill someone
 attackDuration: 30
 
@@ -13,7 +16,7 @@ reanimateSacrifice: "TOTEM_OF_UNDYING"
 # Focus time in seconds required to target someone with a spyglass
 spyglassTargetTime: 10
 # Magic number that modifies spyglass sensitivity. Larger is more sensitive.
-spyglassSensitivity: 0.01
+spyglassSensitivity: 0.1
 
 # Effective range of Peripherals ability
 peripheralsRange: 10
