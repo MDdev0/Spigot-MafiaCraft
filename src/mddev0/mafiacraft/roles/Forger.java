@@ -8,4 +8,9 @@ public final class Forger extends Role {
         super(WinCondition.MAFIA, false);
         abilities.add(Ability.FORGERY);
     }
+
+    @Override
+    public String toString() {
+        return "Forger";
+    }
 }

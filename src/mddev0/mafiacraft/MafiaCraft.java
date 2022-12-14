@@ -4,7 +4,9 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
 import mddev0.mafiacraft.commands.MafiaCraftAdminCMD;
+import mddev0.mafiacraft.commands.MafiaCraftCMD;
 import mddev0.mafiacraft.util.*;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -38,57 +40,58 @@ public class MafiaCraft extends JavaPlugin {
         // Register death state manager. This has two different triggers.
         // FIRST TRIGGER: (Priority = Low, whereas others are Normal) recognizes death and flags player as dead.
         // SECOND TRIGGER: (Priority = High, whereas others are Normal) puts player in spectator and hides them from living players if they are still flagged.
-        this.getServer().getPluginManager().registerEvents(new DeathManager(this), this);
+        Bukkit.getPluginManager().registerEvents(new DeathManager(this), this);
 
         // Manager for joining and leaving
-        this.getServer().getPluginManager().registerEvents(new JoinLeaveManager(this), this);
+        Bukkit.getPluginManager().registerEvents(new JoinLeaveManager(this), this);
 
         // Register abilities
-        this.getServer().getPluginManager().registerEvents(new Protection(this), this);
-        this.getServer().getPluginManager().registerEvents(new Succession(this), this);
-        this.getServer().getPluginManager().registerEvents(new Forgery(this), this);
-        this.getServer().getPluginManager().registerEvents(new Assassination(this), this);
-        this.getServer().getPluginManager().registerEvents(new Reanimation(this), this);
-        this.getServer().getPluginManager().registerEvents(new Retaliation(this), this);
+        Bukkit.getPluginManager().registerEvents(new Protection(this), this);
+        Bukkit.getPluginManager().registerEvents(new Succession(this), this);
+        Bukkit.getPluginManager().registerEvents(new Forgery(this), this);
+        Bukkit.getPluginManager().registerEvents(new Assassination(this), this);
+        Bukkit.getPluginManager().registerEvents(new Reanimation(this), this);
+        Bukkit.getPluginManager().registerEvents(new Retaliation(this), this);
         abilityHighNoon.runTaskTimer(this, 0L, 1L); // checks every tick
-        this.getServer().getPluginManager().registerEvents(new Marksman(this), this);
-        this.getServer().getPluginManager().registerEvents(new Investigate(this), this);
-        this.getServer().getPluginManager().registerEvents(new Watch(this, manager), this);
-        this.getServer().getPluginManager().registerEvents(new Peripherals(this, manager), this);
-        this.getServer().getPluginManager().registerEvents(new ClearSight(this), this);
-        this.getServer().getPluginManager().registerEvents(new Rescue(this), this);
+        Bukkit.getPluginManager().registerEvents(new Marksman(this), this);
+        Bukkit.getPluginManager().registerEvents(new Investigate(this), this);
+        Bukkit.getPluginManager().registerEvents(new Watch(this, manager), this);
+        Bukkit.getPluginManager().registerEvents(new Peripherals(this, manager), this);
+        Bukkit.getPluginManager().registerEvents(new ClearSight(this), this);
+        Bukkit.getPluginManager().registerEvents(new Rescue(this), this);
         abilityAmbrosia.runTaskTimer(this, 0L, 100L); // checks every 5 seconds
-        this.getServer().getPluginManager().registerEvents(abilityAmbrosia, this);
+        Bukkit.getPluginManager().registerEvents(abilityAmbrosia, this);
         abilityInquisition.runTaskTimer(this, 0L, 600L); // show particles every 10 seconds
-        this.getServer().getPluginManager().registerEvents(new Ambush(this), this);
-        this.getServer().getPluginManager().registerEvents(new ThisIsFine(this), this);
-        this.getServer().getPluginManager().registerEvents(new DodgeRoll(this), this);
-        this.getServer().getPluginManager().registerEvents(new SpellBook(this), this);
-        this.getServer().getPluginManager().registerEvents(new Scatter(this), this);
-        this.getServer().getPluginManager().registerEvents(new Toadify(this), this);
-        this.getServer().getPluginManager().registerEvents(new FogOfWar(this), this);
-        this.getServer().getPluginManager().registerEvents(new Vanish(this), this);
+        Bukkit.getPluginManager().registerEvents(new Ambush(this), this);
+        Bukkit.getPluginManager().registerEvents(new ThisIsFine(this), this);
+        Bukkit.getPluginManager().registerEvents(new DodgeRoll(this), this);
+        Bukkit.getPluginManager().registerEvents(new SpellBook(this), this);
+        Bukkit.getPluginManager().registerEvents(new Scatter(this), this);
+        Bukkit.getPluginManager().registerEvents(new Toadify(this), this);
+        Bukkit.getPluginManager().registerEvents(new FogOfWar(this), this);
+        Bukkit.getPluginManager().registerEvents(new Vanish(this), this);
         abilityTransform.runTaskTimer(this, 0L, 100L); // Check night for Werewolves every 5 seconds
-        this.getServer().getPluginManager().registerEvents(abilityRampage, this);
+        Bukkit.getPluginManager().registerEvents(abilityRampage, this);
         abilityRampage.runTaskTimer(this, 0L, 100L); // Apply strength every 5 seconds
-        this.getServer().getPluginManager().registerEvents(new Bite(this), this);
-        this.getServer().getPluginManager().registerEvents(new Nemesis(this), this);
-        this.getServer().getPluginManager().registerEvents(new Convert(this), this);
-        this.getServer().getPluginManager().registerEvents(new HuntingNight(this), this);
+        Bukkit.getPluginManager().registerEvents(new Bite(this), this);
+        Bukkit.getPluginManager().registerEvents(new Nemesis(this), this);
+        Bukkit.getPluginManager().registerEvents(new Convert(this), this);
+        Bukkit.getPluginManager().registerEvents(new HuntingNight(this), this);
         abilityNightOwl.runTaskTimer(this, 0L, 100L); // Check Day for Vampires every 5 seconds
-        this.getServer().getPluginManager().registerEvents(new Staked(this), this);
-        this.getServer().getPluginManager().registerEvents(new JustAPrank(this), this);
+        Bukkit.getPluginManager().registerEvents(new Staked(this), this);
+        Bukkit.getPluginManager().registerEvents(new JustAPrank(this), this);
 
         // Register combat state manager. This will trigger after all abilities. (Priority = High, whereas others are Normal)
-        this.getServer().getPluginManager().registerEvents(new CombatState(this), this);
+        Bukkit.getPluginManager().registerEvents(new CombatState(this), this);
 
         // GUI events are handled every time a GUI is instantiated
 
         // COMMANDS
-        this.getCommand("mafiacraftadmin").setExecutor(new MafiaCraftAdminCMD(this));
+        getCommand("mafiacraftadmin").setExecutor(new MafiaCraftAdminCMD(this));
+        getCommand("mafiacraft").setExecutor(new MafiaCraftCMD(this));
 
         // Chat
-        this.getServer().getPluginManager().registerEvents(new ChatBlocking(this), this);
+        Bukkit.getPluginManager().registerEvents(new ChatBlocking(this), this);
 
         // TODO: ACTIVE IS SET TO TRUE FOR TESTING! CHANGE THIS LATER!!!!!!!
         active = true;

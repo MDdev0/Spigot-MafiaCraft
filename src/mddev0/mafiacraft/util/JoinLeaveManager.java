@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -46,7 +47,7 @@ public class JoinLeaveManager implements Listener {
             join.setJoinMessage(null);
             // hide player from all living players
             for (Map.Entry<UUID, MafiaPlayer> living : plugin.getLivingPlayers().entrySet()) {
-                OfflinePlayer offp = plugin.getServer().getOfflinePlayer(living.getKey());
+                OfflinePlayer offp = Bukkit.getOfflinePlayer(living.getKey());
                 if (offp.isOnline()) {
                     Player p = offp.getPlayer();
                     assert p != null;

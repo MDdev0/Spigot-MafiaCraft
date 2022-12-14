@@ -37,7 +37,7 @@ public final class Transform extends BukkitRunnable {
                         // player can transform
                         if (!((Werewolf) play.getRole()).getTransformed()) {
                             Bukkit.broadcastMessage(ChatColor.DARK_GRAY + "TEST 5"); // TODO: REMOVE ME
-                            plugin.getServer().getPlayer(play.getID()).sendMessage(ChatColor.DARK_RED + "You feel hungry. It is a full moon!");
+                            Bukkit.getPlayer(play.getID()).sendMessage(ChatColor.DARK_RED + "You feel hungry. It is a full moon!");
                             ((Werewolf) play.getRole()).setTransformed(true);
                             play.setUnholy();
                         }
@@ -50,9 +50,9 @@ public final class Transform extends BukkitRunnable {
             if (play.getRole().hasAbility(Ability.TRANSFORM)) {
                 // player can transform
                 if (((Werewolf) play.getRole()).getTransformed()) {
-                    Objects.requireNonNull(plugin.getServer().getPlayer(play.getID())).sendMessage(ChatColor.DARK_GRAY + "You feel normal again.");
+                    Objects.requireNonNull(Bukkit.getPlayer(play.getID())).sendMessage(ChatColor.DARK_GRAY + "You feel normal again.");
                     ((Werewolf) play.getRole()).setTransformed(false);
-                    Objects.requireNonNull(plugin.getServer().getPlayer(play.getID())).removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                    Objects.requireNonNull(Bukkit.getPlayer(play.getID())).removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                     // see Rampage.java
                 }
             }

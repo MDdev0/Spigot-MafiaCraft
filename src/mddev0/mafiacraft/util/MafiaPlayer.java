@@ -3,6 +3,7 @@ package mddev0.mafiacraft.util;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.abilities.Ability;
 import mddev0.mafiacraft.roles.Role;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class MafiaPlayer {
         this.plugin = plugin;
         onTick = new PlayerTicker();
         onTick.runTaskTimer(plugin,0,1); // runs every tick
-        spyglass = new SpyglassUtil(plugin, plugin.getServer().getPlayer(id));
+        spyglass = new SpyglassUtil(plugin, Bukkit.getPlayer(id));
         spyglass.runTaskTimer(plugin,0,1); // runs every tick
         uuid = id;
         living = true;

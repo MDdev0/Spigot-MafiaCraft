@@ -25,10 +25,10 @@ public final class ReanimationGUI implements Listener {
 
     public ReanimationGUI(MafiaCraft plugin) {
         this.plugin = plugin;
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
 
         Map<UUID, MafiaPlayer> deadPlayers = plugin.getDeadPlayers();
-        inv = Bukkit.createInventory(null, (deadPlayers.size()/9) +1, ChatColor.DARK_GREEN + "Choose a player to reanimate");
+        inv = Bukkit.createInventory(null, ((deadPlayers.size()/9) +1) * 9, ChatColor.DARK_GREEN + "Choose a player to reanimate");
 
         createHeads(deadPlayers);
     }
@@ -80,7 +80,7 @@ public final class ReanimationGUI implements Listener {
                     p.hidePlayer(plugin, other);
                 }
             }
-            plugin.getServer().broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
+            Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
         }
     }
 

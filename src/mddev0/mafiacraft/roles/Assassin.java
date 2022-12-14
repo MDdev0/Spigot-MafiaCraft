@@ -8,4 +8,9 @@ public final class Assassin extends Role {
         super(WinCondition.MAFIA, false);
         abilities.add(Ability.ASSASSINATION);
     }
+
+    @Override
+    public String toString() {
+        return "Assassin";
+    }
 }

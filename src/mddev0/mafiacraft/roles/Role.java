@@ -37,4 +37,7 @@ public abstract class Role {
     public WinCondition getWinCond() {
         return winCond;
     }
+
+    @Override
+    abstract public String toString();
 }

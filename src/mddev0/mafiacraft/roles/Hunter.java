@@ -48,4 +48,9 @@ public final class Hunter extends Role {
         }
         return dead;
     }
+
+    @Override
+    public String toString() {
+        return "Hunter";
+    }
 }

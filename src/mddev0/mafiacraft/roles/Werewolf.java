@@ -31,4 +31,9 @@ public final class Werewolf extends Role {
     public int getKills() {
         return killedWhileTransformed;
     }
+
+    @Override
+    public String toString() {
+        return "Werewolf";
+    }
 }

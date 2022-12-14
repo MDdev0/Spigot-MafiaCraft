@@ -8,4 +8,9 @@ public final class Reanimator extends Role {
         super(WinCondition.VILLAGE, true);
         abilities.add(Ability.REANIMATION);
     }
+
+    @Override
+    public String toString() {
+        return "Reanimator";
+    }
 }

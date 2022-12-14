@@ -9,4 +9,9 @@ public final class Trapmaker extends Role {
         abilities.add(Ability.THIS_IS_FINE);
         abilities.add(Ability.DODGE_ROLL);
     }
+
+    @Override
+    public String toString() {
+        return "Trapmaker";
+    }
 }

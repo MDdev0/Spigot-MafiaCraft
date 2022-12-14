@@ -33,7 +33,7 @@ public final class Reanimation implements Listener {
                 if (thrower.getRole().hasAbility(Ability.REANIMATION) && !thrower.onCooldown(Ability.REANIMATION)) {
                     item.remove();
                     ReanimationGUI gui = new ReanimationGUI(plugin);
-                    gui.open(Objects.requireNonNull(Bukkit.getPlayer(Objects.requireNonNull(item.getThrower()))));
+                    gui.open(Bukkit.getPlayer(item.getThrower()));
                 }
             }
         }

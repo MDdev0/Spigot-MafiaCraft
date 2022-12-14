@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.util.MafiaPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,12 +47,12 @@ public final class Peripherals implements Listener {
                         watcher.setEntity(p);
                         watcher.setObject(0, serializer, (byte) (0)); // 0 remove invis
                         packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
-                        manager.sendServerPacket(plugin.getServer().getPlayer(executor.getKey()), packet);
+                        manager.sendServerPacket(Bukkit.getPlayer(executor.getKey()), packet);
                     }
                 }
                 // Now remove invis for nearby players
                 int range = plugin.getConfig().getInt("peripheralsRange");
-                for (Entity ent : Objects.requireNonNull(plugin.getServer().getPlayer(executor.getKey()))
+                for (Entity ent : Objects.requireNonNull(Bukkit.getPlayer(executor.getKey()))
                         .getNearbyEntities(range,range,range)) {
                     if (ent.getType() != EntityType.PLAYER) continue;
                     Player found = (Player) ent;
@@ -63,7 +64,7 @@ public final class Peripherals implements Listener {
                         watcher.setEntity(found);
                         watcher.setObject(0, serializer, (byte) (0)); // 0 remove invis
                         packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
-                        manager.sendServerPacket(plugin.getServer().getPlayer(executor.getKey()), packet);
+                        manager.sendServerPacket(Bukkit.getPlayer(executor.getKey()), packet);
                     }
                 }
             }

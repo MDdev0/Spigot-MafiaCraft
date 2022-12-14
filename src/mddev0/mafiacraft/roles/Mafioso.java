@@ -8,4 +8,9 @@ public final class Mafioso extends Role {
         super(WinCondition.MAFIA, false);
         abilities.add(Ability.SUCCESSION);
     }
+
+    @Override
+    public String toString() {
+        return "Mafioso";
+    }
 }

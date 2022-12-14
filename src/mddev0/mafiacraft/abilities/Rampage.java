@@ -3,6 +3,7 @@ package mddev0.mafiacraft.abilities;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.Werewolf;
 import mddev0.mafiacraft.util.MafiaPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,7 +47,7 @@ public final class Rampage extends BukkitRunnable implements Listener {
                 if (((Werewolf) p.getRole()).getTransformed()) {
                     int level = Math.min(5, ((Werewolf) p.getRole()).getKills() - 1);
                     if (level >= 0)
-                        Objects.requireNonNull(plugin.getServer().getPlayer(p.getID())).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 120, level, false, false, true));
+                        Objects.requireNonNull(Bukkit.getPlayer(p.getID())).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 120, level, false, false, true));
                 }
             }
         }

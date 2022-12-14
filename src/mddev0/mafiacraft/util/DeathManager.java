@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +33,7 @@ public class DeathManager implements Listener {
         MafiaPlayer dead = plugin.getPlayerList().get(death.getEntity().getUniqueId());
         if (dead != null && !dead.isLiving()) {
             Player died = death.getEntity();
-            plugin.getServer().broadcastMessage(ChatColor.YELLOW + died.getName() + " left the game");
+            Bukkit.broadcastMessage(ChatColor.YELLOW + died.getName() + " left the game");
             for (Player p : plugin.getServer().getOnlinePlayers()) {
                 MafiaPlayer live = plugin.getLivingPlayers().get(p.getUniqueId());
                 if (live != null) {

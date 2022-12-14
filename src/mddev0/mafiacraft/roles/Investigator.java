@@ -8,4 +8,9 @@ public final class Investigator extends Role {
         super(WinCondition.VILLAGE, false);
         abilities.add(Ability.INVESTIGATE);
     }
+
+    @Override
+    public String toString() {
+        return "Investigator";
+    }
 }

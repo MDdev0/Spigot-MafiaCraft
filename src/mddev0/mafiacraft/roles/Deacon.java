@@ -8,4 +8,9 @@ public final class Deacon extends Role {
         super(WinCondition.VILLAGE, false);
         abilities.add(Ability.INQUISITION);
     }
+
+    @Override
+    public String toString() {
+        return "Deacon";
+    }
 }

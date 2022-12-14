@@ -22,4 +22,9 @@ public final class Sorcerer extends Role {
     public void nextAbility() {
         selected = abilities.iterator().next();
     }
+
+    @Override
+    public String toString() {
+        return "Sorcerer";
+    }
 }

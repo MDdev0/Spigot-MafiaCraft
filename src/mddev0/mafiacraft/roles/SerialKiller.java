@@ -9,4 +9,9 @@ public final class SerialKiller extends Role {
         abilities.add(Ability.PROTECTION);
         abilities.add(Ability.AMBUSH);
     }
+
+    @Override
+    public String toString() {
+        return "Serial Killer";
+    }
 }

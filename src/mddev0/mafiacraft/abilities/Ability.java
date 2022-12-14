@@ -37,9 +37,13 @@ public enum Ability {
     STAKED("Staked"),
     JUST_A_PRANK("Just a Prank");
 
-    public final String NAME;
+    private final String NAME;
 
     Ability(String name) {
         this.NAME = name;
+    }
+
+    public String fullName() {
+        return NAME;
     }
 }

@@ -10,4 +10,9 @@ public final class Lookout extends Role {
         abilities.add(Ability.PERIPHERALS);
         abilities.add(Ability.CLEAR_SIGHT);
     }
+
+    @Override
+    public String toString() {
+        return "Lookout";
+    }
 }

@@ -11,4 +11,9 @@ public final class Vampire extends Role {
         abilities.add(Ability.NIGHT_OWL);
         abilities.add(Ability.STAKED);
     }
+
+    @Override
+    public String toString() {
+        return "Vampire";
+    }
 }

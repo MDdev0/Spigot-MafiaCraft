@@ -8,4 +8,9 @@ public final class Apothecary extends Role {
         super(WinCondition.VILLAGE, true);
         abilities.add(Ability.AMBROSIA);
     }
+
+    @Override
+    public String toString() {
+        return "Apothecary";
+    }
 }

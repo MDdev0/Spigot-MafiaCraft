@@ -3,6 +3,7 @@ package mddev0.mafiacraft.abilities;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.Godfather;
 import mddev0.mafiacraft.util.MafiaPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +32,7 @@ public final class Succession implements Listener {
                 // Only act if more than one eligible player is in the game
                 int selection = new Random().nextInt(eligible.size());
                 eligible.get(selection).changeRole(new Godfather());
-                Objects.requireNonNull(plugin.getServer().getPlayer(eligible.get(selection).getID())).sendMessage(ChatColor.RED + "The Godfather is dead. You have taken their place.");
+                Objects.requireNonNull(Bukkit.getPlayer(eligible.get(selection).getID())).sendMessage(ChatColor.RED + "The Godfather is dead. You have taken their place.");
             }
         }
     }

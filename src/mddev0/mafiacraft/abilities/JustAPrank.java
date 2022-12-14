@@ -4,6 +4,7 @@ import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.Jester;
 import mddev0.mafiacraft.roles.Role;
 import mddev0.mafiacraft.util.MafiaPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ public final class JustAPrank implements Listener {
             if (jest != null && jest.getRole().hasAbility(Ability.JUST_A_PRANK) && killer != null && killer.getRole().getWinCond() == Role.WinCondition.VILLAGE) {
                 if (!jest.isAttacker()) {
                     jest.makeAlive();
-                    Player jester = plugin.getServer().getPlayer(jest.getID());
+                    Player jester = Bukkit.getPlayer(jest.getID());
                     assert jester != null; // jester must be online to have been killed
                     jester.sendMessage(ChatColor.DARK_GREEN + "You were killed by a member of the Village! You've triggered your effect!");
                     ((Jester) jest.getRole()).activate();

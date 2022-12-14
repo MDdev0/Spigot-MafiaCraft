@@ -8,4 +8,9 @@ public final class Doctor extends Role {
         super(WinCondition.VILLAGE, false);
         abilities.add(Ability.RESCUE);
     }
+
+    @Override
+    public String toString() {
+        return "Doctor";
+    }
 }

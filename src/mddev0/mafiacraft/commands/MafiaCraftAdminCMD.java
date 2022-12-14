@@ -3,6 +3,7 @@ package mddev0.mafiacraft.commands;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.*;
 import mddev0.mafiacraft.util.MafiaPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -38,7 +39,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "Missing arguments: <player> <(Role Name) | original>");
                     return false;
                 }
-                Player p = plugin.getServer().getPlayer(args[1]);
+                Player p = Bukkit.getPlayer(args[1]);
                 if (p == null) {
                     sender.sendMessage(ChatColor.RED + args[1] + " is not online.");
                     return true;
@@ -71,7 +72,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                         sender.sendMessage(ChatColor.RED + "Invalid role name provided.");
                         return true;
                     }
-                    sender.sendMessage(ChatColor.YELLOW + "Changed " + args[1] + "'s role to " + play.getRole().getClass().getName() + ".");
+                    sender.sendMessage(ChatColor.YELLOW + "Changed " + args[1] + "'s role to " + play.getRole().toString() + ".");
                 } else {
                     MafiaPlayer play = new MafiaPlayer(plugin, p.getUniqueId(), switch (args[2].toLowerCase()) {
                         case "godfather" -> new Godfather();
@@ -100,7 +101,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                         return true;
                     }
                     plugin.getPlayerList().put(play.getID(), play);
-                    sender.sendMessage(ChatColor.GREEN + "Added " + args[1] + " to the game with the role " + play.getRole().getClass().getName() + ".");
+                    sender.sendMessage(ChatColor.GREEN + "Added " + args[1] + " to the game with the role " + play.getRole().toString() + ".");
                 }
             }
             case "removeplayer" -> {
@@ -108,7 +109,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "Missing arguments: <player>");
                     return false;
                 }
-                Player p = plugin.getServer().getPlayer(args[1]);
+                Player p = Bukkit.getPlayer(args[1]);
                 if (p == null) {
                     sender.sendMessage(ChatColor.RED + args[1] + " is not online.");
                     return true;
@@ -136,7 +137,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "Missing arguments: <player>");
                     return false;
                 }
-                Player p = plugin.getServer().getPlayer(args[1]);
+                Player p = Bukkit.getPlayer(args[1]);
                 if (p == null) {
                     sender.sendMessage(ChatColor.RED + args[1] + " is not online.");
                     return true;
@@ -157,13 +158,13 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                         p.hidePlayer(plugin, other);
                     }
                 }
-                plugin.getServer().broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
+                Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
                 sender.sendMessage(ChatColor.GREEN + args[1] + " has been revived.");
                 return true;
             }
             case "list" -> {
                 for (MafiaPlayer p : plugin.getPlayerList().values()) {
-                    sender.sendMessage(ChatColor.GRAY + plugin.getServer().getPlayer(p.getID()).getName() + " | " + p.getRole().getClass().getName() + " | " + p.isLiving());
+                    sender.sendMessage(ChatColor.GRAY + Bukkit.getPlayer(p.getID()).getName() + " | " + p.getRole().toString() + " | " + p.isLiving());
                 }
             }
         }

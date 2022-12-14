@@ -19,4 +19,9 @@ public final class Jester extends Role {
     public boolean getAbilityActivated() {
         return hasActivatedAbility;
     }
+
+    @Override
+    public String toString() {
+        return "Jester";
+    }
 }

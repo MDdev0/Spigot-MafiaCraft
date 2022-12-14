@@ -6,4 +6,7 @@ depend: [ProtocolLib]
 commands:
   mafiacraftadmin:
     description: Command for Administrators to manage and start MafiaCraft games.
-    aliases: [mca, mafiacrafta, mcadmin, mafcraftadmin, mafcrafta, mafiaadmin]
+    aliases: [mca, mafiacrafta, mafcrafta, mafiaadmin]
+  mafiacraft:
+    description: Shows players of a MafiaCraft game information about their status.
+    aliases: [mafiacraft, mafcraft, mafia]

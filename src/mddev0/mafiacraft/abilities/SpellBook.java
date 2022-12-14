@@ -67,7 +67,7 @@ public final class SpellBook implements Listener {
                         ((Sorcerer) sorcerer.getRole()).nextAbility();
                         click.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE +
                                 "Changed spells to " + ChatColor.GRAY +
-                                ((Sorcerer) sorcerer.getRole()).getSelected().NAME);
+                                ((Sorcerer) sorcerer.getRole()).getSelected().fullName());
                     }
                 }
             }
