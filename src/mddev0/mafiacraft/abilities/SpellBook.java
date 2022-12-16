@@ -3,10 +3,12 @@ package mddev0.mafiacraft.abilities;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.roles.Sorcerer;
 import mddev0.mafiacraft.util.MafiaPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -28,7 +30,7 @@ public final class SpellBook implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler //TODO: FIX! Needs to check for fire, and doesn't work anyways
     public void onItemDamage(EntityDamageByBlockEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntityType() == EntityType.DROPPED_ITEM) {
@@ -49,6 +51,9 @@ public final class SpellBook implements Listener {
                     lore.add("Right click to switch to different spells.");
                     lore.add("Left click to activate. Look at a player to cast the spell on them, or anywhere else to cast on yourself.");
                     meta.setLore(lore);
+                    toGive.setItemMeta(meta);
+                    Player receiver = Bukkit.getPlayer(thrower.getID());
+                    receiver.getWorld().dropItem(receiver.getLocation(), toGive);
                     thrower.setUnholy();
                 }
             }

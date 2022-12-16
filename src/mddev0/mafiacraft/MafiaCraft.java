@@ -40,6 +40,7 @@ public class MafiaCraft extends JavaPlugin {
         // Register death state manager. This has two different triggers.
         // FIRST TRIGGER: (Priority = Low, whereas others are Normal) recognizes death and flags player as dead.
         // SECOND TRIGGER: (Priority = High, whereas others are Normal) puts player in spectator and hides them from living players if they are still flagged.
+        // ALSO TRIGGERS ON RESPAWN TO SET GAMEMODE
         Bukkit.getPluginManager().registerEvents(new DeathManager(this), this);
 
         // Manager for joining and leaving
@@ -94,7 +95,7 @@ public class MafiaCraft extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ChatBlocking(this), this);
 
         // TODO: ACTIVE IS SET TO TRUE FOR TESTING! CHANGE THIS LATER!!!!!!!
-        active = true;
+        active = false;
     }
 
     public void onDisable() {
@@ -131,4 +132,12 @@ public class MafiaCraft extends JavaPlugin {
                 output.put(p.getKey(), p.getValue());
         return output;
     }
+
+    // TODO: CLEANUP AND REMOVE
+//    private class EventTester implements Listener {
+//        @EventHandler
+//        public void onEvent1(InventoryClickEvent inv) {
+//            Bukkit.broadcastMessage("EVENT:" + inv.toString());
+//        }
+//    }
 }

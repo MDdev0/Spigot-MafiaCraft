@@ -9,4 +9,4 @@ commands:
     aliases: [mca, mafiacrafta, mafcrafta, mafiaadmin]
   mafiacraft:
     description: Shows players of a MafiaCraft game information about their status.
-    aliases: [mafiacraft, mafcraft, mafia]
+    aliases: [mafiacraft, mafcraft, mafia, maf]

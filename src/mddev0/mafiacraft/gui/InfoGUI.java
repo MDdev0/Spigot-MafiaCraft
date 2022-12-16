@@ -10,6 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +31,6 @@ public final class InfoGUI implements Listener {
     public InfoGUI(MafiaCraft plugin, MafiaPlayer player) {
         this.plugin = plugin;
         this.caller = player;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
 
         String invTitle = switch (caller.getRole().getWinCond()) {
             case MAFIA -> ChatColor.RED;
@@ -48,7 +49,7 @@ public final class InfoGUI implements Listener {
     private void fillInventory() {
         // Top row black
         for (int pos = 0; pos < 9; pos++) {
-            inv.setItem(pos, new ItemStack(Material.BLACK_STAINED_GLASS));
+            inv.setItem(pos, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
         }
 
         // Create head for top center
@@ -170,7 +171,7 @@ public final class InfoGUI implements Listener {
     }
 
     @EventHandler
-    public void onInteract(final InventoryInteractEvent e) {
+    public void onInteract(InventoryClickEvent e) {
         if (e.getInventory().equals(inv))
             e.setCancelled(true);
     }

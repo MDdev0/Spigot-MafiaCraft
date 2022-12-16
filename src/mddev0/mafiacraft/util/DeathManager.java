@@ -3,11 +3,13 @@ package mddev0.mafiacraft.util;
 import mddev0.mafiacraft.MafiaCraft;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class DeathManager implements Listener {
 
@@ -31,7 +33,7 @@ public class DeathManager implements Listener {
     public void onPlayerDeathLate(PlayerDeathEvent death) {
         if (!plugin.getActive()) return;
         MafiaPlayer dead = plugin.getPlayerList().get(death.getEntity().getUniqueId());
-        if (dead != null && !dead.isLiving()) {
+        if (dead != null && !dead.isLiving() && death.getEntity().getGameMode() != GameMode.SPECTATOR) {
             Player died = death.getEntity();
             Bukkit.broadcastMessage(ChatColor.YELLOW + died.getName() + " left the game");
             for (Player p : plugin.getServer().getOnlinePlayers()) {
@@ -41,6 +43,15 @@ public class DeathManager implements Listener {
                     p.hidePlayer(plugin, died);
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent res) {
+        if (!plugin.getActive()) return;
+        MafiaPlayer dead = plugin.getPlayerList().get(res.getPlayer().getUniqueId());
+        if (dead != null && !dead.isLiving()) {
+            res.getPlayer().setGameMode(GameMode.SPECTATOR);
         }
     }
 }
