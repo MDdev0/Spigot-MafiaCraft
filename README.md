@@ -5,9 +5,9 @@
 ![](https://img.shields.io/badge/Implemented%20Roles-19-green)  
 ![](https://img.shields.io/badge/Total%20Abilities-35-lightgrey)
 ![](https://img.shields.io/badge/Implemented%20Abilities-35-green)  
-![](https://img.shields.io/badge/Commands-Pending%20Testing-green)  
+![](https://img.shields.io/badge/Commands-Done-0b0)  
 ![](https://img.shields.io/badge/Game%20Flow-WIP-yellow)    
-![](https://img.shields.io/badge/Serialization-Not%20Started-darkred)  
+![](https://img.shields.io/badge/Serialization-Needs%20Testing-teal)  
 ![](https://img.shields.io/badge/Testing-Started-orange)  
 ![](https://img.shields.io/badge/Estimated%20Finish%20Date-December%2019-blue)
 

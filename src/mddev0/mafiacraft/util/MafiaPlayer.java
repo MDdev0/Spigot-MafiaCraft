@@ -6,9 +6,7 @@ import mddev0.mafiacraft.roles.Role;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MafiaPlayer {
 
@@ -35,6 +33,23 @@ public class MafiaPlayer {
         uuid = id;
         living = true;
         role = originalRole = startingRole;
+    }
+
+    public MafiaPlayer(MafiaCraft plugin, PlayerData dataRecord) {
+        this.plugin = plugin;
+        onTick = new PlayerTicker();
+        onTick.runTaskTimer(plugin,0,1); // runs every tick
+        spyglass = new SpyglassUtil(plugin, Bukkit.getPlayer(dataRecord.uuid()));
+        spyglass.runTaskTimer(plugin,0,1); // runs every tick
+        this.uuid = dataRecord.uuid();
+        this.living = dataRecord.living();
+        this.role = dataRecord.role();
+        this.originalRole = dataRecord.originalRole();
+        for (Map.Entry<Ability, CooldownData> cooldown : dataRecord.cooldowns().entrySet())
+            this.cooldowns.put(cooldown.getKey(), new CooldownLength(cooldown.getValue().dayTime(), cooldown.getValue().days()));
+        this.framed = dataRecord.framed();
+        this.unholyTicks = dataRecord.unholyTicks();
+        this.attackerTicks = dataRecord.attackerTicks();
     }
 
     public UUID getID() {
@@ -135,6 +150,33 @@ public class MafiaPlayer {
         return spyglass;
     }
 
+    // Game Save Utility
+    public PlayerData getDataRecord() {
+        Map<Ability, CooldownData> cools = new HashMap<>();
+        for (Map.Entry<Ability, CooldownLength> cooldown : cooldowns.entrySet())
+            cools.put(cooldown.getKey(), cooldown.getValue().getDataRecord());
+        return new PlayerData(uuid, living, role, originalRole, cools, framed, unholyTicks, attackerTicks);
+    }
+
+    /**
+     * Used for saving while server is offline
+     * @param uuid
+     * @param living
+     * @param role
+     * @param originalRole
+     * @param cooldowns
+     * @param framed
+     * @param unholyTicks
+     * @param attackerTicks
+     */
+    public record PlayerData (UUID uuid, boolean living, Role role, Role originalRole, Map<Ability, CooldownData> cooldowns, boolean framed, long unholyTicks, int attackerTicks) {}
+    /**
+     * Used for saving while server is offline
+     * @param dayTime
+     * @param days
+     */
+    record CooldownData (long dayTime, int days) {}
+
     // Support Classes
     private class PlayerTicker extends BukkitRunnable {
         @Override
@@ -175,6 +217,9 @@ public class MafiaPlayer {
         }
         boolean expired() {
             return (days == 0 && dayTime == 0);
+        }
+        CooldownData getDataRecord() {
+            return new CooldownData(dayTime, days);
         }
     }
 }

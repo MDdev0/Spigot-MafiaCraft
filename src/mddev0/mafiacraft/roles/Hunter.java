@@ -14,7 +14,7 @@ public final class Hunter extends Role {
 
     private final UUID self;
 
-    private final List<UUID> targets;
+    private final List<UUID> targets; // Saved Member
 
     public Hunter(MafiaCraft plugin, UUID self) {
         super(WinCondition.SURVIVING, false);
@@ -25,11 +25,20 @@ public final class Hunter extends Role {
         targets = new ArrayList<>();
     }
 
+    public Hunter(MafiaCraft plugin, UUID self, List<UUID> targets) {
+        super(WinCondition.SURVIVING, false);
+        this.plugin = plugin;
+        this.self = self;
+        abilities.add(Ability.TARGET);
+        abilities.add(Ability.TRACKING);
+        this.targets = targets;
+    }
+
     public List<UUID> getTargets() {
         return targets;
     }
 
-    public void getTargets(int num) {
+    public void findTargets(int num) {
         Random rand = new Random();
         List<UUID> players = new java.util.ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
         players.remove(self);

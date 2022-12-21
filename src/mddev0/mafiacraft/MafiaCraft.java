@@ -33,6 +33,11 @@ public class MafiaCraft extends JavaPlugin {
         // Config
         saveDefaultConfig();
 
+        // GAME SAVE MANAGER
+        GameSaver.init(this);
+        GameSaver.loadGame();
+        Bukkit.getPluginManager().registerEvents(new GameSaver.WorldSaveListener(), this);
+
         // ProtocolLib
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
         manager.addPacketListener(new HardcoreHearts(this));
@@ -94,8 +99,8 @@ public class MafiaCraft extends JavaPlugin {
         // Chat
         Bukkit.getPluginManager().registerEvents(new ChatBlocking(this), this);
 
-        // TODO: ACTIVE IS SET TO TRUE FOR TESTING! CHANGE THIS LATER!!!!!!!
-        active = false;
+        // Active
+        active = getConfig().getBoolean("active");
     }
 
     public void onDisable() {

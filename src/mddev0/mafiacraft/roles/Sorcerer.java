@@ -13,6 +13,7 @@ public final class Sorcerer extends Role {
         abilities.add(Ability.TOADIFY);
         abilities.add(Ability.FOG_OF_WAR);
         abilities.add(Ability.VANISH);
+        selected = Ability.SCATTER; // Just as a default
     }
 
     public Ability getSelected() {

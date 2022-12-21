@@ -1,3 +1,6 @@
+# Whether not the game will be active on server start
+active: true
+
 # Determines whether hearts should be shown as hardcore-style or regular-style
 hardcoreStyle: true
 

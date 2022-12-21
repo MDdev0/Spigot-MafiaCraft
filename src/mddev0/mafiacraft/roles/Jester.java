@@ -4,9 +4,9 @@ import mddev0.mafiacraft.abilities.Ability;
 
 public final class Jester extends Role {
 
-    private boolean hasActivatedAbility;
+    private boolean hasActivatedAbility; // Saved Member
 
-    public Jester(){
+    public Jester() {
         super(WinCondition.SURVIVING, true);
         abilities.add(Ability.JUST_A_PRANK);
         hasActivatedAbility = false;
