@@ -11,8 +11,6 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -79,8 +77,10 @@ public final class InfoGUI implements Listener {
                     case ROLE -> ChatColor.DARK_AQUA + "with players of the same role";
                 });
         headLore.add(ChatColor.GRAY + "See all your abilities below.");
-        if (caller.getRole().getWinCond() == Role.WinCondition.MAFIA || caller.getRole().getWinCond() == Role.WinCondition.ROLE)
-            headLore.add(ChatColor.GRAY + "The names and roles of your teammates are listed, if they are alive.");
+        if (caller.getRole().getWinCond() == Role.WinCondition.MAFIA || caller.getRole().getWinCond() == Role.WinCondition.ROLE) {
+            headLore.add(ChatColor.GRAY + "The names and roles of your");
+            headLore.add(ChatColor.GRAY + "teammates are listed, if they are alive.");
+        }
         headMeta.setLore(headLore);
         head.setItemMeta(headMeta);
         inv.setItem(4,head);

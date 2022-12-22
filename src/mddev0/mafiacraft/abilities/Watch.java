@@ -6,12 +6,12 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.util.MafiaPlayer;
-import mddev0.mafiacraft.util.SpyglassUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -34,15 +34,17 @@ public final class Watch implements Listener {
             // Material is spyglass, check player
             MafiaPlayer clicker = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
             if (clicker != null && clicker.getRole().hasAbility(Ability.WATCH)) {
+
                 // Player has right ability
-                SpyglassUtil spyglass = clicker.getSpyglass();
                 // create new runnable that keeps players visible until player stops using spyglass
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         // Spaghetti code time!
                         // Thanks to: https://www.spigotmc.org/threads/simulating-potion-effect-glowing-with-protocollib.218828/#post-2246160
-                        if (spyglass.isActive()) {
+                        ItemStack using = click.getPlayer().getItemInUse();
+                        boolean active = using != null && using.getType() == Material.SPYGLASS;
+                        if (active) {
                             // if spyglass is active, keep setting all players inside the spyglass as visible
                             for (Player p : plugin.getServer().getOnlinePlayers()) {
                                 if (!p.equals(click.getPlayer()) && p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {

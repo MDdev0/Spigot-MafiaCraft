@@ -45,7 +45,7 @@ public final class Peripherals implements Listener {
                         WrappedDataWatcher watcher = new WrappedDataWatcher();
                         WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class);
                         watcher.setEntity(p);
-                        watcher.setObject(0, serializer, (byte) (0)); // 0 remove invis
+                        watcher.setObject(0, serializer, (byte) (0x20)); // 0x20 set invis
                         packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
                         manager.sendServerPacket(Bukkit.getPlayer(executor.getKey()), packet);
                     }
