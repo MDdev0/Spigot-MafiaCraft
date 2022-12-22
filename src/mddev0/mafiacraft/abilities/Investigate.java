@@ -3,12 +3,15 @@ package mddev0.mafiacraft.abilities;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.util.MafiaPlayer;
 import mddev0.mafiacraft.util.SpyglassUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class Investigate implements Listener {
 
@@ -25,30 +28,54 @@ public final class Investigate implements Listener {
             // Material is spyglass, check player
             MafiaPlayer clicker = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
             if (clicker != null && clicker.getRole().hasAbility(Ability.INVESTIGATE)) {
-                // Can investigate
-                SpyglassUtil spyglass = clicker.getSpyglass();
-                // Always refresh the spyglass
-                spyglass.refresh();
-                // Must check if spyglass is being opened or if it was already active
-                if (!spyglass.isSpyglassActive()) {
-                    // Spyglass was not active, start timer
-                    spyglass.startTimer();
-                } else {
-                    // Spyglass was already active, check timer
-                    if (spyglass.finished()) {
-                        // TELL PLAYER!
-                        Player toTell = click.getPlayer();
-                        MafiaPlayer targeted = plugin.getLivingPlayers().get(spyglass.getTargeted().getUniqueId());
-                        if (targeted != null && targeted.isMafiaSuspect())
-                            toTell.sendMessage(ChatColor.GRAY + "This player seems to be "
-                                + ChatColor.RED + "" + ChatColor.BOLD + "suspicious" +
-                                    ChatColor.RESET + "" + ChatColor.GRAY + ".");
-                        else if (targeted != null)
-                            toTell.sendMessage(ChatColor.GRAY + "This player seems to be "
-                                    + ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "not suspicious" +
-                                    ChatColor.RESET + "" + ChatColor.GRAY + ".");
-                    }
+                // Delay running checks on spyglass for one tick to make sure it has time to be set properly
+                (new AbilityActivateTimer(plugin, plugin.getLivingPlayers().get(click.getPlayer().getUniqueId()))).runTaskTimer(plugin, 1L, 1L);
+            }
+        }
+    }
+
+    private final static class AbilityActivateTimer extends BukkitRunnable {
+        private final MafiaCraft plugin;
+        private final double targetTime;
+        private final MafiaPlayer user;
+        private long ticksActive;
+
+        private AbilityActivateTimer(MafiaCraft plugin, MafiaPlayer user) {
+            this.plugin = plugin;
+            targetTime = plugin.getConfig().getDouble("spyglassTargetTime");
+            this.user = user;
+            ticksActive = 0;
+        }
+
+        // This will be run every tick to see if a user is tracking their target
+        @Override
+        public void run() {
+            SpyglassUtil spyglass = user.getSpyglass();
+            if (spyglass.isActive()) {
+                // spyglass is still active, all is well
+                ticksActive += 1;
+                Player holder = Bukkit.getPlayer(user.getID());
+                if (holder == null) this.cancel(); // cancel if player doesn't exist (somehow)
+                assert holder != null;
+                if (ticksActive % 20 == 0) { // play sound once per second
+                    holder.playSound(holder.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1.0f, 2.0f);
                 }
+                if (ticksActive >= (20 * targetTime)) { // 20 ticks per sec.
+                    // Finished!
+                    if (plugin.getLivingPlayers().get(spyglass.getTargeted().getUniqueId()).isMafiaSuspect()) {
+                        holder.sendMessage(ChatColor.GRAY + "This player seems to be "
+                                + ChatColor.RED + "" + ChatColor.BOLD + "suspicious" +
+                                ChatColor.RESET + "" + ChatColor.GRAY + ".");
+                    } else {
+                        holder.sendMessage(ChatColor.GRAY + "This player seems to be "
+                                + ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "not suspicious" +
+                                ChatColor.RESET + "" + ChatColor.GRAY + ".");
+                    }
+                    this.cancel();
+                }
+            } else {
+                // Spyglass is not active, cancel this
+                this.cancel();
             }
         }
     }

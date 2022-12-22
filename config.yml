@@ -17,7 +17,7 @@ forgeItemName: "Forgery"
 reanimateSacrifice: "TOTEM_OF_UNDYING"
 
 # Focus time in seconds required to target someone with a spyglass
-spyglassTargetTime: 10
+spyglassTargetTime: 10.0
 # Magic number that modifies spyglass sensitivity. Larger is more sensitive.
 spyglassSensitivity: 0.1
 

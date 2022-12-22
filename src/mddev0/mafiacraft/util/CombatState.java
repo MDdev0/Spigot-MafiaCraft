@@ -2,6 +2,8 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public class CombatState implements Listener {
 
@@ -42,6 +43,7 @@ public class CombatState implements Listener {
     public static Player findAttackingPlayer(EntityDamageByEntityEvent damage) {
         if (damage.getDamager().equals(damage.getEntity())) return null;
         // Return null if attacker and attacked are the same
+        Bukkit.broadcastMessage(ChatColor.DARK_GRAY + damage.getDamager().getType().toString());
         return switch (damage.getDamager().getType()) {
             case PLAYER:
                 // Know the attacking entity is a player
@@ -52,6 +54,9 @@ public class CombatState implements Listener {
                     case WOODEN_SWORD, WOODEN_AXE, STONE_SWORD, STONE_AXE, IRON_SWORD, IRON_AXE,
                             GOLDEN_SWORD, GOLDEN_AXE, DIAMOND_SWORD, DIAMOND_AXE, NETHERITE_SWORD, NETHERITE_AXE, TRIDENT -> {
                         yield (Player) damage.getDamager();
+                    }
+                    default -> {
+                        yield null;
                     }
                 }
             case ARROW, TRIDENT:
