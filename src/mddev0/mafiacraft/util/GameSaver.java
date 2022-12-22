@@ -29,9 +29,12 @@ public class GameSaver {
     public static void init(MafiaCraft plugin) {
         GameSaver.plugin = plugin;
         GameSaver.playerDataFolder = new File(plugin.getDataFolder().getPath() + File.separator + "players");
-        if (!playerDataFolder.isDirectory())
+        if (!playerDataFolder.isDirectory()) {
             if (playerDataFolder.mkdir())
                 Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Created player data folder");
+            else
+                Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Unable to create or find player data folder");
+        }
     }
 
     public static void saveGame() {
@@ -50,12 +53,24 @@ public class GameSaver {
             Player playerEnt = Bukkit.getPlayer(p.getKey());
             String dataName = (playerEnt != null) ? playerEnt.getName() : p.getKey().toString();
             File dataFile = new File(playerDataFolder, dataName + ".yml");
-            if (!dataFile.exists()) plugin.saveResource(dataName + ".yml", false);
+            if (!dataFile.exists()) {
+                try {
+                    if (dataFile.createNewFile())
+                        Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Created player data file: " + dataName);
+                    else {
+                        Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Unable to create player data file: " + dataName + ", skipping save for this player");
+                        continue;
+                    }
+                } catch (IOException e) {
+                    Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Error while attempting to save " + dataName + ", skipping save for this player: ", e);
+                    continue;
+                }
+            }
             FileConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
             // Write player data to data file
             MafiaPlayer.PlayerData playerData = player.getDataRecord();
-            data.set("uuid", playerData.uuid());
+            data.set("uuid", playerData.uuid().toString());
             data.set("living", playerData.living());
             data.set("role", playerData.role().getClass().getSimpleName());
             data.set("originalRole", playerData.originalRole().getClass().getSimpleName());
@@ -118,7 +133,7 @@ public class GameSaver {
             return;
         }
         File[] dataFileList = playerDataFolder.listFiles();
-        if (dataFileList == null) {
+        if (dataFileList == null || dataFileList.length == 0) {
             Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Found no player data to load");
             return;
         }
@@ -198,7 +213,7 @@ public class GameSaver {
             }
 
             // Add player to game
-            plugin.getPlayerList().put((UUID) data.get("uuid"), new MafiaPlayer(plugin, new MafiaPlayer.PlayerData(
+            plugin.getPlayerList().put(UUID.fromString(data.getString("uuid")), new MafiaPlayer(plugin, new MafiaPlayer.PlayerData(
                     UUID.fromString(data.getString("uuid")),
                     data.getBoolean("living"),
                     role,
