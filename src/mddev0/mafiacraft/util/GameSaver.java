@@ -24,12 +24,21 @@ import java.util.logging.Level;
 public class GameSaver {
 
     private static MafiaCraft plugin = null;
+    private static File playerDataFolder = null;
 
     public static void init(MafiaCraft plugin) {
         GameSaver.plugin = plugin;
+        GameSaver.playerDataFolder = new File(plugin.getDataFolder().getPath() + File.separator + "players");
+        if (!playerDataFolder.isDirectory())
+            if (playerDataFolder.mkdir())
+                Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Created player data folder");
     }
 
     public static void saveGame() {
+        if (plugin == null || playerDataFolder == null) {
+            Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Cannot save player data! GameSaver has not been initialized!");
+            return;
+        }
 
         Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Saving player data");
 
@@ -40,7 +49,7 @@ public class GameSaver {
             // Create file if needed and set up variables
             Player playerEnt = Bukkit.getPlayer(p.getKey());
             String dataName = (playerEnt != null) ? playerEnt.getName() : p.getKey().toString();
-            File dataFile = new File(plugin.getDataFolder(), dataName + ".yml");
+            File dataFile = new File(playerDataFolder, dataName + ".yml");
             if (!dataFile.exists()) plugin.saveResource(dataName + ".yml", false);
             FileConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
@@ -104,9 +113,15 @@ public class GameSaver {
     }
 
     public static void loadGame() {
-        if (!plugin.getDataFolder().exists()) return;
-        File[] dataFileList = plugin.getDataFolder().listFiles();
-        if (dataFileList == null) return;
+        if (plugin == null || playerDataFolder == null) {
+            Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Cannot save player data! GameSaver has not been initialized!");
+            return;
+        }
+        File[] dataFileList = playerDataFolder.listFiles();
+        if (dataFileList == null) {
+            Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Found no player data to load");
+            return;
+        }
 
         Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Loading player data from " + dataFileList.length + " files");
 

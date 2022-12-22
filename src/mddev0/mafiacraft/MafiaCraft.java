@@ -104,6 +104,7 @@ public class MafiaCraft extends JavaPlugin {
     }
 
     public void onDisable() {
+        GameSaver.saveGame();
         for (Map.Entry<UUID,MafiaPlayer> p : players.entrySet())
             p.getValue().cancelTasks();
         abilityHighNoon.cancel();
