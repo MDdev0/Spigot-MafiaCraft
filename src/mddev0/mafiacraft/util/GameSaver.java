@@ -7,10 +7,10 @@ import mddev0.mafiacraft.roles.Jester;
 import mddev0.mafiacraft.roles.Role;
 import mddev0.mafiacraft.roles.Werewolf;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldSaveEvent;
@@ -50,8 +50,8 @@ public class GameSaver {
         for (Map.Entry<UUID, MafiaPlayer> p : players.entrySet()) {
             MafiaPlayer player = p.getValue();
             // Create file if needed and set up variables
-            Player playerEnt = Bukkit.getPlayer(p.getKey());
-            String dataName = (playerEnt != null) ? playerEnt.getName() : p.getKey().toString();
+            OfflinePlayer offp = Bukkit.getPlayer(p.getKey());
+            String dataName = (offp != null) ? offp.getName() : p.getKey().toString();
             File dataFile = new File(playerDataFolder, dataName + ".yml");
             if (!dataFile.exists()) {
                 try {

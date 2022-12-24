@@ -2,6 +2,7 @@ package mddev0.mafiacraft.gui;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.abilities.Ability;
+import mddev0.mafiacraft.roles.Hunter;
 import mddev0.mafiacraft.roles.Role;
 import mddev0.mafiacraft.util.MafiaPlayer;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public final class InfoGUI implements Listener {
 
@@ -80,6 +82,9 @@ public final class InfoGUI implements Listener {
         if (caller.getRole().getWinCond() == Role.WinCondition.MAFIA || caller.getRole().getWinCond() == Role.WinCondition.ROLE) {
             headLore.add(ChatColor.GRAY + "The names and roles of your");
             headLore.add(ChatColor.GRAY + "teammates are listed, if they are alive.");
+        } else if (caller.getRole() instanceof Hunter) {
+            headLore.add(ChatColor.GRAY + "The names and status of your");
+            headLore.add(ChatColor.GRAY + "targets are listed.");
         }
         headMeta.setLore(headLore);
         head.setItemMeta(headMeta);
@@ -116,8 +121,8 @@ public final class InfoGUI implements Listener {
         }
 
         // List of Teammates
-        int teammateNumber = 0;
         if (caller.getRole().getWinCond() == Role.WinCondition.MAFIA) { // If Mafia
+            int teammateNumber = 0;
             for (MafiaPlayer other : plugin.getLivingPlayers().values()) {
                 ItemStack teamHead;
                 SkullMeta teamMeta;
@@ -127,11 +132,7 @@ public final class InfoGUI implements Listener {
                     teamMeta = (SkullMeta) teamHead.getItemMeta();
                     assert teamMeta != null;
                     teamMeta.setOwningPlayer(Bukkit.getOfflinePlayer(other.getID()));
-                    try {
-                        teamTitle = ChatColor.RED + Bukkit.getPlayer(other.getID()).getName() + " | " + other.getRole().toString();
-                    } catch (NullPointerException npex) {
-                        teamTitle = ChatColor.RED + "??? | " + other.getRole().toString();
-                    }
+                    teamTitle = ChatColor.RED + Bukkit.getOfflinePlayer(other.getID()).getName() + " | " + other.getRole().toString();
                     teamMeta.setDisplayName(teamTitle);
                     teamHead.setItemMeta(teamMeta);
                     // Set Item
@@ -141,6 +142,7 @@ public final class InfoGUI implements Listener {
                 }
             }
         } else if (caller.getRole().getWinCond() == Role.WinCondition.ROLE) { // If Other Teammate
+            int teammateNumber = 0;
             for (MafiaPlayer other : plugin.getLivingPlayers().values()) {
                 ItemStack teamHead;
                 SkullMeta teamMeta;
@@ -150,11 +152,7 @@ public final class InfoGUI implements Listener {
                     teamMeta = (SkullMeta) teamHead.getItemMeta();
                     assert teamMeta != null;
                     teamMeta.setOwningPlayer(Bukkit.getOfflinePlayer(other.getID()));
-                    try {
-                        teamTitle = ChatColor.DARK_AQUA + Bukkit.getPlayer(other.getID()).getName() + " | " + other.getRole().toString();
-                    } catch (NullPointerException npex) {
-                        teamTitle = ChatColor.DARK_AQUA + "??? | " + other.getRole().toString();
-                    }
+                    teamTitle = ChatColor.DARK_AQUA + Bukkit.getOfflinePlayer(other.getID()).getName() + " | " + other.getRole().toString();
                     teamMeta.setDisplayName(teamTitle);
                     teamHead.setItemMeta(teamMeta);
                     // Set Item
@@ -162,6 +160,30 @@ public final class InfoGUI implements Listener {
                     inv.setItem(teamPos, teamHead);
                     teammateNumber++;
                 }
+            }
+        } else if (caller.getRole() instanceof Hunter hunter) { // If is a list of targets instead
+            int targetNumber = 0;
+            for (UUID uuid : hunter.getTargets()) {
+                MafiaPlayer target = plugin.getPlayerList().get(uuid);
+                if (target == null) {
+                    // skip target if that player is not in the game
+                    continue;
+                }
+                ItemStack targetHead = new ItemStack(Material.PLAYER_HEAD);
+                SkullMeta targetMeta = (SkullMeta) targetHead.getItemMeta();
+                assert targetMeta != null;
+                targetMeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+                String targetTitle;
+                if (target.isLiving())
+                    targetTitle = ChatColor.YELLOW + Bukkit.getOfflinePlayer(uuid).getName() + " | Alive";
+                else
+                    targetTitle = ChatColor.DARK_RED + Bukkit.getOfflinePlayer(uuid).getName() + " | Dead";
+                targetMeta.setDisplayName(targetTitle);
+                targetHead.setItemMeta(targetMeta);
+                // set item
+                int teamPos = 17 + (9 * (targetNumber % 5)) - (targetNumber / 9);
+                inv.setItem(teamPos, targetHead);
+                targetNumber++;
             }
         }
     }

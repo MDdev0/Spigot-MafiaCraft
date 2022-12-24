@@ -36,7 +36,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
         switch (args[0]) {
             case "setrole" -> {
                 if (args.length < 3) {
-                    sender.sendMessage(ChatColor.RED + "Missing arguments: <player> <(Role Name) | original>");
+                    sender.sendMessage(ChatColor.RED + "Missing arguments: <player> <(Role Name)>");
                     return false;
                 }
                 Player p = Bukkit.getPlayer(args[1]);
@@ -164,7 +164,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
             }
             case "list" -> {
                 for (MafiaPlayer p : plugin.getPlayerList().values()) {
-                    sender.sendMessage(ChatColor.GRAY + Bukkit.getPlayer(p.getID()).getName() + " | " + p.getRole().toString() + " | " + p.isLiving());
+                    sender.sendMessage(ChatColor.GRAY + Bukkit.getOfflinePlayer(p.getID()).getName() + " | " + p.getRole().toString() + " | " + p.isLiving());
                 }
             }
         }
