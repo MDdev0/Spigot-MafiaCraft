@@ -29,6 +29,9 @@ public class MafiaCraft extends JavaPlugin {
 
     private boolean active;
 
+    // Game Finisher
+    private final GameFinisher gameFinisher = new GameFinisher(this);
+
     public void onEnable() {
         // Config
         saveDefaultConfig();
@@ -101,6 +104,9 @@ public class MafiaCraft extends JavaPlugin {
 
         // Active
         active = getConfig().getBoolean("active");
+
+        // Listener for finishing the game
+        gameFinisher.runTaskTimer(this, 0L, 1L); // Check if game should end every tick
     }
 
     public void onDisable() {
