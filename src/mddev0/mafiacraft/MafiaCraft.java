@@ -32,6 +32,8 @@ public class MafiaCraft extends JavaPlugin {
     // Game Finisher
     private final GameFinisher gameFinisher = new GameFinisher(this);
 
+    private final GameRandomizer randomizer = new GameRandomizer(this);
+
     public void onEnable() {
         // Config
         saveDefaultConfig();
@@ -143,6 +145,9 @@ public class MafiaCraft extends JavaPlugin {
             if (!p.getValue().isLiving())
                 output.put(p.getKey(), p.getValue());
         return output;
+    }
+    public GameRandomizer getRandomizer() {
+        return randomizer;
     }
 
     // TODO: CLEANUP AND REMOVE

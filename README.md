@@ -6,20 +6,21 @@
 ![](https://img.shields.io/badge/Total%20Abilities-35-lightgrey)
 ![](https://img.shields.io/badge/Implemented%20Abilities-35-green)  
 ![](https://img.shields.io/badge/Commands-Done-0b0)  
-![](https://img.shields.io/badge/Game%20Flow-WIP-yellow)    
+![](https://img.shields.io/badge/Game%20Flow-Needs%20Testing-teal)    
 ![](https://img.shields.io/badge/Serialization-Needs%20Testing-teal)  
-![](https://img.shields.io/badge/Testing-Started-orange)  
-![](https://img.shields.io/badge/Estimated%20Finish%20Date-December%2019-blue)
+![](https://img.shields.io/badge/Testing-Final%20Testing-yellow)  
+![](https://img.shields.io/badge/Estimated%20Finish%20Date-January%201st%202023-blue)
+
+![](https://img.shields.io/tokei/lines/github/MDdev0/Spigot-MafiaCraft?color=gold&label=Lines%20of%20Code)
 
 ---
 
 # MafiaCraft
 
-<p>MafiaCraft is a plugin for Bukkit that recreates the classic hidden role game
+<p>MafiaCraft is a plugin for Spigot-based Minecraft servers that recreates the classic hidden role game
 Mafia (also played under the name Werewolf) into Minecraft. This plugin was heavily inspired by those
 games, as well as other online hidden role games like Town of Salem.</p>
-<p>This plugin is still early in development, and I only really get time to work on it when my schedule
-is free for a whole afternoon, so expect lengthy delays. See the status above for more info.</p>
+<p>This plugin is now heading into final testing, and then will be used on my server. Let's hope it works!</p>
 
 # Gameplay
 

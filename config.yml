@@ -37,3 +37,30 @@ fogOfWarCost: 10
 fogOfWarRange: 30
 # Cost (in levels) to trigger Vanish
 vanishCost: 10
+
+# Number of targets hunters will be given
+hunterNumTargets: 3
+
+# Roles that you want to ensure at least one of exists in the game.
+# If the role is unique, it will only be added once. If it is not, it could be added multiple times.
+# If there are not enough players in the game, the randomization command will fail.
+requiredRoles:
+  - "Godfather"
+  - "Mafioso"
+  - "Reanimator"
+  - "Investigator"
+  - "Apothecary"
+  - "Deacon"
+  - "SerialKiller"
+  - "Hunter"
+
+# Roles that will not be assigned to players. Overridden by requiredRoles.
+# If there is some issue that makes the game impossible to set up, the randomization command will fail.
+bannedRoles:
+
+# Minimum required ratios for certain types of roles.
+# If these add up to more than 1.0 the randomization command will fail.
+roleRatio:
+  mafia: 0.2
+  village: 0.6
+  neutral: 0.1
