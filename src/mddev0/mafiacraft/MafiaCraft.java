@@ -16,8 +16,6 @@ import java.util.concurrent.ConcurrentMap;
 
 public class MafiaCraft extends JavaPlugin {
 
-    // TODO: find all uses of getPlayers(), should it be replaced with getLivingPlayers() or getDeadPlayers()?
-
     private final ConcurrentMap<UUID, MafiaPlayer> players = new ConcurrentHashMap<>();
 
     // Timed abilities
