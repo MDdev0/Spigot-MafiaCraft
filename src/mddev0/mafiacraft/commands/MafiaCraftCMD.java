@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Objects;
+
 public class MafiaCraftCMD implements CommandExecutor {
 
     private final MafiaCraft plugin;
@@ -20,13 +22,13 @@ public class MafiaCraftCMD implements CommandExecutor {
     // Please ignore the @SuppressWarnings. If you ignore them they don't exist
     @Override
     public boolean onCommand(CommandSender sender, @SuppressWarnings("NullableProblems") Command cmd, @SuppressWarnings("NullableProblems") String label, @SuppressWarnings("NullableProblems") String[] args) {
-        MafiaPlayer player = plugin.getPlayerList().get(Bukkit.getPlayer(sender.getName()).getUniqueId());
+        MafiaPlayer player = plugin.getPlayerList().get(Objects.requireNonNull(Bukkit.getPlayer(sender.getName())).getUniqueId());
         if (player == null) {
             sender.sendMessage(ChatColor.GRAY + "You are not currently in the MafiaCraft game!");
             return true;
         }
         InfoGUI gui = new InfoGUI(plugin, player);
-        gui.open(Bukkit.getPlayer(sender.getName()));
+        gui.open(Objects.requireNonNull(Bukkit.getPlayer(sender.getName())));
         Bukkit.getPluginManager().registerEvents(gui, plugin);
         return true;
     }

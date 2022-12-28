@@ -7,7 +7,7 @@ import java.util.Set;
 
 public abstract class Role {
     public enum WinCondition {
-        MAFIA, // TODO: make mafia able to see other mafia
+        MAFIA,
         VILLAGE,
         ALONE,
         SURVIVING,

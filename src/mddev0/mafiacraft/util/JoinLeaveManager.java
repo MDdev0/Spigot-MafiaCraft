@@ -22,6 +22,7 @@ public class JoinLeaveManager implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent join) {
         if (!plugin.getActive()) return;
@@ -57,6 +58,7 @@ public class JoinLeaveManager implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent leave) {
         if (!plugin.getActive()) return;

@@ -18,6 +18,7 @@ public final class Staked implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onDamageTaken(EntityDamageByEntityEvent hit) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

@@ -15,6 +15,7 @@ public class ChatBlocking implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onChatSend(AsyncPlayerChatEvent chat) {
         if (plugin.getConfig().getBoolean("blockSpectatorChat") && plugin.getActive()) {

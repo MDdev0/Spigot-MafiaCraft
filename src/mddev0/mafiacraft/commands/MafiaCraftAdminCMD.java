@@ -183,10 +183,10 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                         List<OfflinePlayer> playerList = plugin.getRandomizer().getPlayers();
                         sender.sendMessage(ChatColor.AQUA + "Listing " + playerList.size() + " players who are designated to be randomized:");
                         for (OfflinePlayer p : playerList) {
-                            TextComponent uuidComponent = new TextComponent(p.getUniqueId().toString());
-                            uuidComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.YELLOW + "Copy to Clipboard")));
-                            uuidComponent.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, p.getUniqueId().toString()));
-                            sender.sendMessage(ChatColor.GRAY + p.getName() + " (" + ChatColor.UNDERLINE + uuidComponent + ChatColor.RESET + ChatColor.GRAY + ")");
+                            TextComponent message = new TextComponent(ChatColor.GRAY + p.getName() + " (" + ChatColor.UNDERLINE + p.getUniqueId() + ChatColor.RESET + ChatColor.GRAY + ")");
+                            message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.YELLOW + "Copy to Clipboard")));
+                            message.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, p.getUniqueId().toString()));
+                            sender.spigot().sendMessage(message);
                         }
                         return true;
                     }
@@ -261,7 +261,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                     caller.sendMessage(ChatColor.DARK_RED + "Failed to randomize: " + ChatColor.RED + statusMsg.get());
                                     Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Randomization Failure: " + statusMsg);
                                 }
-                                Bukkit.getLogger().log(Level.INFO, "Randomization has returned to main thread");
+                                Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Randomization has returned to main thread");
                             });
                         });
                         return true;
@@ -276,7 +276,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
             }
             case "stop" -> {
                 plugin.setActive(false);
-                sender.sendMessage("The game has been stopped.");
+                sender.sendMessage(ChatColor.YELLOW + "The game has been stopped.");
                 return true;
             }
             case "revive" -> { // TODO: FIX?

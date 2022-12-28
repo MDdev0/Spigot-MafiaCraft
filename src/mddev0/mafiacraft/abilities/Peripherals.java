@@ -29,13 +29,14 @@ public final class Peripherals implements Listener {
         this.manager = manager;
     }
 
-    // SCUFFED: THIS PROBABLY IS ALSO FULL OF BUGS!
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerApproach(PlayerMoveEvent move) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         // Scuffed: Yeah it just checks all players every time someone moves. "This is terrible. Oh well."
         for (Map.Entry<UUID, MafiaPlayer> executor : plugin.getLivingPlayers().entrySet()) {
+            if (!Bukkit.getOfflinePlayer(executor.getKey()).isOnline()) continue; // Do nothing for offline players!
             if (executor.getValue().getRole().hasAbility(Ability.PERIPHERALS)) {
                 // Reset all players first
                 for (Player p : plugin.getServer().getOnlinePlayers()) {

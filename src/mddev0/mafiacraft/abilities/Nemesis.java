@@ -18,10 +18,11 @@ public final class Nemesis implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onDamageTaken(EntityDamageByEntityEvent hit) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
-        MafiaPlayer damaged = plugin.getPlayerList().get(hit.getEntity().getUniqueId());
+        MafiaPlayer damaged = plugin.getLivingPlayers().get(hit.getEntity().getUniqueId());
         if (damaged != null && damaged.getRole().hasAbility(Ability.NEMESIS) && hit.getDamager() instanceof LivingEntity ) {
             // null check
             if (((LivingEntity) hit.getDamager()).getEquipment() == null) return;

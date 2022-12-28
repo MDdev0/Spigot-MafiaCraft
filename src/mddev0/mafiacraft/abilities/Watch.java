@@ -25,8 +25,8 @@ public final class Watch implements Listener {
         this.manager = manager;
     }
 
-    // SCUFFED: THIS PROBABLY IS FULL OF BUGS!
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onSpyglassLook(PlayerInteractEvent click) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

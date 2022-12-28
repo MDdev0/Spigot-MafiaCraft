@@ -26,6 +26,7 @@ public final class Toadify implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onItemSwing(PlayerInteractEvent click) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

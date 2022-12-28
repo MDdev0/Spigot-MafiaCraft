@@ -21,6 +21,7 @@ public final class Rescue implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerDamaged(EntityDamageEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

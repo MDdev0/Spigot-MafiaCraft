@@ -16,6 +16,7 @@ public final class Marksman implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onArrowShoot(EntityShootBowEvent shot) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

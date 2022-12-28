@@ -23,12 +23,14 @@ public class DeathManager implements Listener {
      * Is called before any abilities. Will mark the player as dead.
      * Later events that prevent death can make them alive again.
      */
+    @SuppressWarnings("unused")
     @EventHandler (priority = EventPriority.LOW)
     public void onPlayerDeathEarly(PlayerDeathEvent death) {
         if (!plugin.getActive()) return;
         plugin.getPlayerList().get(death.getEntity().getUniqueId()).makeDead();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler (priority = EventPriority.HIGH)
     public void onPlayerDeathLate(PlayerDeathEvent death) {
         if (!plugin.getActive()) return;
@@ -46,6 +48,7 @@ public class DeathManager implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent res) {
         if (!plugin.getActive()) return;

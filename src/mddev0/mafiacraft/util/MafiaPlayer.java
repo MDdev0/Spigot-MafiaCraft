@@ -102,8 +102,8 @@ public class MafiaPlayer {
         attackerTicks = plugin.getConfig().getInt("attackDuration");
     }
 
-    public boolean isAttacker() {
-        return attackerTicks > 0;
+    public boolean isNotAttacker() {
+        return attackerTicks <= 0;
     }
 
     public void setFramed() {
@@ -131,15 +131,6 @@ public class MafiaPlayer {
      */
     public void startCooldown(Ability a, long dayTime) {
         cooldowns.put(a, new CooldownLength(dayTime));
-    }
-
-    /** New cooldown for specified days, starting at current day time
-     *
-     * @param a Ability to put on cooldown
-     * @param days Number of days cooldown will last
-     */
-    public void startCooldown(Ability a, int days) {
-        cooldowns.put(a, new CooldownLength(plugin.getServer().getWorlds().get(0).getTime(), days));
     }
 
     public boolean onCooldown(Ability a) {
@@ -190,13 +181,13 @@ public class MafiaPlayer {
             unholyTicks = (unholyTicks>0) ? unholyTicks-1 : 0;
             // Cooldowns
             for (Map.Entry<Ability, CooldownLength> a : cooldowns.entrySet()) {
-                a.getValue().decrement();
+                a.getValue().check();
                 if (a.getValue().expired()) cooldowns.remove(a.getKey());
             }
         }
     }
 
-    private class CooldownLength {
+    private static class CooldownLength {
         long dayTime;
         int days;
         CooldownLength(long dayTime, int days) {
@@ -207,16 +198,14 @@ public class MafiaPlayer {
             this.dayTime = dayTime;
             this.days = 0;
         }
-        void decrement() { //XXX: Change this so DayTime is the time of day
-            if (days == 0 && dayTime == 0) return; // Do nothing
-            dayTime--;
-            if (dayTime < 0) {
+        void check() {
+            if (days < 0) return; // Do nothing
+            if (Bukkit.getWorlds().get(0).getTime() == dayTime) {
                 days--;
-                dayTime += 24000;
             }
         }
         boolean expired() {
-            return (days == 0 && dayTime == 0);
+            return (days < 0);
         }
         CooldownData getDataRecord() {
             return new CooldownData(dayTime, days);

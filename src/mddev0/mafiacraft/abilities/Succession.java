@@ -18,6 +18,7 @@ public final class Succession implements Listener {
     public Succession(MafiaCraft plugin) {
         this.plugin = plugin;
     }
+    @SuppressWarnings("unused")
     @EventHandler
     public void onGodfatherDeath(PlayerDeathEvent death) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

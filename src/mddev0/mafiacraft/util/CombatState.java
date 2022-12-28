@@ -2,8 +2,6 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,6 +18,7 @@ public class CombatState implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler (priority = EventPriority.HIGH) // execute AFTER normal damage handlers
     public void onAttackPlayer(EntityDamageByEntityEvent damage) {
         if (damage.getEntityType() == EntityType.PLAYER) {
@@ -43,7 +42,6 @@ public class CombatState implements Listener {
     public static Player findAttackingPlayer(EntityDamageByEntityEvent damage) {
         if (damage.getDamager().equals(damage.getEntity())) return null;
         // Return null if attacker and attacked are the same
-        Bukkit.broadcastMessage(ChatColor.DARK_GRAY + damage.getDamager().getType().toString());
         return switch (damage.getDamager().getType()) {
             case PLAYER:
                 // Know the attacking entity is a player

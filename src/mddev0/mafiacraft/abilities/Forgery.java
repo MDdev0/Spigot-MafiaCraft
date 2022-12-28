@@ -16,6 +16,7 @@ public final class Forgery implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onItemPickup(EntityPickupItemEvent pickup) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

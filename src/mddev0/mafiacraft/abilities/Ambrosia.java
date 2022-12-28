@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public final class Ambrosia extends BukkitRunnable implements Listener {
 
     private final MafiaCraft plugin;

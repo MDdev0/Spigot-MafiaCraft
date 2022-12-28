@@ -61,6 +61,6 @@ bannedRoles:
 # Minimum required ratios for certain types of roles.
 # If these add up to more than 1.0 the randomization command will fail.
 roleRatio:
-  mafia: 0.2
-  village: 0.6
+  mafia: 0.15
+  village: 0.65
   neutral: 0.1

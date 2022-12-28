@@ -165,7 +165,7 @@ public class GameSaver {
                         List<UUID> targets = new ArrayList<>();
                         for (String uuidStr : data.getStringList("roleData.targets"))
                             targets.add(UUID.fromString(uuidStr));
-                        role = (Hunter) roleCls.getDeclaredConstructor(MafiaCraft.class, UUID.class, List.class).newInstance(plugin, UUID.fromString(data.getString("uuid")), targets);
+                        role = (Hunter) roleCls.getDeclaredConstructor(MafiaCraft.class, UUID.class, List.class).newInstance(plugin, UUID.fromString(Objects.requireNonNull(data.getString("uuid"))), targets);
                     }
                     case "Jester" -> {
                         role = (Jester) roleCls.getDeclaredConstructor().newInstance();
@@ -193,7 +193,7 @@ public class GameSaver {
                         List<UUID> targets = new ArrayList<>();
                         for (String uuidStr : data.getStringList("originalRoleData.targets"))
                             targets.add(UUID.fromString(uuidStr));
-                        originalRole = (Hunter) originalRoleCls.getDeclaredConstructor(MafiaCraft.class, UUID.class, List.class).newInstance(plugin, UUID.fromString(data.getString("uuid")), targets);
+                        originalRole = (Hunter) originalRoleCls.getDeclaredConstructor(MafiaCraft.class, UUID.class, List.class).newInstance(plugin, UUID.fromString(Objects.requireNonNull(data.getString("uuid"))), targets);
                     }
                     case "Jester" -> {
                         originalRole = (Jester) originalRoleCls.getDeclaredConstructor().newInstance();
@@ -213,8 +213,8 @@ public class GameSaver {
             }
 
             // Add player to game
-            plugin.getPlayerList().put(UUID.fromString(data.getString("uuid")), new MafiaPlayer(plugin, new MafiaPlayer.PlayerData(
-                    UUID.fromString(data.getString("uuid")),
+            plugin.getPlayerList().put(UUID.fromString(Objects.requireNonNull(data.getString("uuid"))), new MafiaPlayer(plugin, new MafiaPlayer.PlayerData(
+                    UUID.fromString(Objects.requireNonNull(data.getString("uuid"))),
                     data.getBoolean("living"),
                     role,
                     originalRole,
@@ -230,6 +230,7 @@ public class GameSaver {
     }
 
     public static class WorldSaveListener implements Listener {
+        @SuppressWarnings("unused")
         @EventHandler
         public void onWorldSave(WorldSaveEvent save) {
             saveGame();

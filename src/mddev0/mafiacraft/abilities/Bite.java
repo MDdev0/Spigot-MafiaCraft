@@ -16,6 +16,7 @@ public final class Bite implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent death) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

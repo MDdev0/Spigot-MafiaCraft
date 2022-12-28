@@ -22,6 +22,7 @@ public final class JustAPrank implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onJesterKill(PlayerDeathEvent death) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
@@ -29,7 +30,7 @@ public final class JustAPrank implements Listener {
             MafiaPlayer jest = plugin.getPlayerList().get(death.getEntity().getUniqueId());
             MafiaPlayer killer = plugin.getLivingPlayers().get(death.getEntity().getKiller().getUniqueId());
             if (jest != null && jest.getRole().hasAbility(Ability.JUST_A_PRANK) && killer != null && killer.getRole().getWinCond() == Role.WinCondition.VILLAGE) {
-                if (!jest.isAttacker()) {
+                if (jest.isNotAttacker()) {
                     jest.makeAlive();
                     Player jester = Bukkit.getPlayer(jest.getID());
                     assert jester != null; // jester must be online to have been killed

@@ -30,8 +30,8 @@ public final class Transform extends BukkitRunnable {
                 for (MafiaPlayer play : plugin.getLivingPlayers().values()) {
                     if (play.getRole().hasAbility(Ability.TRANSFORM)) {
                         // player can transform
-                        if (!((Werewolf) play.getRole()).getTransformed()) {
-                            Bukkit.getPlayer(play.getID()).sendMessage(ChatColor.DARK_RED + "You feel hungry. It is a full moon!");
+                        if (!((Werewolf) play.getRole()).getTransformed() && Bukkit.getPlayer(play.getID()) != null) {
+                            Objects.requireNonNull(Bukkit.getPlayer(play.getID())).sendMessage(ChatColor.DARK_RED + "You feel hungry. It is a full moon!");
                             ((Werewolf) play.getRole()).setTransformed(true);
                             play.setUnholy();
                         }

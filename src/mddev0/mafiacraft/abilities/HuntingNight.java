@@ -15,6 +15,7 @@ public final class HuntingNight implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent death) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

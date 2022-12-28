@@ -26,6 +26,7 @@ public final class FogOfWar implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onItemSwing(PlayerInteractEvent click) {
         if (click.getAction().equals(Action.LEFT_CLICK_AIR)) {

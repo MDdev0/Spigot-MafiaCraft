@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class InfoGUI implements Listener {
@@ -25,8 +26,6 @@ public final class InfoGUI implements Listener {
     private final MafiaCraft plugin;
     private final MafiaPlayer caller;
     private final Inventory inv;
-
-    // TODO: SHOW HUNTER TARGETS SOMEWHERE IN GUI!
 
     public InfoGUI(MafiaCraft plugin, MafiaPlayer player) {
         this.plugin = plugin;
@@ -38,7 +37,7 @@ public final class InfoGUI implements Listener {
             case ALONE -> ChatColor.BLUE;
             case SURVIVING -> ChatColor.YELLOW;
             case ROLE -> ChatColor.DARK_AQUA;
-        } + Bukkit.getPlayer(caller.getID()).getName() + " | "
+        } + Objects.requireNonNull(Bukkit.getPlayer(caller.getID())).getName() + " | "
                 + caller.getRole().toString();
 
         inv = Bukkit.createInventory(null, 54, invTitle);
@@ -64,7 +63,7 @@ public final class InfoGUI implements Listener {
             case ALONE -> ChatColor.BLUE;
             case SURVIVING -> ChatColor.YELLOW;
             case ROLE -> ChatColor.DARK_AQUA;
-        } + Bukkit.getPlayer(caller.getID()).getName() + " | "
+        } + Objects.requireNonNull(Bukkit.getPlayer(caller.getID())).getName() + " | "
                 + caller.getRole().toString();
         headMeta.setDisplayName(headTitle);
         // Lore
@@ -115,7 +114,7 @@ public final class InfoGUI implements Listener {
                 abilItem.setItemMeta(abilMeta);
             }
             // Set Item
-            int abilPos = 9 + (9 * (abilityNumber % 5)) + (abilityNumber / 9);
+            int abilPos = 9 + (9 * (abilityNumber % 5)) + (abilityNumber / 5);
             inv.setItem(abilPos, abilItem);
             abilityNumber++;
         }
@@ -136,7 +135,7 @@ public final class InfoGUI implements Listener {
                     teamMeta.setDisplayName(teamTitle);
                     teamHead.setItemMeta(teamMeta);
                     // Set Item
-                    int teamPos = 17 + (9 * (teammateNumber % 5)) - (teammateNumber / 9);
+                    int teamPos = 17 + (9 * (teammateNumber % 5)) - (teammateNumber / 5);
                     inv.setItem(teamPos, teamHead);
                     teammateNumber++;
                 }
@@ -156,7 +155,7 @@ public final class InfoGUI implements Listener {
                     teamMeta.setDisplayName(teamTitle);
                     teamHead.setItemMeta(teamMeta);
                     // Set Item
-                    int teamPos = 17 + (9 * (teammateNumber % 5)) - (teammateNumber / 9);
+                    int teamPos = 17 + (9 * (teammateNumber % 5)) - (teammateNumber / 5);
                     inv.setItem(teamPos, teamHead);
                     teammateNumber++;
                 }
@@ -181,8 +180,8 @@ public final class InfoGUI implements Listener {
                 targetMeta.setDisplayName(targetTitle);
                 targetHead.setItemMeta(targetMeta);
                 // set item
-                int teamPos = 17 + (9 * (targetNumber % 5)) - (targetNumber / 9);
-                inv.setItem(teamPos, targetHead);
+                int targetPos = 17 + (9 * (targetNumber % 5)) - (targetNumber / 5);
+                inv.setItem(targetPos, targetHead);
                 targetNumber++;
             }
         }
@@ -192,6 +191,7 @@ public final class InfoGUI implements Listener {
         e.openInventory(inv);
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onInteract(InventoryClickEvent e) {
         if (e.getInventory().equals(inv))

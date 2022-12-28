@@ -19,14 +19,15 @@ public final class Protection implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onPlayerAttacked(EntityDamageByEntityEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
-        MafiaPlayer attacked = plugin.getPlayerList().get(damage.getEntity().getUniqueId());
+        MafiaPlayer attacked = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());
         if (damage.getEntityType() == EntityType.PLAYER && attacked != null &&
                 attacked.getRole().hasAbility(Ability.PROTECTION)) {
             // Player attacked has protection ability
-            if (!attacked.isAttacker() && !attacked.onCooldown(Ability.PROTECTION)) {
+            if (attacked.isNotAttacker() && !attacked.onCooldown(Ability.PROTECTION)) {
                 // Does not trigger if player was the attacker or if ability is on cooldown
                 if (CombatState.findAttackingPlayer(damage) != null) {
                     // TRIGGER ABILITY

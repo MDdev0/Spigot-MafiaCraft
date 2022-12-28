@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class GameRandomizer {
 
@@ -26,6 +27,10 @@ public class GameRandomizer {
         int added = 0;
         for (OfflinePlayer p : Bukkit.getOfflinePlayers())
             if (!players.contains(p)) {
+                if (p.getName() == null) {
+                    // DO NOT ADD PLAYERS WITH NULL USERNAMES!!!
+                    continue;
+                }
                 players.add(p);
                 added++;
             }
@@ -87,7 +92,7 @@ public class GameRandomizer {
         for (Role.RoleClasses roleClass : Role.RoleClasses.values()) {
             if (requiredRoles.contains(roleClass.getRoleClass().getSimpleName()))
                 // Role is required
-                availableRoles.add(requiredRoles.getClass());
+                availableRoles.add(roleClass.getRoleClass());
             else if (!bannedRoles.contains(roleClass.getRoleClass().getSimpleName()))
                 // Role is not banned
                 availableRoles.add(roleClass.getRoleClass());
@@ -133,7 +138,7 @@ public class GameRandomizer {
             Class<?> roleCls;
             do {
                 roleCls = availableRoles.get(rand.nextInt(availableRoles.size()));
-            } while (requiredRoles.size() > 0 && requiredRoles.contains(roleCls.getSimpleName()));
+            } while (requiredRoles.size() > 0 && !requiredRoles.contains(roleCls.getSimpleName()));
             Role role;
             // Create role
             try {
@@ -178,7 +183,14 @@ public class GameRandomizer {
             if (mafiaPlayer.getRole().isUnique()) availableRoles.remove(mafiaPlayer.getRole().getClass());
 
             // Player is all set to go!
-            players.remove(player);
+            plugin.getPlayerList().put(mafiaPlayer.getID(), mafiaPlayer);
+            if (plugin.getPlayerList().containsKey(mafiaPlayer.getID())){
+                players.remove(player);
+                // I think the logger is thread safe
+                Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Set random role for player " + player.getName() + " (" + player.getUniqueId() + ")");
+            } else {
+                Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Could not add " + player.getName() + " (" + player.getUniqueId() + ") to the MafiaCraft player list");
+            }
         }
         // All players should have been set up by this point
         // Do hunter targets

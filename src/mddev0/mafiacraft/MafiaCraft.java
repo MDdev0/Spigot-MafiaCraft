@@ -9,15 +9,16 @@ import mddev0.mafiacraft.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class MafiaCraft extends JavaPlugin {
 
     // TODO: find all uses of getPlayers(), should it be replaced with getLivingPlayers() or getDeadPlayers()?
 
-    private final Map<UUID, MafiaPlayer> players = new HashMap<>();
+    private final ConcurrentMap<UUID, MafiaPlayer> players = new ConcurrentHashMap<>();
 
     // Timed abilities
     private final HighNoon abilityHighNoon = new HighNoon(this);
@@ -98,7 +99,9 @@ public class MafiaCraft extends JavaPlugin {
         // GUI events are handled every time a GUI is instantiated
 
         // COMMANDS
+        //noinspection DataFlowIssue
         getCommand("mafiacraftadmin").setExecutor(new MafiaCraftAdminCMD(this));
+        //noinspection DataFlowIssue
         getCommand("mafiacraft").setExecutor(new MafiaCraftCMD(this));
 
         // Chat
@@ -129,18 +132,18 @@ public class MafiaCraft extends JavaPlugin {
     public void setActive(boolean state) {
         this.active = state;
     }
-    public Map<UUID, MafiaPlayer> getPlayerList() {
+    public ConcurrentMap<UUID, MafiaPlayer> getPlayerList() {
         return players;
     }
-    public Map<UUID, MafiaPlayer> getLivingPlayers() {
-        Map<UUID, MafiaPlayer> output = new HashMap<>();
+    public ConcurrentMap<UUID, MafiaPlayer> getLivingPlayers() {
+        ConcurrentMap<UUID, MafiaPlayer> output = new ConcurrentHashMap<>();
         for (Map.Entry<UUID, MafiaPlayer> p : players.entrySet())
             if (p.getValue().isLiving())
                 output.put(p.getKey(), p.getValue());
         return output;
     }
-    public Map<UUID, MafiaPlayer> getDeadPlayers() {
-        Map<UUID, MafiaPlayer> output = new HashMap<>();
+    public ConcurrentMap<UUID, MafiaPlayer> getDeadPlayers() {
+        ConcurrentMap<UUID, MafiaPlayer> output = new ConcurrentHashMap<>();
         for (Map.Entry<UUID, MafiaPlayer> p : players.entrySet())
             if (!p.getValue().isLiving())
                 output.put(p.getKey(), p.getValue());
@@ -149,12 +152,4 @@ public class MafiaCraft extends JavaPlugin {
     public GameRandomizer getRandomizer() {
         return randomizer;
     }
-
-    // TODO: CLEANUP AND REMOVE
-//    private class EventTester implements Listener {
-//        @EventHandler
-//        public void onEvent1(InventoryClickEvent inv) {
-//            Bukkit.broadcastMessage("EVENT:" + inv.toString());
-//        }
-//    }
 }

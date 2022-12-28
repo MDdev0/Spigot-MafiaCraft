@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityCombustByBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -30,10 +30,11 @@ public final class SpellBook implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler //TODO: FIX! Needs to check for fire, and doesn't work anyways
-    public void onItemDamage(EntityDamageByBlockEvent damage) {
+    @SuppressWarnings("unused")
+    @EventHandler
+    public void onItemDamage(EntityCombustByBlockEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
-        if (damage.getEntityType() == EntityType.DROPPED_ITEM) {
+        if (damage.getEntityType() == EntityType.DROPPED_ITEM && Objects.requireNonNull(damage.getCombuster()).getType() == Material.FIRE) {
             Item item = (Item) damage.getEntity();
             if (item.getItemStack().getType() == Material.ENCHANTED_BOOK) {
                 // Valid item, check player
@@ -49,17 +50,19 @@ public final class SpellBook implements Listener {
                     List<String> lore = new ArrayList<>();
                     lore.add("Only usable by Sorcerers.");
                     lore.add("Right click to switch to different spells.");
-                    lore.add("Left click to activate. Look at a player to cast the spell on them, or anywhere else to cast on yourself.");
+                    lore.add("Left click to activate. Look at a player to cast");
+                    lore.add(" the spell on them, or anywhere else to cast on yourself.");
                     meta.setLore(lore);
                     toGive.setItemMeta(meta);
                     Player receiver = Bukkit.getPlayer(thrower.getID());
-                    receiver.getWorld().dropItem(receiver.getLocation(), toGive);
+                    Objects.requireNonNull(receiver).getWorld().dropItem(receiver.getLocation(), toGive);
                     thrower.setUnholy();
                 }
             }
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onBookClick(PlayerInteractEvent click) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

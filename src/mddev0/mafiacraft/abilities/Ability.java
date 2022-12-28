@@ -1,5 +1,6 @@
 package mddev0.mafiacraft.abilities;
 
+@SuppressWarnings("unused")
 public enum Ability {
     PROTECTION("Protection"),
     CHARISMA("Charisma"), // Has no class

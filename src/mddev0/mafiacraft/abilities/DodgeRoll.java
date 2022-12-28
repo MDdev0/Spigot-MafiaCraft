@@ -15,6 +15,7 @@ public final class DodgeRoll implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onFallOrExplodeDamage(EntityDamageEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

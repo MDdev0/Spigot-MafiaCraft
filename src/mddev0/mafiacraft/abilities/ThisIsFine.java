@@ -15,6 +15,7 @@ public final class ThisIsFine implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onFireDamage(EntityDamageEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!

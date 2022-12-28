@@ -21,6 +21,7 @@ public final class Investigate implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onSpyglassLook(PlayerInteractEvent click) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
