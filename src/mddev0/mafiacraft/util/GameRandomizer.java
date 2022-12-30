@@ -17,6 +17,7 @@ public class GameRandomizer {
     private final MafiaCraft plugin;
 
     private final List<OfflinePlayer> players;
+    private List<OfflinePlayer> prevPlayers;
 
     public GameRandomizer (MafiaCraft plugin) {
         this.plugin = plugin;
@@ -128,6 +129,9 @@ public class GameRandomizer {
         if (requiredRoles.size() > numPlayers)
             throw new RandomizationException(requiredRoles.size() + " roles need to be filled, but only " + numPlayers + " players are available.");
 
+        // SHALLOW COPY!!
+        prevPlayers = new ArrayList<>(players);
+
         // Player role assignment
         // This loop could go on for ages... oh well
         // and by ages I mean worst case is potentially infinite
@@ -203,6 +207,10 @@ public class GameRandomizer {
 
     public List<OfflinePlayer> getPlayers() {
         return players;
+    }
+
+    public final List<OfflinePlayer> getPrevPlayers() {
+        return prevPlayers;
     }
 
     public static class RandomizationException extends Exception {

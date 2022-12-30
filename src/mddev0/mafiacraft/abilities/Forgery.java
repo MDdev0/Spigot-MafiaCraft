@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public final class Forgery implements Listener {
 
@@ -20,9 +21,10 @@ public final class Forgery implements Listener {
     @EventHandler
     public void onItemPickup(EntityPickupItemEvent pickup) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
-        String itemName = ChatColor.stripColor(pickup.getItem().getCustomName());
+        ItemMeta meta = pickup.getItem().getItemStack().getItemMeta();
+        String itemName = (meta != null) ? ChatColor.stripColor(meta.getDisplayName()) : null;
         if (pickup.getEntityType() == EntityType.PLAYER && itemName != null &&
-                itemName.equalsIgnoreCase(plugin.getConfig().getString("forgeItemName"))) {
+                itemName.trim().equalsIgnoreCase(plugin.getConfig().getString("forgeItemName"))) {
             // Check that thrower has ability
             MafiaPlayer thrower = plugin.getLivingPlayers().get(pickup.getItem().getThrower());
             MafiaPlayer toFrame = plugin.getLivingPlayers().get(pickup.getEntity().getUniqueId());

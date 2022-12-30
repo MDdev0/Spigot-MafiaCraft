@@ -40,6 +40,7 @@ public final class ReanimationGUI implements Listener {
             assert meta != null;
             meta.setDisplayName(ChatColor.AQUA + player.getName());
             meta.setOwningPlayer(player);
+            head.setItemMeta(meta);
             inv.addItem(head);
         }
     }
@@ -61,6 +62,8 @@ public final class ReanimationGUI implements Listener {
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).startCooldown(Ability.REANIMATION, 0L, 6);
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).setUnholy();
         plugin.getPlayerList().get(toReanimate).makeAlive();
+        click.getWhoClicked().sendMessage(ChatColor.GREEN + Bukkit.getOfflinePlayer(toReanimate).getName() + " has been revived.");
+        click.getWhoClicked().closeInventory();
         // Code to make player living again if they are currently online
         OfflinePlayer offp = ((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer();
         if (offp.isOnline()) {

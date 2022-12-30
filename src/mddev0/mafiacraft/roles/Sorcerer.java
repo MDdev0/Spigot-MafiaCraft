@@ -21,7 +21,12 @@ public final class Sorcerer extends Role {
     }
 
     public void nextAbility() {
-        selected = abilities.iterator().next();
+        do {
+            int selectedIndex = (abilities.stream().toList().indexOf(selected));
+            selectedIndex += 1;
+            selectedIndex %= abilities.size();
+            selected = abilities.stream().toList().get(selectedIndex);
+        } while (selected == Ability.SPELL_BOOK);
     }
 
     @Override

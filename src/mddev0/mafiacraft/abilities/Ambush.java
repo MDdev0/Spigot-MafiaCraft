@@ -23,8 +23,10 @@ public final class Ambush implements Listener {
     @EventHandler
     public void onAttackPlayer(EntityDamageByEntityEvent damage) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
-        MafiaPlayer damagerMP = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());
-        if (damage.getEntityType() == EntityType.PLAYER && damagerMP != null && damagerMP.isNotAttacker()) {
+        MafiaPlayer damagerMP = plugin.getLivingPlayers().get(damage.getDamager().getUniqueId());
+        MafiaPlayer damagedMP = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());
+        if (damage.getEntity().getType() == EntityType.PLAYER && damagerMP != null &&
+                damage.getDamager().getType() == EntityType.PLAYER && damagedMP != null && damagedMP.isNotAttacker()) {
             // Attacked entity is a player who has not attacked
             Player damager = CombatState.findAttackingPlayer(damage);
             if (damager != null) {

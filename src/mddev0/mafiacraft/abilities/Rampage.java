@@ -42,8 +42,8 @@ public final class Rampage extends BukkitRunnable implements Listener {
 
     @Override
     public void run() {
+        if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         for (MafiaPlayer p : plugin.getLivingPlayers().values()) {
-            if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
             if (p.getRole().hasAbility(Ability.RAMPAGE)) {
                 if (((Werewolf) p.getRole()).getTransformed()) {
                     int level = Math.min(5, ((Werewolf) p.getRole()).getKills() - 1);

@@ -23,7 +23,7 @@ public final class Transform extends BukkitRunnable {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         // Do nothing if it is not night
         long dayTime = plugin.getServer().getWorlds().get(0).getTime();
-        if (dayTime >= 19000 && dayTime < 23000) {
+        if (dayTime >= 13000 && dayTime < 23000) {
             long fullTime = plugin.getServer().getWorlds().get(0).getFullTime();
             int phase = (int) (fullTime/24000)%8;
             if (phase == 0) { // Full Moon

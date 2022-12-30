@@ -50,8 +50,8 @@ public class GameSaver {
         for (Map.Entry<UUID, MafiaPlayer> p : players.entrySet()) {
             MafiaPlayer player = p.getValue();
             // Create file if needed and set up variables
-            OfflinePlayer offp = Bukkit.getPlayer(p.getKey());
-            String dataName = (offp != null) ? offp.getName() : p.getKey().toString();
+            OfflinePlayer offp = Bukkit.getOfflinePlayer(p.getKey());
+            String dataName = (offp.getName() != null) ? offp.getName() : p.getKey().toString();
             File dataFile = new File(playerDataFolder, dataName + ".yml");
             if (!dataFile.exists()) {
                 try {

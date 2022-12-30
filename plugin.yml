@@ -1,6 +1,6 @@
 name: MafiaCraft
 main: mddev0.mafiacraft.MafiaCraft
-version: 0.1
+version: 1.0
 api-version: 1.19
 depend: [ProtocolLib]
 commands:

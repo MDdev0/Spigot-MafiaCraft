@@ -188,7 +188,7 @@ public class MafiaPlayer {
     }
 
     private static class CooldownLength {
-        long dayTime;
+        final long dayTime;
         int days;
         CooldownLength(long dayTime, int days) {
             this.dayTime = dayTime;

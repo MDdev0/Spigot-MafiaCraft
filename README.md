@@ -1,13 +1,11 @@
 ### Status
-
-![](https://img.shields.io/badge/Project%20Phase-Final%20Testing-aqua)  
-![](https://img.shields.io/badge/Roles%20and%20Abilities-Done-0b0)
-![](https://img.shields.io/badge/Commands-Done-0b0)
-![](https://img.shields.io/badge/Game%20Flow-Needs%20Testing-teal)
-![](https://img.shields.io/badge/Serialization-Done-0b0)  
-![](https://img.shields.io/badge/Testing-Final%20Testing-yellow)
-![](https://img.shields.io/badge/Estimated%20Finish%20Date-January%201st%202023-blue)
-
+![](https://img.shields.io/github/v/release/MDdev0/Spigot-MafiaCraft?display_name=tag&label=latest%20release)
+![](https://img.shields.io/github/v/release/MDdev0/Spigot-MafiaCraft?display_name=tag&include_prereleases&label=latest%20pre-release)
+<br>
+![](https://img.shields.io/github/issues/MDdev0/Spigot-MafiaCraft)
+![](https://img.shields.io/github/issues/MDdev0/Spigot-MafiaCraft/bug?label=bug%20reports)
+<br><br>
+![](https://img.shields.io/badge/Project%20Phase-Finished-green)
 ![](https://img.shields.io/tokei/lines/github/MDdev0/Spigot-MafiaCraft?color=gold&label=Lines%20of%20Code)
 
 ---
@@ -116,3 +114,31 @@ _* A Jester only wins if they survive and get their **Just a Prank** ability is 
 * **Unholy Abilities**: Reanimation, Ambrosia, Spell Book, Scatter, Toadify, Fog of War, Vanish, Transform, Convert, Hunting Night
   * Unholy Abilities display to Deacons for two complete in-game days (does not reset at sunrise). This is refreshed every time an unholy ability is used.
 * Wins by Surviving roles win with **anyone**, even Wins Alone roles.
+* The game will end at sundown, when the living players have met their win conditions (or failed to, in the case of some neutral roles)
+
+## Commands
+
+`/mafiacraft`: Available to all players. Shows information about their role.  
+`/mafiacraftadmin`: Available to operators only. Controls all aspects of MafiaCraft that are not controlled in the config.  
+These commands also have aliases to make them easier to use quickly.
+
+### The `/mafiacraftadmin` command tree
+
+* `setrole <player> <role>`: Sets a player's role. The player must be online. No spaces allowed in role name.
+* `removeplayer <player>`: Removes the specified player from the game. The player must be online.
+* `randomize`
+  * `add <player>`: Adds the player to the list of players who need their role randomized. The player must be online. Players can have their role re-randomized if they already have one.
+  * `addall`: Adds all players who have ever joined this world into the list of players to be randomized. The list is taken from the `world/playerdata` folder.
+  * `remove <player/uuid>`: Removes the specified player from the list of players to be randomized. Use UUID if the player is offline (see `/mafiacraft randomize list`).
+  * `removeall`: Clears the list of players to be randomized.
+  * `list`: Lists all players set to be randomized and their UUIDs (click to copy).
+  * `start`: Starts the randomization process and announces roles.
+* `start`: Starts the game. Does not affect the config value.
+* `stop`: Stops the game. Does not affect the config value.
+* `revive <player>`: Revives a dead player. The player must be online.
+* `list`: Lists all players in this game of MafiaCraft
+
+## Thanks To
+Code Contributions: [@kalyus](https://github.com/kalyus)  
+Development Testing: dustyporcupine, set_h, SpaghetBoi, [@kalyus](https://github.com/kalyus)  
+and everyone who helped workshop and encourage this idea along the way

@@ -26,7 +26,7 @@ public final class HuntingNight implements Listener {
                 long dayTime = plugin.getServer().getWorlds().get(0).getTime();
                 long fullTime = plugin.getServer().getWorlds().get(0).getFullTime();
                 int phase = (int) (fullTime/24000)%8;
-                if (dayTime >= 19000 && dayTime < 23000 && phase == 4) { // New Moon Night
+                if (dayTime >= 13000 && dayTime < 23000 && phase == 4) { // New Moon Night
                     // player already marked as dead, make them stay that way
                     death.getEntity().getKiller().sendMessage(ChatColor.DARK_RED + "The new moon is out tonight. The player you killed will not respawn.");
                     killer.setUnholy();

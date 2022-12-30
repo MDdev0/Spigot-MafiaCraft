@@ -215,7 +215,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                     caller.sendMessage(ChatColor.DARK_AQUA + "Be careful not to check roles if you are playing to avoid being spoiled!");
 
                                     // Reveal roles to players
-                                    for (OfflinePlayer offp : randomizer.getPlayers()) {
+                                    for (OfflinePlayer offp : randomizer.getPrevPlayers()) {
                                         if (offp.isOnline()) {
                                             ((Player) offp).playSound(((Player) offp).getLocation(), Sound.BLOCK_PORTAL_TRIGGER, 1.0f, 1.0f);
                                             ((Player) offp).sendTitle(ChatColor.BOLD + "Your Role Is...", "", 20, 60, 20);
@@ -223,7 +223,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                     }
                                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                                         // Final role announcement
-                                        for (OfflinePlayer offp : randomizer.getPlayers()) {
+                                        for (OfflinePlayer offp : randomizer.getPrevPlayers()) {
                                             MafiaPlayer p = plugin.getPlayerList().get(offp.getUniqueId());
                                             if (offp.isOnline() && p != null) {
                                                 ((Player) offp).playSound(((Player) offp).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
@@ -312,8 +312,12 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
             case "list" -> {
                 sender.sendMessage(ChatColor.AQUA + "Listing " + plugin.getPlayerList().size() + " MafiaCraft players:");
                 for (MafiaPlayer p : plugin.getPlayerList().values()) {
-                    sender.sendMessage(ChatColor.GRAY + Bukkit.getOfflinePlayer(p.getID()).getName() + " | " + p.getRole().toString() + " | " + p.isLiving());
+                    sender.sendMessage(ChatColor.GRAY + Bukkit.getOfflinePlayer(p.getID()).getName() + " | " + p.getRole().toString() + " | Living: " + p.isLiving());
                 }
+            }
+            default -> {
+                sender.sendMessage(ChatColor.RED + "Incorrect argument: <setrole | removeplayer | randomize | start | stop | revive | list>");
+                return false;
             }
         }
         return false;

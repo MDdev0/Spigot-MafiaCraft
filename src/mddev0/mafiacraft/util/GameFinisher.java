@@ -164,7 +164,7 @@ public class GameFinisher extends BukkitRunnable {
                     Bukkit.broadcastMessage(winnersMessage);
                     // List of all players
                     List<String> playerList = new ArrayList<>();
-                    String playerListHeader = ChatColor.GRAY +  "All of the players who played in this game (with final and original roles):";
+                    String playerListHeader = ChatColor.GOLD +  "All of the players who played in this game:";
                     playerList.add(playerListHeader);
                     for (MafiaPlayer p : plugin.getPlayerList().values()) {
                         StringBuilder addToList = new StringBuilder();

@@ -11,7 +11,7 @@ blockSpectatorChat: true
 attackDuration: 30
 
 # String an item should be renamed to in order to activate Forgery ability
-forgeItemName: "Forgery"
+forgeItemName: "forgery"
 
 # ID of item that should be sacrificed to trigger reanimation
 reanimateSacrifice: "TOTEM_OF_UNDYING"
