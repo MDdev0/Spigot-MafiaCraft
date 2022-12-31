@@ -1,15 +1,15 @@
 package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+
+import java.util.logging.Level;
 
 public class DeathManager implements Listener {
 
@@ -33,6 +33,11 @@ public class DeathManager implements Listener {
     @SuppressWarnings("unused")
     @EventHandler (priority = EventPriority.HIGH)
     public void onPlayerDeathLate(PlayerDeathEvent death) {
+        if (Boolean.FALSE.equals(death.getEntity().getWorld().getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
+            Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] showing silent death message below:");
+            Location loc = death.getEntity().getLocation();
+            Bukkit.getLogger().log(Level.INFO, death.getDeathMessage() + " <" + death.getEntity().getWorld().getName() + ": " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ">");
+        }
         if (!plugin.getActive()) return;
         MafiaPlayer dead = plugin.getPlayerList().get(death.getEntity().getUniqueId());
         if (dead != null && !dead.isLiving() && death.getEntity().getGameMode() != GameMode.SPECTATOR) {
