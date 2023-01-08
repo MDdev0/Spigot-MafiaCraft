@@ -61,7 +61,7 @@ Win by Surviving roles can win with anyone, as long as they survive until the en
 | Sorcerer      | A powerful spell-caster bound by no allegiances.                                            | Scatter,<br/>Toadify,<br/>Fog of War,<br/>Vanish,<br/>Spell Book | Surviving      | Use your abilities to survive.                                             |
 | *Werewolf*    | A regular person who suddenly transforms under the Full Moon.                               | Transform,<br/>Rampage,<br/>Bite,<br/>Nemesis                    | Same Role      | Convert or kill all others.<p/>Do not get caught.                          |
 | *Vampire*     | A mythical creature whose only goal is to spread their reach to as many people as possible. | Convert,<br/>Hunting Night,<br/>Night Owl,<br/>Staked            | Same Role      | Convert or kill all others.<p/>Do not get caught.                          |
-| *Jester*      | A clown who just wants to trick the Village into making a grave mistake.                    | Just a Prank                                                     | Surviving*     | Be killed by a member of the Village.                                      |
+| *Jester*      | A clown who just wants to trick the Village into making a grave mistake.                    | Just a Prank                                                     | Surviving*     | Be killed by a member of the Village without fighting back.                |
 
 _* A Jester only wins if they survive and get their **Just a Prank** ability is triggered._
 
@@ -103,7 +103,7 @@ _* A Jester only wins if they survive and get their **Just a Prank** ability is 
 | Hunting Night | On nights with a new moon, any kills by a Vampire will not Convert players and will instead simply kill them.                                                                                                                 |                                      |
 | Night Owl     | Affected by Weakness II during the day.                                                                                                                                                                                       | Occurs automatically.                |
 | Staked        | Weak to Wooden Tools.                                                                                                                                                                                                         |                                      |
-| Just a Prank  | Any Villager who kills a Jester unprovoked will be affected with Wither I indefinitely, until they are able to find a cure. The Jester will respawn.                                                                          |                                      |
+| Just a Prank  | Any Villager who kills a Jester who does not fight back will be affected with Wither I indefinitely, until they are able to find a cure. The Jester will respawn.                                                            |                                      |
 
 ## Rules and Definitions
 
