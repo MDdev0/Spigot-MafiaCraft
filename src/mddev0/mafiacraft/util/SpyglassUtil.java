@@ -9,6 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class SpyglassUtil extends BukkitRunnable {
     private Player targeted;
     boolean active = false;
 
-    public SpyglassUtil(MafiaCraft plugin, OfflinePlayer p) {
+    public SpyglassUtil(MafiaCraft plugin, @Nonnull OfflinePlayer p) {
         this.plugin = plugin;
         this.holder = p;
         targeted = null;
@@ -32,7 +33,7 @@ public class SpyglassUtil extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (holder == null || !holder.isOnline()) return; // holder is offline
+        if (!holder.isOnline()) return; // holder is offline
         ItemStack using = Objects.requireNonNull(holder.getPlayer()).getItemInUse();
         active = using != null && using.getType() == Material.SPYGLASS;
         // only active if player is using spyglass

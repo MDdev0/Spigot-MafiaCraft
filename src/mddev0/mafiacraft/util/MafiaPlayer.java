@@ -28,7 +28,7 @@ public class MafiaPlayer {
         this.plugin = plugin;
         onTick = new PlayerTicker();
         onTick.runTaskTimer(plugin,0,1); // runs every tick
-        spyglass = new SpyglassUtil(plugin, Bukkit.getPlayer(id));
+        spyglass = new SpyglassUtil(plugin, Bukkit.getOfflinePlayer(id));
         spyglass.runTaskTimer(plugin,0,1); // runs every tick
         uuid = id;
         living = true;
@@ -39,7 +39,7 @@ public class MafiaPlayer {
         this.plugin = plugin;
         onTick = new PlayerTicker();
         onTick.runTaskTimer(plugin,0,1); // runs every tick
-        spyglass = new SpyglassUtil(plugin, Bukkit.getPlayer(dataRecord.uuid()));
+        spyglass = new SpyglassUtil(plugin, Bukkit.getOfflinePlayer(dataRecord.uuid()));
         spyglass.runTaskTimer(plugin,0,1); // runs every tick
         this.uuid = dataRecord.uuid();
         this.living = dataRecord.living();
