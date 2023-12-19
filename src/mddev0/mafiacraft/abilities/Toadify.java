@@ -1,8 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.Sorcerer;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.*;
 import mddev0.mafiacraft.util.SpyglassUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -35,7 +34,7 @@ public final class Toadify implements Listener {
                 ItemStack book = click.getItem();
                 if (Objects.requireNonNull(book.getItemMeta()).isUnbreakable()) {
                     MafiaPlayer sorcerer = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
-                    if (sorcerer.getRole() instanceof Sorcerer && ((Sorcerer) sorcerer.getRole()).getSelected() == Ability.TOADIFY) { // dirty check but it works
+                    if (sorcerer.getRole() == Role.SORCERER && sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED) == Ability.TOADIFY) { // dirty check but it works
                         if (click.getPlayer().getLevel() < plugin.getConfig().getInt("toadifyCost")) {
                             click.getPlayer().sendMessage(ChatColor.RED + "You don't have enough levels to use this spell!");
                         } else {
@@ -55,7 +54,7 @@ public final class Toadify implements Listener {
                             click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("toadifyCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Toadify" +
                                     ChatColor.GREEN + " on " + ChatColor.AQUA + p.getName());
-                            sorcerer.setUnholy();
+                            sorcerer.getStatus().startStatus(StatusData.Status.UNHOLY, 48000L); // Two days of unholy
                             plugin.getServer().getWorlds().get(0).spawnParticle(Particle.SPELL_WITCH, click.getPlayer().getLocation().add(0,1,0), 10, 1, 1, 1);
                             plugin.getServer().getWorlds().get(0).spawnParticle(Particle.SLIME, p.getLocation().add(0,1,0), 10, 1, 1, 1);
                         }

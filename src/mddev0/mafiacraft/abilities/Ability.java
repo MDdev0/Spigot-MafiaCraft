@@ -30,10 +30,8 @@ public enum Ability {
     VANISH("Vanish"),
     TRANSFORM("Transform"),
     RAMPAGE("Rampage"),
-    BITE("Bite"),
     NEMESIS("Nemesis"),
     CONVERT("Convert"),
-    HUNTING_NIGHT("Hunting Night"),
     NIGHT_OWL("Night Owl"),
     STAKED("Staked"),
     JUST_A_PRANK("Just a Prank");

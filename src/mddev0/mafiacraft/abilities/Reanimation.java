@@ -2,7 +2,7 @@ package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.gui.ReanimationGUI;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -32,7 +32,7 @@ public final class Reanimation implements Listener {
                 // Valid item, check player and cooldown
                 if (item.getThrower() == null) return;
                 MafiaPlayer thrower = plugin.getLivingPlayers().get(item.getThrower());
-                if (thrower.getRole().hasAbility(Ability.REANIMATION) && !thrower.onCooldown(Ability.REANIMATION)) {
+                if (thrower.getRole().getAbilities().contains(Ability.REANIMATION) && !thrower.getCooldowns().isOnCooldown(Ability.REANIMATION)) {
                     item.remove();
                     ReanimationGUI gui = new ReanimationGUI(plugin);
                     gui.open(Objects.requireNonNull(Bukkit.getPlayer(item.getThrower())));

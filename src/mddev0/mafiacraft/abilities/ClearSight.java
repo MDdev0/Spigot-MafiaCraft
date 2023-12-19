@@ -1,7 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +24,7 @@ public final class ClearSight implements Listener {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         MafiaPlayer affected = plugin.getPlayerList().get(potion.getEntity().getUniqueId());
         if (potion.getEntity().getType() == EntityType.PLAYER && affected != null &&
-                affected.getRole().hasAbility(Ability.CLEAR_SIGHT) &&
+                affected.getRole().getAbilities().contains(Ability.CLEAR_SIGHT) &&
                 Objects.requireNonNull(potion.getNewEffect()).getType() == PotionEffectType.BLINDNESS)
             potion.setCancelled(true); // Cancel potion effect if eligible player is being blinded
     }

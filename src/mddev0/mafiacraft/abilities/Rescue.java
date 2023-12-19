@@ -34,9 +34,9 @@ public final class Rescue implements Listener {
                 List<Entity> nearbyEntities = damaged.getNearbyEntities(range,range,range);
                 for (Entity e : nearbyEntities) {
                     if (e.getType() == EntityType.PLAYER &&
-                            plugin.getLivingPlayers().get(e.getUniqueId()).getRole().hasAbility(Ability.RESCUE)) {
+                            plugin.getLivingPlayers().get(e.getUniqueId()).getRole().getAbilities().contains(Ability.RESCUE)) {
                         // a player nearby has the rescue ability
-                        if (e.getUniqueId() != damaged.getUniqueId()) { // Can't save yourself
+                        if (e.getUniqueId() != damaged.getUniqueId()) { // Can't dataMap yourself
                             // the player is able to be saved
                             // Do the saving
                             damage.setCancelled(true);
@@ -45,7 +45,9 @@ public final class Rescue implements Listener {
                             damaged.sendMessage(ChatColor.AQUA + "You were saved from death!");
                             // Handle the rescuer
                             e.sendMessage(ChatColor.AQUA + "You saved " + ChatColor.GREEN + damaged.getName() + ChatColor.AQUA + " from death!");
-                            plugin.getLivingPlayers().get(e.getUniqueId()).startCooldown(Ability.RESCUE, 0L); // Cooldown ends at dawn
+                            long waitUntil = plugin.getServer().getWorlds().get(0).getFullTime() + 24000L;
+                            waitUntil = waitUntil - (waitUntil % 24000); // Cooldown ends at dawn
+                            plugin.getLivingPlayers().get(e.getUniqueId()).getCooldowns().startCooldown(Ability.RESCUE, waitUntil);
                         }
                     }
                 }

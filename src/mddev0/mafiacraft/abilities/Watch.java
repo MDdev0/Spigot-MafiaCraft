@@ -5,7 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +33,7 @@ public final class Watch implements Listener {
         if (click.getItem() != null && click.getItem().getType() == Material.SPYGLASS) {
             // Material is spyglass, check player
             MafiaPlayer clicker = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
-            if (clicker != null && clicker.getRole().hasAbility(Ability.WATCH)) {
+            if (clicker != null && clicker.getRole().getAbilities().contains(Ability.WATCH)) {
 
                 // Player has right ability
                 // create new runnable that keeps players visible until player stops using spyglass

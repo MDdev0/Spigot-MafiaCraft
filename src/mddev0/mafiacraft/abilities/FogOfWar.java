@@ -1,8 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.Sorcerer;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -35,7 +34,7 @@ public final class FogOfWar implements Listener {
                 ItemStack book = click.getItem();
                 if (Objects.requireNonNull(book.getItemMeta()).isUnbreakable()) {
                     MafiaPlayer sorcerer = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
-                    if (sorcerer.getRole() instanceof Sorcerer && ((Sorcerer) sorcerer.getRole()).getSelected() == Ability.FOG_OF_WAR) { // dirty check but it works
+                    if (sorcerer.getRole() == Role.SORCERER && sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED) == Ability.FOG_OF_WAR) {
                         if (click.getPlayer().getLevel() < plugin.getConfig().getInt("fogOfWarCost")) {
                             click.getPlayer().sendMessage(ChatColor.RED + "You don't have enough levels to use this spell!");
                         } else {
@@ -50,7 +49,7 @@ public final class FogOfWar implements Listener {
                             // apply effect
                             click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("fogOfWarCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Fog of War");
-                            sorcerer.setUnholy();
+                            sorcerer.getStatus().startStatus(StatusData.Status.UNHOLY, 48000L); // Two days of unholy
                             plugin.getServer().getWorlds().get(0).spawnParticle(Particle.SPELL_WITCH, click.getPlayer().getLocation().add(0,1,0), 10, 1, 1, 1);
                         }
                     }

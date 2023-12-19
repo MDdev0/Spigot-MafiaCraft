@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;

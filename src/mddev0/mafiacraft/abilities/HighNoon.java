@@ -1,7 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -27,7 +27,7 @@ public final class HighNoon extends BukkitRunnable {
             // IT'S HIGH NOON!
             Map<UUID, MafiaPlayer> living = plugin.getLivingPlayers();
             for (Map.Entry<UUID, MafiaPlayer> p : living.entrySet()) {
-                if (p.getValue().getRole().hasAbility(Ability.HIGH_NOON)) {
+                if (p.getValue().getRole().getAbilities().contains(Ability.HIGH_NOON)) {
                     Player affected = Bukkit.getPlayer(p.getKey());
                     if (affected != null && affected.isOnline()) {
                         affected.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 1, false, false, true));

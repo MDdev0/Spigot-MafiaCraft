@@ -3,7 +3,8 @@ package mddev0.mafiacraft.abilities;
 import mddev0.mafiacraft.MafiaCraft;
 
 
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
+import mddev0.mafiacraft.player.RoleData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +24,9 @@ public final class Nemesis implements Listener {
     public void onDamageTaken(EntityDamageByEntityEvent hit) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         MafiaPlayer damaged = plugin.getLivingPlayers().get(hit.getEntity().getUniqueId());
-        if (damaged != null && damaged.getRole().hasAbility(Ability.NEMESIS) && hit.getDamager() instanceof LivingEntity ) {
+        if (damaged != null && damaged.getRole().getAbilities().contains(Ability.NEMESIS) &&
+                (Boolean)damaged.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM) && hit.getDamager() instanceof LivingEntity ) {
+            // Has nemesis ability and is transformed
             // null check
             if (((LivingEntity) hit.getDamager()).getEquipment() == null) return;
             // get hand item

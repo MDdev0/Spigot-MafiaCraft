@@ -1,38 +1,36 @@
 package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.Hunter;
-import mddev0.mafiacraft.roles.Role;
+import mddev0.mafiacraft.player.MafiaPlayer;
+import mddev0.mafiacraft.player.Role;
+import mddev0.mafiacraft.player.RoleData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class GameRandomizer {
 
     private final MafiaCraft plugin;
 
-    private final List<OfflinePlayer> players;
-    private List<OfflinePlayer> prevPlayers;
+    private final List<OfflinePlayer> playersToRoll;
+    private List<OfflinePlayer> prevRolledPlayers;
 
     public GameRandomizer (MafiaCraft plugin) {
         this.plugin = plugin;
-        players = new ArrayList<>();
+        playersToRoll = new ArrayList<>();
     }
 
     public int addAllOffline() {
         int added = 0;
         for (OfflinePlayer p : Bukkit.getOfflinePlayers())
-            if (!players.contains(p)) {
+            if (!playersToRoll.contains(p)) {
                 if (p.getName() == null) {
                     // DO NOT ADD PLAYERS WITH NULL USERNAMES!!!
                     continue;
                 }
-                players.add(p);
+                playersToRoll.add(p);
                 added++;
             }
         return added;
@@ -41,19 +39,19 @@ public class GameRandomizer {
     public boolean addPlayer(String playerName) {
         OfflinePlayer player = Bukkit.getPlayer(playerName);
         if (player == null) return false;
-        if (!players.contains(player)) {
-            players.add(player);
+        if (!playersToRoll.contains(player)) {
+            playersToRoll.add(player);
             return true;
         } else return false;
     }
 
     public boolean removePlayer(String playerName) {
         if (Bukkit.getPlayer(playerName) != null) {
-            return players.remove(Bukkit.getPlayer(playerName));
+            return playersToRoll.remove(Bukkit.getPlayer(playerName));
         } else {
-            for (OfflinePlayer p : players) {
+            for (OfflinePlayer p : playersToRoll) {
                 if (p.getName() != null && p.getName().equals(playerName)) {
-                    return players.remove(p);
+                    return playersToRoll.remove(p);
                 }
             }
             return false;
@@ -61,7 +59,7 @@ public class GameRandomizer {
     }
 
     public void removeAll() {
-        players.clear();
+        playersToRoll.clear();
     }
 
     // This will likely be an expensive method that will have to be called asynchronously.
@@ -69,7 +67,7 @@ public class GameRandomizer {
         if (plugin.getActive())
             throw new RandomizationException("Cannot randomize while active.");
 
-        final int numPlayers = players.size();
+        final int numPlayers = playersToRoll.size();
         if (numPlayers == 0)
             throw new RandomizationException("There are no players added to the game to be randomized.");
 
@@ -87,40 +85,34 @@ public class GameRandomizer {
         // Start selection process
         List<String> requiredRoles = plugin.getConfig().getStringList("requiredRoles");
         List<String> bannedRoles = plugin.getConfig().getStringList("bannedRoles");
-        List<Class<?>> availableRoles = new ArrayList<>();
+        Set<Role> availableRoles = new HashSet<>();
 
-        // Role possibilities
-        for (Role.RoleClasses roleClass : Role.RoleClasses.values()) {
-            if (requiredRoles.contains(roleClass.getRoleClass().getSimpleName()))
+        // Initial Role possibilities
+        for (Role r : Role.values()) {
+            if (requiredRoles.contains(r.name()))
                 // Role is required
-                availableRoles.add(roleClass.getRoleClass());
-            else if (!bannedRoles.contains(roleClass.getRoleClass().getSimpleName()))
+                availableRoles.add(r);
+            else if (!bannedRoles.contains(r.name()))
                 // Role is not banned
-                availableRoles.add(roleClass.getRoleClass());
+                availableRoles.add(r);
         }
 
-        // In case there are already players in the game, take that into account
-        // If a player will be replaced (rerolled), remove them from the game (they will be added back)
-        for (MafiaPlayer mp : plugin.getPlayerList().values()) { // For all players already in the game
-            boolean checkThisPlayer = true;
-            for (OfflinePlayer p : players)
-                // Do not consider the player as "in the game" if they will be replaced
-                if (p.getUniqueId() == mp.getID()) {
-                    checkThisPlayer = false;
-                    plugin.getPlayerList().remove(p.getUniqueId());
-                    break; // break out of [for (OfflinePlayer p : players)]
-                }
-            if (checkThisPlayer) {
-                switch (mp.getRole().getWinCond()) {
-                    case MAFIA -> numMafia--;
-                    case VILLAGE -> numVillage--;
-                    default -> numNeutral--;
-                }
-                requiredRoles.remove(mp.getRole().getClass().getSimpleName()); // if role is required, mark as fulfilled
-                if (mp.getRole().isUnique()) availableRoles.remove(mp.getRole().getClass());
+        // Remove all players to be rolled from the game if they are already in
+        for (OfflinePlayer p : playersToRoll)
+            plugin.getPlayerList().remove(p.getUniqueId());
+
+        // Count players who have their roles and limit the number of duplicates
+        for (MafiaPlayer mp : plugin.getPlayerList().values()) {
+            switch (mp.getRole().getAlignment()) {
+                case MAFIA -> numMafia--;
+                case VILLAGE -> numVillage--;
+                default -> numNeutral--;
             }
+            availableRoles.remove(mp.getRole());
+            requiredRoles.remove(mp.getRole().name());
         }
 
+        // Throw an error if the required ratios aren't possible
         if (numMafia + numVillage + numNeutral > numPlayers)
             throw new RandomizationException("Required minimum ratios of mafia, village, and neutral roles cannot be satisfied with " +
                     numPlayers + " players.");
@@ -129,37 +121,40 @@ public class GameRandomizer {
         if (requiredRoles.size() > numPlayers)
             throw new RandomizationException(requiredRoles.size() + " roles need to be filled, but only " + numPlayers + " players are available.");
 
-        // SHALLOW COPY!!
-        prevPlayers = new ArrayList<>(players);
+        // INTENTIONAL SHALLOW COPY!!
+        // Done to keep a record of who was randomized
+        prevRolledPlayers = new ArrayList<>(playersToRoll);
 
-        // Player role assignment
+        /*
+         * XXX: At some point this needs to be revised to avoid potentially infinite time.
+         *  Use lists of mafia, village, and neutral roles then assign based on ratio
+         */
+
+        // Player role assignment (This is the reason for asynchronous)
         // This loop could go on for ages... oh well
         // and by ages I mean worst case is potentially infinite
-        // and it nests loops rip
         final Random rand = new Random();
-        while (!players.isEmpty()) {
-            OfflinePlayer player = players.get(rand.nextInt(players.size()));
-            Class<?> roleCls;
-            do {
-                roleCls = availableRoles.get(rand.nextInt(availableRoles.size()));
-            } while (requiredRoles.size() > 0 && !requiredRoles.contains(roleCls.getSimpleName()));
-            Role role;
-            // Create role
-            try {
-                if (roleCls.getSimpleName().equals("Hunter")) {
-                    role = (Hunter) roleCls.getDeclaredConstructor(MafiaCraft.class, UUID.class).newInstance(plugin, player.getUniqueId());
-                } else {
-                    role = (Role) roleCls.getDeclaredConstructor().newInstance();
-                }
-            } catch (ReflectiveOperationException | IllegalArgumentException e) {
-                // This shouldn't happen, but in case it does for some reason,
-                continue; // Just skip this iteration :)
-            }
+        while (!playersToRoll.isEmpty()) {
+            // Get random player
+            OfflinePlayer player = playersToRoll.get(rand.nextInt(playersToRoll.size()));
+
+            Role role; // this will store the assigned role
+
+            // Restock roles if there are none left
+            for (Role r : Role.values())
+                if (!r.isUnique() && !bannedRoles.contains(r.name())) // Role is not unique/banned
+                    availableRoles.add(r);
+
+            // If there are required roles outstanding, assign them first
+            if (!requiredRoles.isEmpty())
+                role = Role.valueOf(requiredRoles.get(0));
+            else // Otherwise, assign a role from the full available list
+                role = availableRoles.stream().toList().get(rand.nextInt(availableRoles.size()));
 
             // Make sure role's group is not full
             // number of each group value from above will be decremented each time
             if (numMafia > 0 || numVillage > 0 || numNeutral > 0) {
-                switch (role.getWinCond()) {
+                switch (role.getAlignment()) {
                     case MAFIA -> {
                         if (numMafia <= 0) // Finish others before adding more mafia
                             continue; // Just skip this iteration :)
@@ -182,35 +177,44 @@ public class GameRandomizer {
             }
 
             // at this point we know the player can be added to the role
+            // Prevent reselect of role
+            requiredRoles.remove(role.name());
+            availableRoles.remove(role);
+
+            // Assign to player
             MafiaPlayer mafiaPlayer = new MafiaPlayer(plugin, player.getUniqueId(), role);
-            requiredRoles.remove(roleCls.getSimpleName());
-            if (mafiaPlayer.getRole().isUnique()) availableRoles.remove(mafiaPlayer.getRole().getClass());
 
             // Player is all set to go!
             plugin.getPlayerList().put(mafiaPlayer.getID(), mafiaPlayer);
             if (plugin.getPlayerList().containsKey(mafiaPlayer.getID())){
-                players.remove(player);
+                playersToRoll.remove(player);
                 // I think the logger is thread safe
                 Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Set random role for player " + player.getName() + " (" + player.getUniqueId() + ")");
             } else {
                 Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Could not add " + player.getName() + " (" + player.getUniqueId() + ") to the MafiaCraft player list");
             }
         }
-        // All players should have been set up by this point
-        // Do hunter targets
+
+        // All players should have been set up by this point do hunter targets
         for (MafiaPlayer mp : plugin.getPlayerList().values()) {
-            if (mp.getRole() instanceof Hunter hunter) {
-                hunter.findTargets(plugin.getConfig().getInt("hunterNumTargets"));
+            if (mp.getRole() == Role.HUNTER) {
+                Set<UUID> targets = new HashSet<>();
+                List<UUID> allLiving = new ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
+                allLiving.remove(mp.getID());
+                int num = Math.min(allLiving.size(), plugin.getConfig().getInt("hunterNumTargets"));
+                for (int i = 0; i < num; i++)
+                    targets.add(allLiving.remove(rand.nextInt(allLiving.size())));
+                mp.getRoleData().setData(RoleData.DataType.HUNTER_TARGETS, targets);
             }
         }
     }
 
-    public List<OfflinePlayer> getPlayers() {
-        return players;
+    public List<OfflinePlayer> getPlayersToRoll() {
+        return playersToRoll;
     }
 
-    public final List<OfflinePlayer> getPrevPlayers() {
-        return prevPlayers;
+    public final List<OfflinePlayer> getPrevRolledPlayers() {
+        return prevRolledPlayers;
     }
 
     public static class RandomizationException extends Exception {

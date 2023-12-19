@@ -1,7 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +21,7 @@ public final class ThisIsFine implements Listener {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         if (damage.getEntity().getType() == EntityType.PLAYER) {
             MafiaPlayer p = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());
-            if (p != null && p.getRole().hasAbility(Ability.THIS_IS_FINE)) {
+            if (p != null && p.getRole().getAbilities().contains(Ability.THIS_IS_FINE)) {
                 if (switch (damage.getCause()) {
                     case FIRE,LAVA,FIRE_TICK,HOT_FLOOR -> true;
                     default -> false;

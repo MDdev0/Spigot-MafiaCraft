@@ -1,8 +1,8 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.Werewolf;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.RoleData;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
@@ -31,11 +31,11 @@ public final class Rampage extends BukkitRunnable implements Listener {
         Player killer = death.getEntity().getKiller();
         if (killer != null && killer.getType() == EntityType.PLAYER) {
             MafiaPlayer killerMP = plugin.getLivingPlayers().get(killer.getUniqueId());
-            if (killerMP.getRole().hasAbility(Ability.RAMPAGE)) {
-                // is a werewolf with rampage
-                ((Werewolf) killerMP.getRole()).incrementKills();
+            if (killerMP.getRole().getAbilities().contains(Ability.RAMPAGE) && (Boolean)killerMP.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM)) {
+                // is a werewolf with rampage who is currently transformed
+                killerMP.getRoleData().setData(RoleData.DataType.WEREWOLF_KILLS, (Integer)killerMP.getRoleData().getData(RoleData.DataType.WEREWOLF_KILLS) + 1);
                 killer.sendMessage(ChatColor.DARK_RED + "You get stronger with every kill. " + ChatColor.RED + "You have " +
-                        ((Werewolf) killerMP.getRole()).getKills() + " tonight!");
+                        killerMP.getRoleData().getData(RoleData.DataType.WEREWOLF_KILLS) + " tonight!");
             }
         }
     }
@@ -44,9 +44,9 @@ public final class Rampage extends BukkitRunnable implements Listener {
     public void run() {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         for (MafiaPlayer p : plugin.getLivingPlayers().values()) {
-            if (p.getRole().hasAbility(Ability.RAMPAGE)) {
-                if (((Werewolf) p.getRole()).getTransformed()) {
-                    int level = Math.min(5, ((Werewolf) p.getRole()).getKills() - 1);
+            if (p.getRole().getAbilities().contains(Ability.RAMPAGE)) {
+                if ((Boolean)p.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM)) {
+                    int level = Math.min(5, (Integer)p.getRoleData().getData(RoleData.DataType.WEREWOLF_KILLS) - 1);
                     if (level >= 0)
                         Objects.requireNonNull(Bukkit.getPlayer(p.getID())).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 120, level, false, false, true));
                 }

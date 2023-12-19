@@ -5,7 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -37,7 +37,7 @@ public final class Peripherals implements Listener {
         // Scuffed: Yeah it just checks all players every time someone moves. "This is terrible. Oh well."
         for (Map.Entry<UUID, MafiaPlayer> executor : plugin.getLivingPlayers().entrySet()) {
             if (!Bukkit.getOfflinePlayer(executor.getKey()).isOnline()) continue; // Do nothing for offline players!
-            if (executor.getValue().getRole().hasAbility(Ability.PERIPHERALS)) {
+            if (executor.getValue().getRole().getAbilities().contains(Ability.PERIPHERALS)) {
                 // Reset all players first
                 for (Player p : plugin.getServer().getOnlinePlayers()) {
                     if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {

@@ -3,7 +3,7 @@ package mddev0.mafiacraft.abilities;
 import mddev0.mafiacraft.MafiaCraft;
 
 
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +23,7 @@ public final class Staked implements Listener {
     public void onDamageTaken(EntityDamageByEntityEvent hit) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         MafiaPlayer damaged = plugin.getLivingPlayers().get(hit.getEntity().getUniqueId());
-        if (damaged != null && damaged.getRole().hasAbility(Ability.STAKED) && hit.getDamager() instanceof LivingEntity ) {
+        if (damaged != null && damaged.getRole().getAbilities().contains(Ability.STAKED) && hit.getDamager() instanceof LivingEntity ) {
             // null check
             if (((LivingEntity) hit.getDamager()).getEquipment() == null) return;
             // get hand item
