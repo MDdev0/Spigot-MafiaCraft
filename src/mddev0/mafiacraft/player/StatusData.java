@@ -1,7 +1,6 @@
 package mddev0.mafiacraft.player;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.abilities.Ability;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +39,7 @@ public class StatusData {
     public enum Status {
         IN_COMBAT,
         FRAMED,
-        UNHOLY;
+        UNHOLY
     }
 
     public record StatusDataSave(HashMap<Status, Long> statusMap) {}

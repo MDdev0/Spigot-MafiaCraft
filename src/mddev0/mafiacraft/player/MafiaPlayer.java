@@ -45,8 +45,6 @@ public class MafiaPlayer {
         }
     }
 
-    // XXX: BROKEN
-    // For creating from offline dataMap
     public MafiaPlayer(MafiaCraft plugin, PlayerSaveData dataRecord) {
         this.plugin = plugin;
         spyglass = new SpyglassUtil(plugin, Bukkit.getOfflinePlayer(dataRecord.uuid()));
