@@ -2,9 +2,9 @@ package mddev0.mafiacraft.gui;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.abilities.Ability;
-import mddev0.mafiacraft.roles.Hunter;
-import mddev0.mafiacraft.roles.Role;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
+import mddev0.mafiacraft.player.Role;
+import mddev0.mafiacraft.player.RoleData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public final class InfoGUI implements Listener {
@@ -31,14 +32,14 @@ public final class InfoGUI implements Listener {
         this.plugin = plugin;
         this.caller = player;
 
-        String invTitle = switch (caller.getRole().getWinCond()) {
+        String invTitle = switch (caller.getRole().getAlignment()) {
             case MAFIA -> ChatColor.RED;
             case VILLAGE -> ChatColor.DARK_GREEN;
-            case ALONE -> ChatColor.BLUE;
-            case SURVIVING -> ChatColor.YELLOW;
-            case ROLE -> ChatColor.DARK_AQUA;
+            case SOLO -> ChatColor.BLUE;
+            case NONE -> ChatColor.YELLOW;
+            case VAMPIRES -> ChatColor.DARK_PURPLE;
         } + Objects.requireNonNull(Bukkit.getPlayer(caller.getID())).getName() + " | "
-                + caller.getRole().toString();
+                + caller.getRole().fullName();
 
         inv = Bukkit.createInventory(null, 54, invTitle);
 
@@ -51,50 +52,75 @@ public final class InfoGUI implements Listener {
             inv.setItem(pos, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
         }
 
-        // Create head for top center
+        // Create head for top bar
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         assert headMeta != null;
         headMeta.setOwningPlayer(Bukkit.getOfflinePlayer(caller.getID()));
         // Title
-        String headTitle = switch (caller.getRole().getWinCond()) {
+        String headTitle = switch (caller.getRole().getAlignment()) {
             case MAFIA -> ChatColor.RED;
             case VILLAGE -> ChatColor.DARK_GREEN;
-            case ALONE -> ChatColor.BLUE;
-            case SURVIVING -> ChatColor.YELLOW;
-            case ROLE -> ChatColor.DARK_AQUA;
+            case SOLO -> ChatColor.BLUE;
+            case NONE -> ChatColor.YELLOW;
+            case VAMPIRES -> ChatColor.DARK_PURPLE;
         } + Objects.requireNonNull(Bukkit.getPlayer(caller.getID())).getName() + " | "
-                + caller.getRole().toString();
+                + caller.getRole().fullName();
         headMeta.setDisplayName(headTitle);
         // Lore
         ArrayList<String> headLore = new ArrayList<>();
         headLore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Wins " +
-                switch (caller.getRole().getWinCond()) {
+                switch (caller.getRole().getAlignment()) {
                     case MAFIA -> "with the " + ChatColor.RED + "Mafia";
                     case VILLAGE -> "with the " + ChatColor.DARK_GREEN + "Village";
-                    case ALONE -> "by " + ChatColor.BLUE + "killing everyone" +
-                            ChatColor.GRAY + " (except those who win by surviving)";
-                    case SURVIVING -> ChatColor.YELLOW + "by surviving";
-                    case ROLE -> ChatColor.DARK_AQUA + "with players of the same role";
+                    case SOLO -> "by " + ChatColor.BLUE + "killing everyone" +
+                            ChatColor.GRAY + " who would oppose you";
+                    case NONE -> {
+                        if (caller.getRole() == Role.JESTER)
+                            yield "if " + ChatColor.LIGHT_PURPLE + "killed" +
+                                    ChatColor.GRAY + " by a member of the " + ChatColor.DARK_GREEN + "Village";
+                        else
+                            yield ChatColor.YELLOW + "by surviving";
+                    }
+                    case VAMPIRES -> "by " + ChatColor.DARK_AQUA + "Converting all players to Vampires";
                 });
         headLore.add(ChatColor.GRAY + "See all your abilities below.");
-        if (caller.getRole().getWinCond() == Role.WinCondition.MAFIA || caller.getRole().getWinCond() == Role.WinCondition.ROLE) {
+        if (caller.getRole().getAlignment() == Role.Team.MAFIA || caller.getRole().getAlignment() == Role.Team.VAMPIRES) {
             headLore.add(ChatColor.GRAY + "The names and roles of your");
-            headLore.add(ChatColor.GRAY + "teammates are listed, if they are alive.");
-        } else if (caller.getRole() instanceof Hunter) {
+            headLore.add(ChatColor.GRAY + "teammates are listed below, if they are alive.");
+        } else if (caller.getRole() == Role.HUNTER) {
             headLore.add(ChatColor.GRAY + "The names and status of your");
-            headLore.add(ChatColor.GRAY + "targets are listed.");
+            headLore.add(ChatColor.GRAY + "targets are listed below.");
         }
         headMeta.setLore(headLore);
         head.setItemMeta(headMeta);
         inv.setItem(4,head);
 
+        // Game status indicator in top
+        ItemStack active;
+        ItemMeta activeMeta;
+        if (plugin.getActive()) {
+            active = new ItemStack(Material.GREEN_CONCRETE_POWDER);
+            activeMeta = active.getItemMeta();
+            assert activeMeta != null;
+            activeMeta.setDisplayName(ChatColor.GREEN + "The game is active!");
+        } else {
+            active = new ItemStack(Material.RED_CONCRETE_POWDER);
+            activeMeta = active.getItemMeta();
+            assert activeMeta != null;
+            activeMeta.setDisplayName(ChatColor.RED + "The game is paused.");
+        }
+        active.setItemMeta(activeMeta);
+        inv.setItem(3,active);
+        inv.setItem(5,active);
+
+        // TODO: Show abilities that are active for a set time with light blue concrete
         // List of Abilities
         int abilityNumber = 0;
         for (Ability abil : caller.getRole().getAbilities()) {
             ItemStack abilItem;
             ItemMeta abilMeta;
-            if (caller.onCooldown(abil)) { // On Cooldown
+            if (caller.getCooldowns().isOnCooldown(abil)) { // On Cooldown
                 abilItem = new ItemStack(Material.YELLOW_CONCRETE);
                 abilMeta = abilItem.getItemMeta();
                 assert abilMeta != null;
@@ -120,13 +146,13 @@ public final class InfoGUI implements Listener {
         }
 
         // List of Teammates
-        if (caller.getRole().getWinCond() == Role.WinCondition.MAFIA) { // If Mafia
+        if (caller.getRole().getAlignment() == Role.Team.MAFIA) { // If Mafia
             int teammateNumber = 0;
             for (MafiaPlayer other : plugin.getLivingPlayers().values()) {
                 ItemStack teamHead;
                 SkullMeta teamMeta;
                 String teamTitle;
-                if (other.getRole().getWinCond() == Role.WinCondition.MAFIA) { // Is Other Mafia
+                if (other.getRole().getAlignment() == Role.Team.MAFIA) { // Is Other Mafia
                     teamHead = new ItemStack(Material.PLAYER_HEAD);
                     teamMeta = (SkullMeta) teamHead.getItemMeta();
                     assert teamMeta != null;
@@ -140,7 +166,7 @@ public final class InfoGUI implements Listener {
                     teammateNumber++;
                 }
             }
-        } else if (caller.getRole().getWinCond() == Role.WinCondition.ROLE) { // If Other Teammate
+        } else if (caller.getRole().getAlignment() == Role.Team.VAMPIRES) { // If Vampire
             int teammateNumber = 0;
             for (MafiaPlayer other : plugin.getLivingPlayers().values()) {
                 ItemStack teamHead;
@@ -160,9 +186,9 @@ public final class InfoGUI implements Listener {
                     teammateNumber++;
                 }
             }
-        } else if (caller.getRole() instanceof Hunter hunter) { // If is a list of targets instead
+        } else if (caller.getRole() == Role.HUNTER) { // If is a list of targets instead
             int targetNumber = 0;
-            for (UUID uuid : hunter.getTargets()) {
+            for (UUID uuid : (Set<UUID>)caller.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
                 MafiaPlayer target = plugin.getPlayerList().get(uuid);
                 if (target == null) {
                     // skip target if that player is not in the game
@@ -185,6 +211,7 @@ public final class InfoGUI implements Listener {
                 targetNumber++;
             }
         }
+        // TODO: Add indicators for Jester and Werewolves
     }
 
     public void open(final HumanEntity e) {
