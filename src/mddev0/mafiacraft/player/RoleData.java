@@ -4,7 +4,13 @@ import mddev0.mafiacraft.abilities.Ability;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.HashSet;
+
+/**
+ * SCUFFED: Storing this this way was a stupid idea, but we're committed lmao
+ *  Serializing this is literally hell, DO NOT do what I did
+ *  this should be rewritten by someone who is an actual CS major
+ */
 
 public class RoleData {
     private final HashMap<DataType, Object> dataMap;
@@ -39,7 +45,7 @@ public class RoleData {
         WEREWOLF_KILLS(Integer.class),
         SORCERER_SELECTED(Ability.class),
         JESTER_ABILITY_USED(Boolean.class),
-        HUNTER_TARGETS(Set.class);
+        HUNTER_TARGETS(HashSet.class);
 
         private final Type TYPENAME;
         DataType(Type typename) {

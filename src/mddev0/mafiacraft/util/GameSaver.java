@@ -53,11 +53,11 @@ public class GameSaver {
                     if (dataFile.createNewFile())
                         Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Created player data file: " + dataName);
                     else {
-                        Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Unable to create player data file: " + dataName + ", skipping dataMap for this player");
+                        Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Unable to create player data file: " + dataName + ", skipping save for this player");
                         continue;
                     }
                 } catch (IOException e) {
-                    Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Error while attempting to dataMap " + dataName + ", skipping dataMap for this player: ", e);
+                    Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Error while attempting to save " + dataName + ", skipping save for this player: ", e);
                     continue;
                 }
             }
@@ -72,10 +72,16 @@ public class GameSaver {
             // Role and Original Role data
             data.set("role", playerData.role().name());
             for (Map.Entry<RoleData.DataType, Object> roleDataEntry : playerData.roleData().dataMap().entrySet())
-                data.set("roleData." + roleDataEntry.getKey().name(), roleDataEntry.getValue());
+                if (roleDataEntry.getKey() == RoleData.DataType.HUNTER_TARGETS) { // Treat this as a collection
+                    data.set("roleData." + roleDataEntry.getKey().name(), ((Collection<?>)roleDataEntry.getValue()).stream().toList());
+                } else
+                    data.set("roleData." + roleDataEntry.getKey().name(), roleDataEntry.getValue());
             data.set("originalRole", playerData.originalRole().name());
             for (Map.Entry<RoleData.DataType, Object> originalRoleDataEntry : playerData.roleData().dataMap().entrySet())
-                data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), originalRoleDataEntry.getValue());
+                if (originalRoleDataEntry.getKey() == RoleData.DataType.HUNTER_TARGETS) { // Treat this as a collection
+                    data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), ((Collection<?>)originalRoleDataEntry.getValue()).stream().toList());
+                } else
+                    data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), originalRoleDataEntry.getValue());
             // Cooldown Data
             for (Map.Entry<Ability, Long> cooldownDataEntry : playerData.cooldowns().cooldownMap().entrySet())
                 data.set("cooldowns." + cooldownDataEntry.getKey().name(), cooldownDataEntry.getValue());
@@ -87,7 +93,7 @@ public class GameSaver {
             try {
                 data.save(dataFile);
             } catch (IOException e) {
-                Bukkit.getLogger().log(Level.WARNING, "Unable to dataMap player file " + dataFile.getName() + ":", e);
+                Bukkit.getLogger().log(Level.WARNING, "Unable to save player file " + dataFile.getName() + ":", e);
             }
         }
     }
@@ -108,6 +114,10 @@ public class GameSaver {
         // For all players in the files
         for (File dataFile : dataFileList) {
             FileConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+            if (data.getKeys(true).isEmpty()) {
+                Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Skipping unreadable player data file: " + dataFile.getName());
+                continue;
+            }
 
             // Status Data
             HashMap<StatusData.Status, Long> statusMap = new HashMap<>();
@@ -137,7 +147,16 @@ public class GameSaver {
             if (roleDataSection != null) {
                 Set<String> rdEntries = roleDataSection.getKeys(false);
                 for (String rd : rdEntries) {
-                    roleDataMap.put(RoleData.DataType.valueOf(rd), roleDataSection.get(rd));
+                    if (RoleData.DataType.valueOf(rd) == RoleData.DataType.HUNTER_TARGETS) { // SCUFFED: this is crude but it'll work
+                        List<?> targets = roleDataSection.getList(RoleData.DataType.HUNTER_TARGETS.name());
+                        if (targets == null) {
+                            Bukkit.getLogger().log(Level.SEVERE, "NOPE, IT'S BROKEN");
+                            continue;
+                        }
+                        roleDataMap.put(RoleData.DataType.HUNTER_TARGETS, new HashSet<>(targets));
+                    } else {
+                        roleDataMap.put(RoleData.DataType.valueOf(rd), roleDataSection.get(rd));
+                    }
                 }
             }
             RoleData.RoleDataSave roleData = new RoleData.RoleDataSave(roleDataMap);
@@ -148,7 +167,11 @@ public class GameSaver {
             if (originalRoleDataSection != null) {
                 Set<String> rdEntries = originalRoleDataSection.getKeys(false);
                 for (String rd : rdEntries) {
-                    originalRoleDataMap.put(RoleData.DataType.valueOf(rd), originalRoleDataSection.get(rd));
+                    if (RoleData.DataType.valueOf(rd) == RoleData.DataType.HUNTER_TARGETS) { // SCUFFED: this is crude but it'll work
+                        originalRoleDataMap.put(RoleData.DataType.HUNTER_TARGETS, new HashSet<>(originalRoleDataSection.getList(RoleData.DataType.HUNTER_TARGETS.name())));
+                    } else {
+                        originalRoleDataMap.put(RoleData.DataType.valueOf(rd), originalRoleDataSection.get(rd));
+                    }
                 }
             }
             RoleData.RoleDataSave originalRoleData = new RoleData.RoleDataSave(originalRoleDataMap);
@@ -165,7 +188,7 @@ public class GameSaver {
                     statusData
             )));
 
-            Bukkit.getLogger().log(Level.INFO, "Added player from dataMap file: " + dataFile.getName());
+            Bukkit.getLogger().log(Level.INFO, "Added player from save file: " + dataFile.getName());
         }
 
         Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Completed player data loading procedure");

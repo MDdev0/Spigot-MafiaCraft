@@ -98,7 +98,28 @@ public class MafiaPlayer {
      */
     public void changeRole(Role newRole) {
         role = newRole;
-        roleData = new RoleData(); // Does not need to be initialized currently, as this will only be called for Vampires
+        roleData = new RoleData();
+
+        // If this role has added attributes, set defaults if needed
+        switch (role)  {
+            case JESTER -> roleData.setData(RoleData.DataType.JESTER_ABILITY_USED, false);
+            case SORCERER -> roleData.setData(RoleData.DataType.SORCERER_SELECTED, Ability.SPELL_BOOK);
+            case WEREWOLF -> {
+                roleData.setData(RoleData.DataType.WEREWOLF_TRANSFORM, false);
+                roleData.setData(RoleData.DataType.WEREWOLF_KILLS, 0);
+            }
+            case HUNTER -> {
+                Set<String> targets = new HashSet<>();
+                List<UUID> allLiving = new ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
+                allLiving.remove(uuid);
+                int num = Math.min(allLiving.size(), plugin.getConfig().getInt("hunterNumTargets"));
+                for (int i = 0; i < num; i++)
+                    targets.add(allLiving.remove(new Random().nextInt(allLiving.size())).toString()); // SCUFFED: oops terrible practice
+                roleData.setData(RoleData.DataType.HUNTER_TARGETS, targets);
+            }
+        }
+
+
     }
 
     public void resetRole() {

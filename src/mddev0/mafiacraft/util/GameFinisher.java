@@ -112,8 +112,8 @@ public class GameFinisher extends BukkitRunnable {
                             // Check if targets are killed
                             boolean hunterWin = true;
                             // SCUFFED: Yes, this next line is an unchecked cast. Guess I just have to be careful.
-                            for (UUID id : (Set<UUID>)mp.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
-                                hunterWin = hunterWin && !plugin.getPlayerList().get(id).isLiving();
+                            for (String id : (Set<String>)mp.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
+                                hunterWin = hunterWin && !plugin.getPlayerList().get(UUID.fromString(id)).isLiving();
                             }
                             if (hunterWin) winnerSet.add(mp);
                         } else if (mp.getRole() == Role.JESTER && (Boolean)mp.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED))  {

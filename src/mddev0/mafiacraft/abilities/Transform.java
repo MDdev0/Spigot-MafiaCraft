@@ -44,7 +44,8 @@ public final class Transform extends BukkitRunnable {
         for (MafiaPlayer play : plugin.getLivingPlayers().values()) {
             if (play.getRole().getAbilities().contains(Ability.TRANSFORM)) {
                 // player can transform
-                if ((Boolean)play.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM)) {
+                Boolean transformed = (Boolean)play.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM);
+                if (transformed == null || transformed) {
                     Objects.requireNonNull(Bukkit.getPlayer(play.getID())).sendMessage(ChatColor.DARK_GRAY + "You feel normal again.");
                     play.getRoleData().setData(RoleData.DataType.WEREWOLF_TRANSFORM, false);
                     Objects.requireNonNull(Bukkit.getPlayer(play.getID())).removePotionEffect(PotionEffectType.INCREASE_DAMAGE);

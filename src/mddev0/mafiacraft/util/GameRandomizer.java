@@ -83,8 +83,11 @@ public class GameRandomizer {
         int numNeutral = (int) Math.ceil(numPlayers * neutralRatio);
 
         // Start selection process
+        // Ensure that required and banned role lists have proper format
         List<String> requiredRoles = plugin.getConfig().getStringList("requiredRoles");
+        requiredRoles.replaceAll(s -> s.toUpperCase().replace(" ", "_"));
         List<String> bannedRoles = plugin.getConfig().getStringList("bannedRoles");
+        bannedRoles.replaceAll(s -> s.toUpperCase().replace(" ", "_"));
         Set<Role> availableRoles = new HashSet<>();
 
         // Initial Role possibilities
@@ -138,7 +141,7 @@ public class GameRandomizer {
             // Get random player
             OfflinePlayer player = playersToRoll.get(rand.nextInt(playersToRoll.size()));
 
-            Role role; // this will store the assigned role
+            Role role = null; // this will store the assigned role
 
             // Restock roles if there are none left
             for (Role r : Role.values())
@@ -147,7 +150,14 @@ public class GameRandomizer {
 
             // If there are required roles outstanding, assign them first
             if (!requiredRoles.isEmpty())
-                role = Role.valueOf(requiredRoles.get(0));
+                do {
+                    try {
+                        role = Role.valueOf(requiredRoles.get(0));
+
+                    } catch (IllegalArgumentException ex) {
+                        Bukkit.getLogger().log(Level.WARNING, "Skipping an invalid entry in the list of required roles: " + requiredRoles.remove(0));
+                    }
+                } while (role == null);
             else // Otherwise, assign a role from the full available list
                 role = availableRoles.stream().toList().get(rand.nextInt(availableRoles.size()));
 
@@ -198,12 +208,12 @@ public class GameRandomizer {
         // All players should have been set up by this point do hunter targets
         for (MafiaPlayer mp : plugin.getPlayerList().values()) {
             if (mp.getRole() == Role.HUNTER) {
-                Set<UUID> targets = new HashSet<>();
+                Set<String> targets = new HashSet<>();
                 List<UUID> allLiving = new ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
                 allLiving.remove(mp.getID());
                 int num = Math.min(allLiving.size(), plugin.getConfig().getInt("hunterNumTargets"));
                 for (int i = 0; i < num; i++)
-                    targets.add(allLiving.remove(rand.nextInt(allLiving.size())));
+                    targets.add(allLiving.remove(rand.nextInt(allLiving.size())).toString());
                 mp.getRoleData().setData(RoleData.DataType.HUNTER_TARGETS, targets);
             }
         }

@@ -38,7 +38,7 @@ public enum Role {
         ABILITIES = Set.of(abilities);
     }
 
-    public String fullName() {
+    public String toString() {
         return NAME;
     }
 

@@ -39,7 +39,7 @@ public final class InfoGUI implements Listener {
             case NONE -> ChatColor.YELLOW;
             case VAMPIRES -> ChatColor.DARK_PURPLE;
         } + Objects.requireNonNull(Bukkit.getPlayer(caller.getID())).getName() + " | "
-                + caller.getRole().fullName();
+                + caller.getRole().toString();
 
         inv = Bukkit.createInventory(null, 54, invTitle);
 
@@ -65,7 +65,7 @@ public final class InfoGUI implements Listener {
             case NONE -> ChatColor.YELLOW;
             case VAMPIRES -> ChatColor.DARK_PURPLE;
         } + Objects.requireNonNull(Bukkit.getPlayer(caller.getID())).getName() + " | "
-                + caller.getRole().fullName();
+                + caller.getRole().toString();
         headMeta.setDisplayName(headTitle);
         // Lore
         ArrayList<String> headLore = new ArrayList<>();
@@ -100,7 +100,7 @@ public final class InfoGUI implements Listener {
         ItemStack active;
         ItemMeta activeMeta;
         if (plugin.getActive()) {
-            active = new ItemStack(Material.GREEN_CONCRETE_POWDER);
+            active = new ItemStack(Material.LIME_CONCRETE_POWDER);
             activeMeta = active.getItemMeta();
             assert activeMeta != null;
             activeMeta.setDisplayName(ChatColor.GREEN + "The game is active!");
@@ -188,8 +188,8 @@ public final class InfoGUI implements Listener {
             }
         } else if (caller.getRole() == Role.HUNTER) { // If is a list of targets instead
             int targetNumber = 0;
-            for (UUID uuid : (Set<UUID>)caller.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
-                MafiaPlayer target = plugin.getPlayerList().get(uuid);
+            for (String uuid : (Set<String>)caller.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
+                MafiaPlayer target = plugin.getPlayerList().get(UUID.fromString(uuid));
                 if (target == null) {
                     // skip target if that player is not in the game
                     continue;
@@ -197,12 +197,12 @@ public final class InfoGUI implements Listener {
                 ItemStack targetHead = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta targetMeta = (SkullMeta) targetHead.getItemMeta();
                 assert targetMeta != null;
-                targetMeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+                targetMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(uuid)));
                 String targetTitle;
                 if (target.isLiving())
-                    targetTitle = ChatColor.YELLOW + Bukkit.getOfflinePlayer(uuid).getName() + " | Alive";
+                    targetTitle = ChatColor.YELLOW + Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName() + " | Alive";
                 else
-                    targetTitle = ChatColor.DARK_RED + Bukkit.getOfflinePlayer(uuid).getName() + " | Dead";
+                    targetTitle = ChatColor.DARK_RED + Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName() + " | Dead";
                 targetMeta.setDisplayName(targetTitle);
                 targetHead.setItemMeta(targetMeta);
                 // set item
