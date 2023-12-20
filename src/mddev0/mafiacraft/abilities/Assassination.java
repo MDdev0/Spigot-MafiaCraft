@@ -34,7 +34,7 @@ public final class Assassination implements Listener {
                 if (attacker != null && attacker.getRole().getAbilities().contains(Ability.ASSASSINATION) && !attacker.getCooldowns().isOnCooldown(Ability.ASSASSINATION)) {
                     damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 0, false, false, true));
                     damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false, true));
-                    long waitUntil = plugin.getServer().getWorlds().get(0).getFullTime() + 24000L;
+                    long waitUntil = plugin.getWorldFullTime() + 24000L;
                     waitUntil = waitUntil - (waitUntil % 24000);
                     attacker.getCooldowns().startCooldown(Ability.ASSASSINATION, waitUntil);
                 }

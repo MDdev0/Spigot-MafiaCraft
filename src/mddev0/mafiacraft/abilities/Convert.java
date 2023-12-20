@@ -30,7 +30,7 @@ public final class Convert implements Listener {
                 killed.makeAlive();
                 killed.changeRole(Role.VAMPIRE);
                 death.getEntity().sendMessage(ChatColor.DARK_PURPLE + "You are now a " + ChatColor.DARK_GRAY + "Vampire" + ChatColor.DARK_PURPLE + ".");
-                killer.getStatus().startStatus(StatusData.Status.UNHOLY, 48000L); // Two days of unholy;
+                killer.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy;
             }
         }
     }

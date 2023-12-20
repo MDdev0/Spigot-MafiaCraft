@@ -55,7 +55,7 @@ public final class SpellBook implements Listener {
                     toGive.setItemMeta(meta);
                     Player receiver = Bukkit.getPlayer(thrower.getID());
                     Objects.requireNonNull(receiver).getWorld().dropItem(receiver.getLocation(), toGive);
-                    thrower.getStatus().startStatus(StatusData.Status.UNHOLY, 48000L); // Two days of unholy
+                    thrower.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                 }
             }
         }

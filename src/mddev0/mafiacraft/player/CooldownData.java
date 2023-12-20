@@ -27,7 +27,7 @@ public class CooldownData {
 
     public boolean isOnCooldown(Ability ability) {
         Long cooldown = cooldownMap.get(ability);
-        if (cooldown == null || cooldown < plugin.getServer().getWorlds().get(0).getFullTime()) {
+        if (cooldown == null || cooldown < plugin.getWorldFullTime()) {
             // Cooldown has expired or is unset
             cooldownMap.remove(ability);
             return false;
@@ -39,7 +39,7 @@ public class CooldownData {
 
     public record CooldownDataSave(HashMap<Ability, Long> cooldownMap) {}
     public CooldownDataSave getDataSave() {
-        Long curTime = plugin.getServer().getWorlds().get(0).getFullTime();
+        Long curTime = plugin.getWorldFullTime();
         for (Map.Entry<Ability, Long> e : cooldownMap.entrySet())
             if (e.getValue() < curTime) cooldownMap.remove(e.getKey());
         return new CooldownDataSave(cooldownMap);

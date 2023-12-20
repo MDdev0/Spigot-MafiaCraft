@@ -26,7 +26,7 @@ public class StatusData {
 
     public boolean hasStatus(Status status) {
         Long statusTime = statusMap.get(status);
-        if (statusTime == null || statusTime < plugin.getServer().getWorlds().get(0).getFullTime()) {
+        if (statusTime == null || statusTime < plugin.getWorldFullTime()) {
             // Status has expired or is unset
             statusMap.remove(status);
             return false;
@@ -44,7 +44,7 @@ public class StatusData {
 
     public record StatusDataSave(HashMap<Status, Long> statusMap) {}
     public StatusDataSave getDataSave() {
-        Long curTime = plugin.getServer().getWorlds().get(0).getFullTime();
+        Long curTime = plugin.getWorldFullTime();
         for (Map.Entry<Status, Long> e : statusMap.entrySet())
             if (e.getValue() < curTime) statusMap.remove(e.getKey());
         return new StatusDataSave(statusMap);

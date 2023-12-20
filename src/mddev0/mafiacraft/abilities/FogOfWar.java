@@ -49,7 +49,7 @@ public final class FogOfWar implements Listener {
                             // apply effect
                             click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("fogOfWarCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Fog of War");
-                            sorcerer.getStatus().startStatus(StatusData.Status.UNHOLY, 48000L); // Two days of unholy
+                            sorcerer.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                             plugin.getServer().getWorlds().get(0).spawnParticle(Particle.SPELL_WITCH, click.getPlayer().getLocation().add(0,1,0), 10, 1, 1, 1);
                         }
                     }

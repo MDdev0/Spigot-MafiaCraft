@@ -86,7 +86,7 @@ public class GameFinisher extends BukkitRunnable {
                             if (winner.getRole() == Role.SERIAL_KILLER)
                                 subtitle = ChatColor.GRAY + "The " + ChatColor.BLUE + ChatColor.BOLD + "Serial Killer" + ChatColor.RESET + ChatColor.GRAY + " has won!";
                             else if (winner.getRole() == Role.TRAPPER)
-                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_BLUE + ChatColor.BOLD + "Trapper" + ChatColor.RESET + ChatColor.GRAY + " has won!";
+                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_AQUA + ChatColor.BOLD + "Trapper" + ChatColor.RESET + ChatColor.GRAY + " has won!";
                             break; // since we only take 1
                         }
                     }
@@ -168,7 +168,7 @@ public class GameFinisher extends BukkitRunnable {
                             case VILLAGE -> ChatColor.DARK_GREEN;
                             case SOLO-> {
                                 if (p.getRole() == Role.SERIAL_KILLER) yield ChatColor.BLUE;
-                                else if (p.getRole() == Role.TRAPPER) yield ChatColor.DARK_BLUE;
+                                else if (p.getRole() == Role.TRAPPER) yield ChatColor.DARK_AQUA;
                                 else yield ChatColor.DARK_GRAY; // Should never be used
                             }
                             case NONE -> {
@@ -188,17 +188,14 @@ public class GameFinisher extends BukkitRunnable {
                                 case VILLAGE -> ChatColor.DARK_GREEN;
                                 case SOLO -> {
                                     if (p.getOriginalRole() == Role.SERIAL_KILLER) yield ChatColor.BLUE;
-                                    else if (p.getOriginalRole() == Role.TRAPPER) yield ChatColor.DARK_BLUE;
+                                    else if (p.getOriginalRole() == Role.TRAPPER) yield ChatColor.DARK_AQUA;
                                     else yield ChatColor.DARK_GRAY; // Should never be used
                                 }
                                 case NONE -> {
                                     if (p.getOriginalRole() == Role.JESTER) yield ChatColor.LIGHT_PURPLE;
                                     else yield ChatColor.YELLOW; // Will be used
                                 }
-                                case VAMPIRES -> {
-                                    if (p.getOriginalRole() == Role.VAMPIRE) yield ChatColor.DARK_PURPLE;
-                                    else yield ChatColor.AQUA; // Should never be used
-                                }
+                                case VAMPIRES -> ChatColor.DARK_PURPLE;
                             }).append(p.getOriginalRole().toString()).append(ChatColor.GRAY).append(")");
                         }
                         playerList.add(addToList.toString());

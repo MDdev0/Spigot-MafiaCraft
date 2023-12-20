@@ -2,7 +2,8 @@ package mddev0.mafiacraft.gui;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.abilities.Ability;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
+import mddev0.mafiacraft.player.StatusData;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -59,8 +60,9 @@ public final class ReanimationGUI implements Listener {
         if (clicked == null || clicked.getType().isAir()) return;
         // SCUFFED: So many requireNonNull... am I doing this wrong?
         UUID toReanimate = Objects.requireNonNull(((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer()).getUniqueId();
-        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).startCooldown(Ability.REANIMATION, 0L, 6);
-        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).setUnholy();
+        Long cooldownExpires = (plugin.getWorldFullTime() + 48000L) - (plugin.getWorldFullTime() % 24000);
+        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getCooldowns().startCooldown(Ability.REANIMATION, cooldownExpires);
+        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L);
         plugin.getPlayerList().get(toReanimate).makeAlive();
         click.getWhoClicked().sendMessage(ChatColor.GREEN + Bukkit.getOfflinePlayer(toReanimate).getName() + " has been revived.");
         click.getWhoClicked().closeInventory();

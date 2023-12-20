@@ -30,7 +30,7 @@ public final class Forgery implements Listener {
             MafiaPlayer thrower = plugin.getLivingPlayers().get(pickup.getItem().getThrower());
             MafiaPlayer toFrame = plugin.getLivingPlayers().get(pickup.getEntity().getUniqueId());
             if (thrower != null && thrower.getRole().getAbilities().contains(Ability.FORGERY) && toFrame != null) {
-                long frameUntil = plugin.getServer().getWorlds().get(0).getFullTime() + 24000L;
+                long frameUntil = plugin.getWorldFullTime() + 24000L;
                 frameUntil = frameUntil - (frameUntil % 24000);
                 toFrame.getStatus().startStatus(StatusData.Status.FRAMED, frameUntil); // Frame player
             }

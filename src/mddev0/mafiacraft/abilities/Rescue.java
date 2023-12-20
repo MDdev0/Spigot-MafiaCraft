@@ -45,7 +45,7 @@ public final class Rescue implements Listener {
                             damaged.sendMessage(ChatColor.AQUA + "You were saved from death!");
                             // Handle the rescuer
                             e.sendMessage(ChatColor.AQUA + "You saved " + ChatColor.GREEN + damaged.getName() + ChatColor.AQUA + " from death!");
-                            long waitUntil = plugin.getServer().getWorlds().get(0).getFullTime() + 24000L;
+                            long waitUntil = plugin.getWorldFullTime() + 24000L;
                             waitUntil = waitUntil - (waitUntil % 24000); // Cooldown ends at dawn
                             plugin.getLivingPlayers().get(e.getUniqueId()).getCooldowns().startCooldown(Ability.RESCUE, waitUntil);
                         }

@@ -25,7 +25,7 @@ public final class Transform extends BukkitRunnable {
         // Do nothing if it is not night
         long dayTime = plugin.getServer().getWorlds().get(0).getTime();
         if (dayTime >= 13000 && dayTime < 23000) {
-            long fullTime = plugin.getServer().getWorlds().get(0).getFullTime();
+            long fullTime = plugin.getWorldFullTime();
             int phase = (int) (fullTime/24000)%8;
             if (phase == 0) { // Full Moon
                 for (MafiaPlayer play : plugin.getLivingPlayers().values()) {
@@ -34,7 +34,7 @@ public final class Transform extends BukkitRunnable {
                         if (!(Boolean)play.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM) && Bukkit.getPlayer(play.getID()) != null) {
                             Objects.requireNonNull(Bukkit.getPlayer(play.getID())).sendMessage(ChatColor.DARK_RED + "You feel hungry. It is a full moon!");
                             play.getRoleData().setData(RoleData.DataType.WEREWOLF_TRANSFORM, true);
-                            play.getStatus().startStatus(StatusData.Status.UNHOLY, 48000L); // Two days of unholy
+                            play.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                         }
                     }
                 }

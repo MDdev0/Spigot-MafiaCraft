@@ -34,7 +34,7 @@ public final class Ambush implements Listener {
                 // Only take action if not null
                 if (damagerMP.getRole().getAbilities().contains(Ability.AMBUSH) && !damagerMP.getCooldowns().isOnCooldown(Ability.AMBUSH)) {
                     damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 600, 1, false, false, true));
-                    long waitUntil = plugin.getServer().getWorlds().get(0).getFullTime() + 24000L;
+                    long waitUntil = plugin.getWorldFullTime() + 24000L;
                     waitUntil = waitUntil - (waitUntil % 24000);
                     damagerMP.getCooldowns().startCooldown(Ability.AMBUSH, waitUntil);
                 }

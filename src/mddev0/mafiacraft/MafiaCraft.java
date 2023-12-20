@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import mddev0.mafiacraft.abilities.*;
 import mddev0.mafiacraft.commands.MafiaCraftAdminCMD;
 import mddev0.mafiacraft.commands.MafiaCraftCMD;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import mddev0.mafiacraft.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -83,10 +84,8 @@ public class MafiaCraft extends JavaPlugin {
         abilityTransform.runTaskTimer(this, 0L, 100L); // Check night for Werewolves every 5 seconds
         Bukkit.getPluginManager().registerEvents(abilityRampage, this);
         abilityRampage.runTaskTimer(this, 0L, 100L); // Apply strength every 5 seconds
-        Bukkit.getPluginManager().registerEvents(new Bite(this), this);
         Bukkit.getPluginManager().registerEvents(new Nemesis(this), this);
         Bukkit.getPluginManager().registerEvents(new Convert(this), this);
-        Bukkit.getPluginManager().registerEvents(new HuntingNight(this), this);
         abilityNightOwl.runTaskTimer(this, 0L, 100L); // Check Day for Vampires every 5 seconds
         Bukkit.getPluginManager().registerEvents(new Staked(this), this);
         Bukkit.getPluginManager().registerEvents(new JustAPrank(this), this);
@@ -115,7 +114,7 @@ public class MafiaCraft extends JavaPlugin {
     public void onDisable() {
         GameSaver.saveGame();
         for (Map.Entry<UUID,MafiaPlayer> p : players.entrySet())
-            p.getValue().cancelTasks();
+            p.getValue().getSpyglass().cancel();
         abilityHighNoon.cancel();
         abilityAmbrosia.cancel();
         abilityInquisition.cancel();
@@ -149,5 +148,8 @@ public class MafiaCraft extends JavaPlugin {
     }
     public GameRandomizer getRandomizer() {
         return randomizer;
+    }
+    public Long getWorldFullTime() {
+        return getServer().getWorlds().get(0).getFullTime();
     }
 }

@@ -53,7 +53,7 @@ public final class Scatter implements Listener {
                             click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("scatterCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Scatter" +
                                     ChatColor.GREEN + " on " + ChatColor.AQUA + p.getName());
-                            sorcerer.getStatus().startStatus(StatusData.Status.UNHOLY, 48000L); // Two days of unholy
+                            sorcerer.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                             plugin.getServer().getWorlds().get(0).spawnParticle(Particle.SPELL_WITCH, click.getPlayer().getLocation().add(0,1,0), 10, 1, 1, 1);
                             plugin.getServer().getWorlds().get(0).spawnParticle(Particle.CLOUD, p.getLocation().add(0,1,0), 10, 1, 1, 1);
                         }
