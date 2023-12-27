@@ -2,6 +2,8 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 
+import mddev0.mafiacraft.player.MafiaPlayer;
+import mddev0.mafiacraft.player.StatusData;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,7 +29,7 @@ public class CombatState implements Listener {
             if (attacker != null) {
                 MafiaPlayer attackerMP = plugin.getPlayerList().get(attacker.getUniqueId());
                 if (attackerMP != null)
-                    attackerMP.setAttacker();
+                    attackerMP.getStatus().startStatus(StatusData.Status.IN_COMBAT, plugin.getWorldFullTime() + 600L);
             }
             // If null do nothing
         }

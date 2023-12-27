@@ -1,7 +1,7 @@
 package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.*;
+import mddev0.mafiacraft.player.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -9,8 +9,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 public class GameFinisher extends BukkitRunnable {
@@ -35,7 +34,7 @@ public class GameFinisher extends BukkitRunnable {
             checkedTonight = true;
             Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Checking to see if there is a winner");
 
-            List<MafiaPlayer> winners = new ArrayList<>();
+            Set<MafiaPlayer> winnerSet = new HashSet<>();
             boolean endGame = false;
 
             String title = "" + ChatColor.GOLD + ChatColor.BOLD + "Game Over!";
@@ -43,20 +42,20 @@ public class GameFinisher extends BukkitRunnable {
 
             // Should check if the game should end by counting each win condition
             // Count remaining players
-            int mafiaRemaining, villageRemaining, aloneRemaining, roleRemaining, survivingRemaining;
-            mafiaRemaining = villageRemaining = aloneRemaining = roleRemaining = survivingRemaining = 0;
+            int mafiaRemaining, villageRemaining, soloRemaining, vampRemaining, freeRemaining;
+            mafiaRemaining = villageRemaining = soloRemaining = vampRemaining = freeRemaining = 0;
             for (MafiaPlayer mp : plugin.getLivingPlayers().values()) {
-                switch (mp.getRole().getWinCond()) {
+                switch (mp.getRole().getAlignment()) {
                     case VILLAGE -> villageRemaining++;
                     case MAFIA -> mafiaRemaining++;
-                    case ALONE -> aloneRemaining++;
-                    case ROLE -> roleRemaining++;
-                    case SURVIVING -> survivingRemaining++;
+                    case SOLO -> soloRemaining++;
+                    case VAMPIRES -> vampRemaining++;
+                    case NONE -> freeRemaining++;
                 }
             }
 
             // If there are no opposing groups remaining
-            if (mafiaRemaining + villageRemaining + aloneRemaining + roleRemaining == Math.max(Math.max(mafiaRemaining, villageRemaining), Math.max(aloneRemaining, roleRemaining))) {
+            if (mafiaRemaining + villageRemaining + soloRemaining + vampRemaining == Math.max(Math.max(mafiaRemaining, villageRemaining), Math.max(soloRemaining, vampRemaining))) {
                 // if that super complicated expression clears then the game might be ready to end
                 // Essentially checks if sum of all groups alive is equal to the number of the largest group alive (only true if all but one of them are 0)
                 // Now check which group should win
@@ -64,8 +63,8 @@ public class GameFinisher extends BukkitRunnable {
                     // Mafia are only group left, they win
                     endGame = true;
                     for (MafiaPlayer winner : plugin.getPlayerList().values()) {
-                        if (winner.getRole().getWinCond() == Role.WinCondition.MAFIA) {
-                            winners.add(winner);
+                        if (winner.getRole().getAlignment() == Role.Team.MAFIA) {
+                            winnerSet.add(winner);
                         }
                     }
                     subtitle = ChatColor.GRAY + "The " + ChatColor.RED + ChatColor.BOLD + "Mafia" + ChatColor.RESET + ChatColor.GRAY + " has won!";
@@ -73,76 +72,63 @@ public class GameFinisher extends BukkitRunnable {
                     // Village is only group left, they win
                     endGame = true;
                     for (MafiaPlayer winner : plugin.getPlayerList().values()) { // dead and living players can win
-                        if (winner.getRole().getWinCond() == Role.WinCondition.VILLAGE) {
-                            winners.add(winner);
+                        if (winner.getRole().getAlignment() == Role.Team.VILLAGE) {
+                            winnerSet.add(winner);
                         }
                     }
                     subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_GREEN + ChatColor.BOLD + "Village" + ChatColor.RESET + ChatColor.GRAY + " has won!";
-                } else if (aloneRemaining == 1) {
+                } else if (soloRemaining == 1) {
                     // Only one "wins alone" role can win the game, so specifically one must be found here to win
-                    for (MafiaPlayer winner : plugin.getPlayerList().values()) { // dead and living players can win
+                    for (MafiaPlayer winner : plugin.getLivingPlayers().values()) { // ONLY living players can win
                         endGame = true;
-                        if (winner.getRole().getWinCond() == Role.WinCondition.ALONE) {
-                            winners.add(winner);
-                            if (winner.getRole() instanceof SerialKiller)
+                        if (winner.getRole().getAlignment() == Role.Team.SOLO) {
+                            winnerSet.add(winner);
+                            if (winner.getRole() == Role.SERIAL_KILLER)
                                 subtitle = ChatColor.GRAY + "The " + ChatColor.BLUE + ChatColor.BOLD + "Serial Killer" + ChatColor.RESET + ChatColor.GRAY + " has won!";
-                            else if (winner.getRole() instanceof Trapmaker)
-                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_BLUE + ChatColor.BOLD + "Trapmaker" + ChatColor.RESET + ChatColor.GRAY + " has won!";
+                            else if (winner.getRole() == Role.TRAPPER)
+                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_AQUA + ChatColor.BOLD + "Trapper" + ChatColor.RESET + ChatColor.GRAY + " has won!";
                             break; // since we only take 1
                         }
                     }
-                } else if (roleRemaining > 0) {
-                    // Will need to check each role
-                    int werewolvesRemaining, vampiresRemaining;
-                    werewolvesRemaining = vampiresRemaining = 0;
-                    for (MafiaPlayer mp : plugin.getLivingPlayers().values()) { // count living players, same idea as above
-                        if (mp.getRole() instanceof Werewolf) werewolvesRemaining++;
-                        else if (mp.getRole() instanceof Vampire) vampiresRemaining++;
-                    }
-                    if (werewolvesRemaining + vampiresRemaining == Math.max(werewolvesRemaining, vampiresRemaining)) {
-                        // Only Werewolves or Vampires remain, same deal as above
-                        if (werewolvesRemaining > 0) {
-                            // Werewolves win
-                            endGame = true;
-                            for (MafiaPlayer winner : plugin.getPlayerList().values()) { // dead and living players can win
-                                if (winner.getRole() instanceof Werewolf) {
-                                    winners.add(winner);
-                                }
-                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_AQUA + ChatColor.BOLD + "Werewolves" + ChatColor.RESET + ChatColor.GRAY + " have won!";
-                            }
-                        } else if (vampiresRemaining > 0) {
-                            // Vampires win
-                            endGame = true;
-                            for (MafiaPlayer winner : plugin.getPlayerList().values()) { // dead and living players can win
-                                if (winner.getRole() instanceof Vampire) {
-                                    winners.add(winner);
-                                }
-                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_PURPLE + ChatColor.BOLD + "Vampires" + ChatColor.RESET + ChatColor.GRAY + " have won!";
-                            }
+                } else if (vampRemaining > 0) {
+                    // Vampires win
+                    endGame = true;
+                    for (MafiaPlayer winner : plugin.getPlayerList().values()) { // dead and living players can win
+                        if (winner.getRole() == Role.VAMPIRE) {
+                            winnerSet.add(winner);
                         }
+                        subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_PURPLE + ChatColor.BOLD + "Vampires" + ChatColor.RESET + ChatColor.GRAY + " have won!";
                     }
-                } else if (mafiaRemaining + villageRemaining + aloneRemaining + roleRemaining == 0) { // only survivors left somehow
+                } else if (mafiaRemaining + villageRemaining + soloRemaining + vampRemaining == 0) { // only survivors left somehow
+                    endGame = true;
                     subtitle = ChatColor.GRAY + "The " + ChatColor.YELLOW + ChatColor.BOLD + "Survivors" + ChatColor.RESET + ChatColor.GRAY + " have won!";
                 }
 
                 // Survivor roles
-                if (survivingRemaining > 0) {
+                if (freeRemaining > 0) {
                     // Now check if any survivor roles have reached their win conditions and are alive
-                    for (MafiaPlayer mp : plugin.getLivingPlayers().values()) {
-                        if (mp.getRole() instanceof Hunter && ((Hunter) mp.getRole()).targetsKilled()) { // survivors ONLY win if alive
-                            winners.add(mp);
-                        } else if (mp.getRole() instanceof Jester && ((Jester) mp.getRole()).getAbilityActivated())  {
-                            winners.add(mp);
+                    for (MafiaPlayer mp : plugin.getLivingPlayers().values()) { // survivors ONLY win if alive
+                        if (mp.getRole() == Role.HUNTER) {
+                            // Check if targets are killed
+                            boolean hunterWin = true;
+                            // SCUFFED: Yes, this next line is an unchecked cast. Guess I just have to be careful.
+                            for (String id : (Set<String>)mp.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
+                                hunterWin = hunterWin && !plugin.getPlayerList().get(UUID.fromString(id)).isLiving();
+                            }
+                            if (hunterWin) winnerSet.add(mp);
+                        } else if (mp.getRole() == Role.JESTER && (Boolean)mp.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED))  {
+                            winnerSet.add(mp);
                         } else { // Other surviving roles have no special win conditions
-                            winners.add(mp);
+                            winnerSet.add(mp);
                         }
                     }
                 }
-
-                // Do end the game if people have won
+                
+                // End the game if people have won
+                List<MafiaPlayer> winners = winnerSet.stream().toList();
                 if (endGame) {
                     plugin.setActive(false);
-                    Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] The game has been finished!");
+                    Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] The game is over!");
                     // Sound and title sent (title prepped above)
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, SoundCategory.MASTER, 1.0f, 1.0f);
@@ -177,44 +163,39 @@ public class GameFinisher extends BukkitRunnable {
                         // Separator
                         addToList.append(ChatColor.GRAY).append("- ");
                         // Role
-                        addToList.append(switch (p.getRole().getWinCond()) {
+                        addToList.append(switch (p.getRole().getAlignment()) {
                             case MAFIA -> ChatColor.RED;
                             case VILLAGE -> ChatColor.DARK_GREEN;
-                            case ALONE -> {
-                                if (p.getRole().toString().equals("Serial Killer")) yield ChatColor.BLUE;
-                                else if (p.getRole().toString().equals("Trapmaker")) yield ChatColor.DARK_BLUE;
+                            case SOLO-> {
+                                if (p.getRole() == Role.SERIAL_KILLER) yield ChatColor.BLUE;
+                                else if (p.getRole() == Role.TRAPPER) yield ChatColor.DARK_AQUA;
                                 else yield ChatColor.DARK_GRAY; // Should never be used
                             }
-                            case SURVIVING -> {
-                                if (p.getRole().toString().equals("Jester")) yield ChatColor.LIGHT_PURPLE;
+                            case NONE -> {
+                                if (p.getRole() == Role.JESTER) yield ChatColor.LIGHT_PURPLE;
                                 else yield ChatColor.YELLOW; // Will be used
                             }
-                            case ROLE -> {
-                                if (p.getRole().toString().equals("Werewolf")) yield ChatColor.DARK_AQUA;
-                                else if (p.getRole().toString().equals("Vampire")) yield ChatColor.DARK_PURPLE;
+                            case VAMPIRES -> {
+                                if (p.getRole() == Role.VAMPIRE) yield ChatColor.DARK_PURPLE;
                                 else yield ChatColor.AQUA; // Should never be used
                             }
                         }).append(p.getRole().toString());
                         // Original Role
                         if (!p.getRole().toString().equals(p.getOriginalRole().toString())) {
                             addToList.append(ChatColor.GRAY).append(" (originally ");
-                            addToList.append(switch (p.getOriginalRole().getWinCond()) {
+                            addToList.append(switch (p.getOriginalRole().getAlignment()) {
                                 case MAFIA -> ChatColor.RED;
                                 case VILLAGE -> ChatColor.DARK_GREEN;
-                                case ALONE -> {
-                                    if (p.getOriginalRole().toString().equals("Serial Killer")) yield ChatColor.BLUE;
-                                    else if (p.getOriginalRole().toString().equals("Trapmaker")) yield ChatColor.DARK_BLUE;
+                                case SOLO -> {
+                                    if (p.getOriginalRole() == Role.SERIAL_KILLER) yield ChatColor.BLUE;
+                                    else if (p.getOriginalRole() == Role.TRAPPER) yield ChatColor.DARK_AQUA;
                                     else yield ChatColor.DARK_GRAY; // Should never be used
                                 }
-                                case SURVIVING -> {
-                                    if (p.getOriginalRole().toString().equals("Jester")) yield ChatColor.LIGHT_PURPLE;
+                                case NONE -> {
+                                    if (p.getOriginalRole() == Role.JESTER) yield ChatColor.LIGHT_PURPLE;
                                     else yield ChatColor.YELLOW; // Will be used
                                 }
-                                case ROLE -> {
-                                    if (p.getOriginalRole().toString().equals("Werewolf")) yield ChatColor.DARK_AQUA;
-                                    else if (p.getOriginalRole().toString().equals("Vampire")) yield ChatColor.DARK_PURPLE;
-                                    else yield ChatColor.AQUA; // Should never be used
-                                }
+                                case VAMPIRES -> ChatColor.DARK_PURPLE;
                             }).append(p.getOriginalRole().toString()).append(ChatColor.GRAY).append(")");
                         }
                         playerList.add(addToList.toString());

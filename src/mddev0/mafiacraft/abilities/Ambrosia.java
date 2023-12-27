@@ -1,9 +1,9 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.Vampire;
-import mddev0.mafiacraft.roles.Werewolf;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.Role;
+import mddev0.mafiacraft.player.StatusData;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
@@ -57,7 +57,7 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                 // Since the Golden Apple is the trigger item, make sure that it was thrown
                                 // by a player with the correct ability
                                 MafiaPlayer thrower = plugin.getLivingPlayers().get(i.getThrower());
-                                if (thrower != null && thrower.getRole().hasAbility(Ability.AMBROSIA) && !thrower.onCooldown(Ability.AMBROSIA)) {
+                                if (thrower != null && thrower.getRole().getAbilities().contains(Ability.AMBROSIA) && !thrower.getCooldowns().isOnCooldown(Ability.AMBROSIA)) {
                                     // then get list of all items in cauldron
                                     List<Item> items = new ArrayList<>();
                                     for (Entity ent : b.getWorld().getNearbyEntities(b.getBoundingBox()))
@@ -88,8 +88,10 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                         Item spawned = (Item) i.getWorld().spawnEntity(b.getLocation(), EntityType.DROPPED_ITEM);
                                         spawned.setItemStack(ambrosiaItem);
                                         // Add cooldown to thrower
-                                        thrower.startCooldown(Ability.AMBROSIA, 0L, 6);
-                                        thrower.setUnholy();
+                                        long waitUntil = plugin.getWorldFullTime() + (24000L * 7); // 7 days later
+                                        waitUntil = waitUntil - (waitUntil % 24000); // Round to earliest morning
+                                        thrower.getCooldowns().startCooldown(Ability.AMBROSIA, waitUntil);
+                                        thrower.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                                     }
                                 }
                             }
@@ -100,6 +102,7 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
         }
     }
 
+    // TODO: Make this take werewolves out of transformation?
     // When potion lands
     @EventHandler
     public void onPotionLand(PotionSplashEvent splash) {
@@ -110,9 +113,9 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
             for (Entity ent : splash.getAffectedEntities())
                 if (ent.getType() == EntityType.PLAYER) {
                     MafiaPlayer player = plugin.getLivingPlayers().get(ent.getUniqueId());
-                    if (player.getRole() instanceof Vampire || player.getRole() instanceof Werewolf) {
-                        // affected entity is player who is a vampire or werewolf
-                        player.changeRole(player.getOriginalRole());
+                    if (player.getRole() == Role.VAMPIRE) {
+                        // affected entity is player who is a vampire
+                        player.resetRole();
                         // role is changed back
                         ent.getWorld().playSound(ent.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 1, 1);
                         ent.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, ent.getLocation().add(0,1,0),50,1,1,2,1);

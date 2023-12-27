@@ -1,5 +1,5 @@
 # Whether not the game will be active on server start
-active: true
+active: false
 
 # Determines whether hearts should be shown as hardcore-style or regular-style
 hardcoreStyle: true
@@ -45,14 +45,14 @@ hunterNumTargets: 3
 # If the role is unique, it will only be added once. If it is not, it could be added multiple times.
 # If there are not enough players in the game, the randomization command will fail.
 requiredRoles:
-  - "Godfather"
-  - "Mafioso"
-  - "Reanimator"
-  - "Investigator"
-  - "Apothecary"
-  - "Deacon"
-  - "SerialKiller"
-  - "Hunter"
+  - "GODFATHER"
+  - "MAFIOSO"
+  - "REANIMATOR"
+  - "INVESTIGATOR"
+  - "APOTHECARY"
+  - "DEACON"
+  - "SERIAL_KILLER"
+  - "HUNTER"
 
 # Roles that will not be assigned to players. Overridden by requiredRoles.
 # If there is some issue that makes the game impossible to set up, the randomization command will fail.

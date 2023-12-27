@@ -1,8 +1,9 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.Werewolf;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.RoleData;
+import mddev0.mafiacraft.player.StatusData;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.potion.PotionEffectType;
@@ -24,16 +25,16 @@ public final class Transform extends BukkitRunnable {
         // Do nothing if it is not night
         long dayTime = plugin.getServer().getWorlds().get(0).getTime();
         if (dayTime >= 13000 && dayTime < 23000) {
-            long fullTime = plugin.getServer().getWorlds().get(0).getFullTime();
+            long fullTime = plugin.getWorldFullTime();
             int phase = (int) (fullTime/24000)%8;
             if (phase == 0) { // Full Moon
                 for (MafiaPlayer play : plugin.getLivingPlayers().values()) {
-                    if (play.getRole().hasAbility(Ability.TRANSFORM)) {
+                    if (play.getRole().getAbilities().contains(Ability.TRANSFORM)) {
                         // player can transform
-                        if (!((Werewolf) play.getRole()).getTransformed() && Bukkit.getPlayer(play.getID()) != null) {
+                        if (!(Boolean)play.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM) && Bukkit.getPlayer(play.getID()) != null) {
                             Objects.requireNonNull(Bukkit.getPlayer(play.getID())).sendMessage(ChatColor.DARK_RED + "You feel hungry. It is a full moon!");
-                            ((Werewolf) play.getRole()).setTransformed(true);
-                            play.setUnholy();
+                            play.getRoleData().setData(RoleData.DataType.WEREWOLF_TRANSFORM, true);
+                            play.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                         }
                     }
                 }
@@ -41,11 +42,12 @@ public final class Transform extends BukkitRunnable {
             }
         }
         for (MafiaPlayer play : plugin.getLivingPlayers().values()) {
-            if (play.getRole().hasAbility(Ability.TRANSFORM)) {
+            if (play.getRole().getAbilities().contains(Ability.TRANSFORM)) {
                 // player can transform
-                if (((Werewolf) play.getRole()).getTransformed()) {
+                Boolean transformed = (Boolean)play.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM);
+                if (transformed == null || transformed) {
                     Objects.requireNonNull(Bukkit.getPlayer(play.getID())).sendMessage(ChatColor.DARK_GRAY + "You feel normal again.");
-                    ((Werewolf) play.getRole()).setTransformed(false);
+                    play.getRoleData().setData(RoleData.DataType.WEREWOLF_TRANSFORM, false);
                     Objects.requireNonNull(Bukkit.getPlayer(play.getID())).removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
                     // see Rampage.java
                 }

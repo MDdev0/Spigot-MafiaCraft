@@ -2,10 +2,7 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.abilities.Ability;
-import mddev0.mafiacraft.roles.Hunter;
-import mddev0.mafiacraft.roles.Jester;
-import mddev0.mafiacraft.roles.Role;
-import mddev0.mafiacraft.roles.Werewolf;
+import mddev0.mafiacraft.player.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -39,11 +36,9 @@ public class GameSaver {
 
     public static void saveGame() {
         if (plugin == null || playerDataFolder == null) {
-            Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Cannot save player data! GameSaver has not been initialized!");
+            Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Cannot save player data! GameSaver has not been initialized! If you see this, file a bug report!");
             return;
         }
-
-        Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Saving player data");
 
         // Save each player
         Map<UUID, MafiaPlayer> players = plugin.getPlayerList();
@@ -68,55 +63,31 @@ public class GameSaver {
             }
             FileConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
 
-            // Write player data to data file
-            MafiaPlayer.PlayerData playerData = player.getDataRecord();
+            /*
+             * Write player data to file
+             */
+            MafiaPlayer.PlayerSaveData playerData = player.getSaveData();
             data.set("uuid", playerData.uuid().toString());
             data.set("living", playerData.living());
-            data.set("role", playerData.role().getClass().getSimpleName());
-            data.set("originalRole", playerData.originalRole().getClass().getSimpleName());
-            for (Map.Entry<Ability, MafiaPlayer.CooldownData> cooldown : playerData.cooldowns().entrySet()) {
-                data.set("cooldowns." + cooldown.getKey().name().toLowerCase() +
-                        ".dayTime", cooldown.getValue().dayTime());
-                data.set("cooldowns." + cooldown.getKey().name().toLowerCase() +
-                        ".days", cooldown.getValue().days());
-            }
-            data.set("framed", playerData.framed());
-            data.set("unholyTicks", playerData.unholyTicks());
-            data.set("attackerTicks", playerData.attackerTicks());
-
-            // Custom data if the role has any
-            Class<?> roleCls = player.getRole().getClass();
-            switch (roleCls.getSimpleName()) {
-                case "Hunter" -> {
-                    List<String> targetsStr = new ArrayList<>();
-                    for (UUID target : ((Hunter) player.getRole()).getTargets()) {
-                        targetsStr.add(target.toString());
-                        data.set("roleData.targets", targetsStr);
-                    }
-                }
-                case "Jester" -> data.set("roleData.abilityTriggered", ((Jester) player.getRole()).getAbilityActivated());
-                case "Werewolf" -> {
-                    data.set("roleData.transformed", ((Werewolf) player.getRole()).getTransformed());
-                    data.set("roleData.killsWhileTransformed", ((Werewolf) player.getRole()).getKills());
-                }
-            }
-
-            // Custom data if the original role has any
-            Class<?> originalRoleCls = player.getOriginalRole().getClass();
-            switch (originalRoleCls.getSimpleName()) {
-                case "Hunter" -> {
-                    List<String> targetsStr = new ArrayList<>();
-                    for (UUID target : ((Hunter) player.getOriginalRole()).getTargets()) {
-                        targetsStr.add(target.toString());
-                        data.set("originalRoleData.targets", targetsStr);
-                    }
-                }
-                case "Jester" -> data.set("originalRoleData.abilityTriggered", ((Jester) player.getOriginalRole()).getAbilityActivated());
-                case "Werewolf" -> {
-                    data.set("originalRoleData.transformed", ((Werewolf) player.getOriginalRole()).getTransformed());
-                    data.set("originalRoleData.killsWhileTransformed", ((Werewolf) player.getOriginalRole()).getKills());
-                }
-            }
+            // Role and Original Role data
+            data.set("role", playerData.role().name());
+            for (Map.Entry<RoleData.DataType, Object> roleDataEntry : playerData.roleData().dataMap().entrySet())
+                if (roleDataEntry.getKey() == RoleData.DataType.HUNTER_TARGETS) { // Treat this as a collection
+                    data.set("roleData." + roleDataEntry.getKey().name(), ((Collection<?>)roleDataEntry.getValue()).stream().toList());
+                } else
+                    data.set("roleData." + roleDataEntry.getKey().name(), roleDataEntry.getValue());
+            data.set("originalRole", playerData.originalRole().name());
+            for (Map.Entry<RoleData.DataType, Object> originalRoleDataEntry : playerData.roleData().dataMap().entrySet())
+                if (originalRoleDataEntry.getKey() == RoleData.DataType.HUNTER_TARGETS) { // Treat this as a collection
+                    data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), ((Collection<?>)originalRoleDataEntry.getValue()).stream().toList());
+                } else
+                    data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), originalRoleDataEntry.getValue());
+            // Cooldown Data
+            for (Map.Entry<Ability, Long> cooldownDataEntry : playerData.cooldowns().cooldownMap().entrySet())
+                data.set("cooldowns." + cooldownDataEntry.getKey().name(), cooldownDataEntry.getValue());
+            // Status Data
+            for (Map.Entry<StatusData.Status, Long> statusDataEntry : playerData.status().statusMap().entrySet())
+                data.set("status." + statusDataEntry.getKey().name(), statusDataEntry.getValue());
 
             // Save file
             try {
@@ -129,7 +100,7 @@ public class GameSaver {
 
     public static void loadGame() {
         if (plugin == null || playerDataFolder == null) {
-            Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Cannot save player data! GameSaver has not been initialized!");
+            Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Cannot load player data! GameSaver has not been initialized!");
             return;
         }
         File[] dataFileList = playerDataFolder.listFiles();
@@ -143,85 +114,79 @@ public class GameSaver {
         // For all players in the files
         for (File dataFile : dataFileList) {
             FileConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
+            if (data.getKeys(true).isEmpty()) {
+                Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Skipping unreadable player data file: " + dataFile.getName());
+                continue;
+            }
 
-            // cooldowns
-            Map<Ability, MafiaPlayer.CooldownData> cooldowns = new HashMap<>();
+            // Status Data
+            HashMap<StatusData.Status, Long> statusMap = new HashMap<>();
+            ConfigurationSection statusSection = data.getConfigurationSection("status");
+            if (statusSection != null) {
+                Set<String> statuses = statusSection.getKeys(false);
+                for (String s : statuses) {
+                    statusMap.put(StatusData.Status.valueOf(s), statusSection.getLong(s));
+                }
+            }
+            StatusData.StatusDataSave statusData = new StatusData.StatusDataSave(statusMap);
+
+            // Cooldown Data
+            HashMap<Ability, Long> cooldownMap = new HashMap<>();
             ConfigurationSection cooldownSection = data.getConfigurationSection("cooldowns");
             if (cooldownSection != null) {
-                Set<String> cools = cooldownSection.getKeys(false);
-                for (String ability : cools) {
-                    cooldowns.put(Ability.valueOf(ability.toUpperCase()), new MafiaPlayer.CooldownData(
-                            cooldownSection.getLong(ability + ".dayTime"),  cooldownSection.getInt(ability + ".days"))
-                    );
+                Set<String> cooldowns = cooldownSection.getKeys(false);
+                for (String c : cooldowns) {
+                    cooldownMap.put(Ability.valueOf(c), cooldownSection.getLong(c));
                 }
             }
+            CooldownData.CooldownDataSave cooldownData = new CooldownData.CooldownDataSave(cooldownMap);
 
-            // Role
-            Role role;
-            try {
-                Class<?> roleCls = Class.forName("mddev0.mafiacraft.roles." + data.getString("role"));
-                switch (roleCls.getSimpleName()) {
-                    case "Hunter" -> {
-                        List<UUID> targets = new ArrayList<>();
-                        for (String uuidStr : data.getStringList("roleData.targets"))
-                            targets.add(UUID.fromString(uuidStr));
-                        role = (Hunter) roleCls.getDeclaredConstructor(MafiaCraft.class, UUID.class, List.class).newInstance(plugin, UUID.fromString(Objects.requireNonNull(data.getString("uuid"))), targets);
+            // Role Data
+            HashMap<RoleData.DataType, Object> roleDataMap = new HashMap<>();
+            ConfigurationSection roleDataSection = data.getConfigurationSection("roleData");
+            if (roleDataSection != null) {
+                Set<String> rdEntries = roleDataSection.getKeys(false);
+                for (String rd : rdEntries) {
+                    if (RoleData.DataType.valueOf(rd) == RoleData.DataType.HUNTER_TARGETS) { // SCUFFED: this is crude but it'll work
+                        List<?> targets = roleDataSection.getList(RoleData.DataType.HUNTER_TARGETS.name());
+                        if (targets == null) {
+                            Bukkit.getLogger().log(Level.SEVERE, "NOPE, IT'S BROKEN");
+                            continue;
+                        }
+                        roleDataMap.put(RoleData.DataType.HUNTER_TARGETS, new HashSet<>(targets));
+                    } else {
+                        roleDataMap.put(RoleData.DataType.valueOf(rd), roleDataSection.get(rd));
                     }
-                    case "Jester" -> {
-                        role = (Jester) roleCls.getDeclaredConstructor().newInstance();
-                        if (data.getBoolean("roleData.abilityTriggered")) ((Jester) role).activate();
-                    }
-                    case "Werewolf" -> {
-                        role = (Werewolf) roleCls.getDeclaredConstructor().newInstance();
-                        ((Werewolf) role).setTransformed(data.getBoolean("roleData.transformed"));
-                        for (int k = 0; k < data.getInt("roleData.killsWhileTransformed"); k++)
-                            ((Werewolf) role).incrementKills();
-                    }
-                    default -> role = (Role) roleCls.getDeclaredConstructor().newInstance();
                 }
-            } catch (ReflectiveOperationException | IllegalArgumentException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Unable to create player from file " + dataFile.getName() + ". Encountered an error during Role creation: ", e);
-                continue; // Skip this iteration of the loop!
             }
+            RoleData.RoleDataSave roleData = new RoleData.RoleDataSave(roleDataMap);
 
-            // Original Role
-            Role originalRole;
-            try {
-                Class<?> originalRoleCls = Class.forName("mddev0.mafiacraft.roles." + data.getString("originalRole"));
-                switch (originalRoleCls.getSimpleName()) {
-                    case "Hunter" -> {
-                        List<UUID> targets = new ArrayList<>();
-                        for (String uuidStr : data.getStringList("originalRoleData.targets"))
-                            targets.add(UUID.fromString(uuidStr));
-                        originalRole = (Hunter) originalRoleCls.getDeclaredConstructor(MafiaCraft.class, UUID.class, List.class).newInstance(plugin, UUID.fromString(Objects.requireNonNull(data.getString("uuid"))), targets);
+            // Original Role Data
+            HashMap<RoleData.DataType, Object> originalRoleDataMap = new HashMap<>();
+            ConfigurationSection originalRoleDataSection = data.getConfigurationSection("originalRoleData");
+            if (originalRoleDataSection != null) {
+                Set<String> rdEntries = originalRoleDataSection.getKeys(false);
+                for (String rd : rdEntries) {
+                    if (RoleData.DataType.valueOf(rd) == RoleData.DataType.HUNTER_TARGETS) { // SCUFFED: this is crude but it'll work
+                        originalRoleDataMap.put(RoleData.DataType.HUNTER_TARGETS, new HashSet<>(originalRoleDataSection.getList(RoleData.DataType.HUNTER_TARGETS.name())));
+                    } else {
+                        originalRoleDataMap.put(RoleData.DataType.valueOf(rd), originalRoleDataSection.get(rd));
                     }
-                    case "Jester" -> {
-                        originalRole = (Jester) originalRoleCls.getDeclaredConstructor().newInstance();
-                        if (data.getBoolean("originalRoleData.abilityTriggered")) ((Jester) originalRole).activate();
-                    }
-                    case "Werewolf" -> {
-                        originalRole = (Werewolf) originalRoleCls.getDeclaredConstructor().newInstance();
-                        ((Werewolf) originalRole).setTransformed(data.getBoolean("originalRoleData.transformed"));
-                        for (int k = 0; k < data.getInt("originalRoleData.killsWhileTransformed"); k++)
-                            ((Werewolf) originalRole).incrementKills();
-                    }
-                    default -> originalRole = (Role) originalRoleCls.getDeclaredConstructor().newInstance();
                 }
-            } catch (ReflectiveOperationException | IllegalArgumentException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "[MafiaCraft] Unable to create player from file " + dataFile.getName() + ". Encountered an error during Original Role creation: ", e);
-                continue; // Skip this iteration of the loop!
             }
+            RoleData.RoleDataSave originalRoleData = new RoleData.RoleDataSave(originalRoleDataMap);
 
             // Add player to game
-            plugin.getPlayerList().put(UUID.fromString(Objects.requireNonNull(data.getString("uuid"))), new MafiaPlayer(plugin, new MafiaPlayer.PlayerData(
+            plugin.getPlayerList().put(UUID.fromString(Objects.requireNonNull(data.getString("uuid"))), new MafiaPlayer(plugin, new MafiaPlayer.PlayerSaveData(
                     UUID.fromString(Objects.requireNonNull(data.getString("uuid"))),
                     data.getBoolean("living"),
-                    role,
-                    originalRole,
-                    cooldowns,
-                    data.getBoolean("framed"),
-                    data.getLong("unholyTicks"),
-                    data.getInt("attackerTicks"))));
+                    Role.valueOf(data.getString("role")),
+                    roleData,
+                    Role.valueOf(data.getString("originalRole")),
+                    originalRoleData,
+                    cooldownData,
+                    statusData
+            )));
 
             Bukkit.getLogger().log(Level.INFO, "Added player from save file: " + dataFile.getName());
         }

@@ -2,7 +2,7 @@ package mddev0.mafiacraft.commands;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.gui.InfoGUI;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

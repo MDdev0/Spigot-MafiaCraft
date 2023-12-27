@@ -1,9 +1,9 @@
 package mddev0.mafiacraft.commands;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.*;
+import mddev0.mafiacraft.player.*;
 import mddev0.mafiacraft.util.GameRandomizer;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -54,60 +54,24 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                 }
                 if (plugin.getPlayerList().containsKey(p.getUniqueId())) {
                     MafiaPlayer play = plugin.getPlayerList().get(p.getUniqueId());
-                    play.changeRole(switch (args[2].toLowerCase()) {
-                        case "godfather" -> new Godfather();
-                        case "mafioso" -> new Mafioso();
-                        case "forger" -> new Forger();
-                        case "assassin" -> new Assassin();
-                        case "reanimator" -> new Reanimator();
-                        case "veteran" -> new Veteran();
-                        case "deputy" -> new Deputy();
-                        case "investigator" -> new Investigator();
-                        case "lookout" -> new Lookout();
-                        case "doctor" -> new Doctor();
-                        case "apothecary" -> new Apothecary();
-                        case "deacon" -> new Deacon();
-                        case "serialkiller" -> new SerialKiller();
-                        case "trapmaker" -> new Trapmaker();
-                        case "hunter" -> new Hunter(plugin, p.getUniqueId());
-                        case "sorcerer" -> new Sorcerer();
-                        case "werewolf" -> new Werewolf();
-                        case "vampire" -> new Vampire();
-                        case "jester" -> new Jester();
-                        default -> null;
-                    });
-                    if (play.getRole() == null) {
+                    try {
+                        play.changeRole(Role.valueOf(args[2].toLowerCase().toUpperCase()));
+                    }
+                    catch (IllegalArgumentException ex) {
                         sender.sendMessage(ChatColor.RED + "Invalid role name provided.");
                         return true;
                     }
                     sender.sendMessage(ChatColor.YELLOW + "Changed " + args[1] + "'s role to " + play.getRole().toString() + ".");
                 } else {
-                    MafiaPlayer play = new MafiaPlayer(plugin, p.getUniqueId(), switch (args[2].toLowerCase()) {
-                        case "godfather" -> new Godfather();
-                        case "mafioso" -> new Mafioso();
-                        case "forger" -> new Forger();
-                        case "assassin" -> new Assassin();
-                        case "reanimator" -> new Reanimator();
-                        case "veteran" -> new Veteran();
-                        case "deputy" -> new Deputy();
-                        case "investigator" -> new Investigator();
-                        case "lookout" -> new Lookout();
-                        case "doctor" -> new Doctor();
-                        case "apothecary" -> new Apothecary();
-                        case "deacon" -> new Deacon();
-                        case "serialkiller" -> new SerialKiller();
-                        case "trapmaker" -> new Trapmaker();
-                        case "hunter" -> new Hunter(plugin, p.getUniqueId());
-                        case "sorcerer" -> new Sorcerer();
-                        case "werewolf" -> new Werewolf();
-                        case "vampire" -> new Vampire();
-                        case "jester" -> new Jester();
-                        default -> null;
-                    });
-                    if (play.getRole() == null) {
+                    Role r;
+                    try {
+                        r = Role.valueOf(args[2].toLowerCase().toUpperCase());
+                    }
+                    catch (IllegalArgumentException ex) {
                         sender.sendMessage(ChatColor.RED + "Invalid role name provided.");
                         return true;
                     }
+                    MafiaPlayer play = new MafiaPlayer(plugin, p.getUniqueId(), r);
                     plugin.getPlayerList().put(play.getID(), play);
                     sender.sendMessage(ChatColor.GREEN + "Added " + args[1] + " to the game with the role " + play.getRole().toString() + ".");
                 }
@@ -180,7 +144,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                         return true;
                     }
                     case "list" -> {
-                        List<OfflinePlayer> playerList = plugin.getRandomizer().getPlayers();
+                        List<OfflinePlayer> playerList = plugin.getRandomizer().getPlayersToRoll();
                         sender.sendMessage(ChatColor.AQUA + "Listing " + playerList.size() + " players who are designated to be randomized:");
                         for (OfflinePlayer p : playerList) {
                             TextComponent message = new TextComponent(ChatColor.GRAY + p.getName() + " (" + ChatColor.UNDERLINE + p.getUniqueId() + ChatColor.RESET + ChatColor.GRAY + ")");
@@ -207,7 +171,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                 statusMsg.set(problem.getMessage());
                             }
                             // Return to synchronous domain
-                            Bukkit.getScheduler().runTask(plugin, () -> {
+                            Bukkit.getScheduler().runTask(this.plugin, () -> {
                                 // SYNCHRONOUS BUKKIT METHOD CALLS ALLOWED AGAIN ------
                                 if (caller == null) return; // offline check
                                 if (status.get()) {
@@ -215,7 +179,7 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                     caller.sendMessage(ChatColor.DARK_AQUA + "Be careful not to check roles if you are playing to avoid being spoiled!");
 
                                     // Reveal roles to players
-                                    for (OfflinePlayer offp : randomizer.getPrevPlayers()) {
+                                    for (OfflinePlayer offp : randomizer.getPrevRolledPlayers()) {
                                         if (offp.isOnline()) {
                                             ((Player) offp).playSound(((Player) offp).getLocation(), Sound.BLOCK_PORTAL_TRIGGER, 1.0f, 1.0f);
                                             ((Player) offp).sendTitle(ChatColor.BOLD + "Your Role Is...", "", 20, 60, 20);
@@ -223,32 +187,26 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                     }
                                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                                         // Final role announcement
-                                        for (OfflinePlayer offp : randomizer.getPrevPlayers()) {
+                                        for (OfflinePlayer offp : randomizer.getPrevRolledPlayers()) {
                                             MafiaPlayer p = plugin.getPlayerList().get(offp.getUniqueId());
                                             if (offp.isOnline() && p != null) {
                                                 ((Player) offp).playSound(((Player) offp).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-                                                String roleTitle = switch (p.getRole().getWinCond()) {
+                                                String roleTitle = switch (p.getRole().getAlignment()) {
                                                     case MAFIA -> ChatColor.RED;
                                                     case VILLAGE -> ChatColor.DARK_GREEN;
-                                                    case ALONE -> {
+                                                    case SOLO -> {
                                                         if (p.getRole().toString().equals("Serial Killer"))
                                                             yield ChatColor.BLUE;
-                                                        else if (p.getRole().toString().equals("Trapmaker"))
-                                                            yield ChatColor.DARK_BLUE;
+                                                        else if (p.getRole().toString().equals("Trapper"))
+                                                            yield ChatColor.DARK_AQUA;
                                                         else yield ChatColor.DARK_GRAY; // Should never be used
                                                     }
-                                                    case SURVIVING -> {
+                                                    case NONE -> {
                                                         if (p.getRole().toString().equals("Jester"))
                                                             yield ChatColor.LIGHT_PURPLE;
                                                         else yield ChatColor.YELLOW; // Will be used
                                                     }
-                                                    case ROLE -> {
-                                                        if (p.getRole().toString().equals("Werewolf"))
-                                                            yield ChatColor.DARK_AQUA;
-                                                        else if (p.getRole().toString().equals("Vampire"))
-                                                            yield ChatColor.DARK_PURPLE;
-                                                        else yield ChatColor.AQUA; // Should never be used
-                                                    }
+                                                    case VAMPIRES -> ChatColor.DARK_PURPLE;
                                                 } + p.getRole().toString();
                                                 String subtitle = ChatColor.GRAY + "Use " + ChatColor.GOLD + "/mafiacraft" + ChatColor.GRAY + " or " + ChatColor.GOLD + "/mafia" + ChatColor.GRAY + " for more info.";
                                                 ((Player) offp).sendTitle(roleTitle, subtitle, 20, 120, 20);

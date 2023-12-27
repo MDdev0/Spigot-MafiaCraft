@@ -1,7 +1,8 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
+import mddev0.mafiacraft.player.StatusData;
 import mddev0.mafiacraft.util.CombatState;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -25,15 +26,17 @@ public final class Protection implements Listener {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         MafiaPlayer attacked = plugin.getLivingPlayers().get(damage.getEntity().getUniqueId());
         if (damage.getEntityType() == EntityType.PLAYER && attacked != null &&
-                attacked.getRole().hasAbility(Ability.PROTECTION)) {
+                attacked.getRole().getAbilities().contains(Ability.PROTECTION)) {
             // Player attacked has protection ability
-            if (attacked.isNotAttacker() && !attacked.onCooldown(Ability.PROTECTION)) {
+            if (!attacked.getStatus().hasStatus(StatusData.Status.IN_COMBAT) && !attacked.getCooldowns().isOnCooldown(Ability.PROTECTION)) {
                 // Does not trigger if player was the attacker or if ability is on cooldown
                 if (CombatState.findAttackingPlayer(damage) != null) {
                     // TRIGGER ABILITY
                     Player toProtect = (Player) damage.getEntity();
                     toProtect.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,600,1,false,false,true));
-                    attacked.startCooldown(Ability.PROTECTION, 0L);
+                    long waitUntil = plugin.getWorldFullTime() + 24000L;
+                    waitUntil = waitUntil - (waitUntil % 24000);
+                    attacked.getCooldowns().startCooldown(Ability.PROTECTION, waitUntil);
                 }
             }
         }

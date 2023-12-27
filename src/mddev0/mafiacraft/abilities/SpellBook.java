@@ -1,8 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.roles.Sorcerer;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,7 +38,7 @@ public final class SpellBook implements Listener {
             if (item.getItemStack().getType() == Material.ENCHANTED_BOOK) {
                 // Valid item, check player
                 MafiaPlayer thrower = plugin.getLivingPlayers().get(item.getThrower());
-                if (thrower.getRole().hasAbility(Ability.SPELL_BOOK)) {
+                if (thrower.getRole().getAbilities().contains(Ability.SPELL_BOOK)) {
                     item.remove();
                     ItemStack toGive = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta meta = toGive.getItemMeta();
@@ -56,7 +55,7 @@ public final class SpellBook implements Listener {
                     toGive.setItemMeta(meta);
                     Player receiver = Bukkit.getPlayer(thrower.getID());
                     Objects.requireNonNull(receiver).getWorld().dropItem(receiver.getLocation(), toGive);
-                    thrower.setUnholy();
+                    thrower.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                 }
             }
         }
@@ -71,11 +70,17 @@ public final class SpellBook implements Listener {
                 ItemStack book = click.getItem();
                 if (Objects.requireNonNull(book.getItemMeta()).isUnbreakable()) {
                     MafiaPlayer sorcerer = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
-                    if (sorcerer.getRole() instanceof Sorcerer) { // dirty check but it works
-                        ((Sorcerer) sorcerer.getRole()).nextAbility();
+                    if (sorcerer.getRole() == Role.SORCERER) { // dirty check but it works
+                        List<Ability> abilities = Role.SORCERER.getAbilities().stream().toList();
+                        do {
+                            int selectedIndex = (abilities.stream().toList().indexOf((Ability)sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED)));
+                            selectedIndex += 1;
+                            selectedIndex %= abilities.size();
+                            sorcerer.getRoleData().setData(RoleData.DataType.SORCERER_SELECTED, abilities.stream().toList().get(selectedIndex));
+                        } while (sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED) == Ability.SPELL_BOOK);
                         click.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE +
                                 "Changed spells to " + ChatColor.GRAY +
-                                ((Sorcerer) sorcerer.getRole()).getSelected().fullName());
+                                ((Ability) sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED)).fullName());
                     }
                 }
             }

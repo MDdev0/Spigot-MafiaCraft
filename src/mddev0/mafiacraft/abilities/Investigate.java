@@ -1,7 +1,9 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.util.MafiaPlayer;
+import mddev0.mafiacraft.player.MafiaPlayer;
+import mddev0.mafiacraft.player.Role;
+import mddev0.mafiacraft.player.StatusData;
 import mddev0.mafiacraft.util.SpyglassUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +30,7 @@ public final class Investigate implements Listener {
         if (click.getItem() != null && click.getItem().getType() == Material.SPYGLASS) {
             // Material is spyglass, check player
             MafiaPlayer clicker = plugin.getLivingPlayers().get(click.getPlayer().getUniqueId());
-            if (clicker != null && clicker.getRole().hasAbility(Ability.INVESTIGATE)) {
+            if (clicker != null && clicker.getRole().getAbilities().contains(Ability.INVESTIGATE)) {
                 // Delay running checks on spyglass for one tick to make sure it has time to be set properly
                 (new AbilityActivateTimer(plugin, plugin.getLivingPlayers().get(click.getPlayer().getUniqueId()))).runTaskTimer(plugin, 1L, 1L);
             }
@@ -63,7 +65,12 @@ public final class Investigate implements Listener {
                 }
                 if (ticksActive >= (20 * targetTime)) { // 20 ticks per sec.
                     // Finished!
-                    if (plugin.getLivingPlayers().get(spyglass.getTargeted().getUniqueId()).isMafiaSuspect()) {
+                    MafiaPlayer target = plugin.getLivingPlayers().get(spyglass.getTargeted().getUniqueId());
+                    // Check if player is suspicious
+                    boolean sus = target.getRole().getAlignment() == Role.Team.MAFIA;
+                    sus = sus || (target.getStatus().hasStatus(StatusData.Status.FRAMED)); // Sus if they are framed
+                    sus = sus && (!target.getRole().getAbilities().contains(Ability.CHARISMA)); // Clean if they have charisma
+                    if (sus) {
                         holder.sendMessage(ChatColor.GRAY + "This player seems to be "
                                 + ChatColor.RED + "" + ChatColor.BOLD + "suspicious" +
                                 ChatColor.RESET + "" + ChatColor.GRAY + ".");
