@@ -35,25 +35,29 @@ public class JoinLeaveManager implements Listener {
                 join.getPlayer().teleport(toSpawn);
             }
             join.getPlayer().setGameMode(GameMode.SURVIVAL);
-            // all dead players should be hidden
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                MafiaPlayer spec = plugin.getPlayerList().get(p.getUniqueId());
-                if (spec == null || !spec.isLiving()) {
-                    join.getPlayer().hidePlayer(plugin, p);
+            if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+                // if true, dead players should be hidden
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
+                    MafiaPlayer spec = plugin.getPlayerList().get(p.getUniqueId());
+                    if (spec == null || !spec.isLiving()) {
+                        join.getPlayer().hidePlayer(plugin, p);
+                    }
                 }
             }
         }
         else { // player is not in game or is dead
-            // set spectator and hide join message
+            // TODO: set spectator? Potential for dead players to remain in world?
             join.getPlayer().setGameMode(GameMode.SPECTATOR);
-            join.setJoinMessage(null);
-            // hide player from all living players
-            for (Map.Entry<UUID, MafiaPlayer> living : plugin.getLivingPlayers().entrySet()) {
-                OfflinePlayer offp = Bukkit.getOfflinePlayer(living.getKey());
-                if (offp.isOnline()) {
-                    Player p = offp.getPlayer();
-                    assert p != null;
-                    p.hidePlayer(plugin, join.getPlayer());
+            if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+                // if true, hide player from all living players
+                join.setJoinMessage(null);
+                for (Map.Entry<UUID, MafiaPlayer> living : plugin.getLivingPlayers().entrySet()) {
+                    OfflinePlayer offp = Bukkit.getOfflinePlayer(living.getKey());
+                    if (offp.isOnline()) {
+                        Player p = offp.getPlayer();
+                        assert p != null;
+                        p.hidePlayer(plugin, join.getPlayer());
+                    }
                 }
             }
         }
@@ -63,9 +67,11 @@ public class JoinLeaveManager implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent leave) {
         if (!plugin.getActive()) return;
-        MafiaPlayer left = plugin.getPlayerList().get(leave.getPlayer().getUniqueId());
-        if (left == null || !left.isLiving()) {
-            leave.setQuitMessage("");
+        if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+            MafiaPlayer left = plugin.getPlayerList().get(leave.getPlayer().getUniqueId());
+            if (left == null || !left.isLiving()) {
+                leave.setQuitMessage(null);
+            }
         }
     }
 }

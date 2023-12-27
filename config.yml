@@ -7,6 +7,10 @@ hardcoreStyle: true
 # If true, players in spectator mode will not be able to send messages to chat. Operators bypass this.
 blockSpectatorChat: true
 
+# If true, spectating players will appear to leave the game when they die and will be hidden from the tab list when online.
+# Remember to set the game rule to hide player death messages if true!
+hideDeadPlayers: false
+
 # Amount of time in seconds players will be considered as "attacking" after attempting to kill someone
 attackDuration: 30
 
