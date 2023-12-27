@@ -87,6 +87,8 @@ public class GameFinisher extends BukkitRunnable {
                                 subtitle = ChatColor.GRAY + "The " + ChatColor.BLUE + ChatColor.BOLD + "Serial Killer" + ChatColor.RESET + ChatColor.GRAY + " has won!";
                             else if (winner.getRole() == Role.TRAPPER)
                                 subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_AQUA + ChatColor.BOLD + "Trapper" + ChatColor.RESET + ChatColor.GRAY + " has won!";
+                            else if (winner.getRole() == Role.WEREWOLF)
+                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_RED + ChatColor.BOLD + "Werewolf" + ChatColor.RESET + ChatColor.GRAY + " has won!";
                             break; // since we only take 1
                         }
                     }
