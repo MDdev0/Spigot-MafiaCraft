@@ -80,8 +80,7 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                         ambrosiaPotion.setColor(Color.fromRGB(255,200,0));
                                         ambrosiaPotion.setDisplayName(ChatColor.GOLD + "Ambrosia");
                                         List<String> ambrosiaLore = new ArrayList<>();
-                                        ambrosiaLore.add("Splash on any " + ChatColor.DARK_RED + "Werewolf" +
-                                                ChatColor.RESET + " or " + ChatColor.DARK_PURPLE + "Vampire");
+                                        ambrosiaLore.add("Splash on any " + ChatColor.DARK_PURPLE + "Vampire");
                                         ambrosiaLore.add("to convert them back to their original role.");
                                         ambrosiaPotion.setLore(ambrosiaLore);
                                         ambrosiaItem.setItemMeta(ambrosiaPotion);
