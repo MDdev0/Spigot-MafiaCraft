@@ -18,12 +18,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public final class ReanimationGUI implements Listener {
+public final class ReviveGUI implements Listener {
 
     private final MafiaCraft plugin;
     private final Inventory inv;
 
-    public ReanimationGUI(MafiaCraft plugin) {
+    public ReviveGUI(MafiaCraft plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
@@ -61,7 +61,7 @@ public final class ReanimationGUI implements Listener {
         // SCUFFED: So many requireNonNull... am I doing this wrong?
         UUID toReanimate = Objects.requireNonNull(((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer()).getUniqueId();
         Long cooldownExpires = (plugin.getWorldFullTime() + 168000L) - (plugin.getWorldFullTime() % 24000);
-        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getCooldowns().startCooldown(Ability.REANIMATION, cooldownExpires);
+        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getCooldowns().startCooldown(Ability.REVIVE, cooldownExpires);
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L);
         plugin.getPlayerList().get(toReanimate).makeAlive();
         click.getWhoClicked().sendMessage(ChatColor.GREEN + Bukkit.getOfflinePlayer(toReanimate).getName() + " has been revived.");

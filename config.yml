@@ -54,7 +54,7 @@ requiredRoles:
   - "REANIMATOR"
   - "INVESTIGATOR"
   - "APOTHECARY"
-  - "DEACON"
+  - "PRIEST"
   - "SERIAL_KILLER"
   - "HUNTER"
 

@@ -101,7 +101,6 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
         }
     }
 
-    // TODO: Make this take werewolves out of transformation?
     // When potion lands
     @EventHandler
     public void onPotionLand(PotionSplashEvent splash) {

@@ -80,7 +80,7 @@ public final class SpellBook implements Listener {
                         } while (sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED) == Ability.SPELL_BOOK);
                         click.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE +
                                 "Changed spells to " + ChatColor.GRAY +
-                                ((Ability) sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED)).fullName());
+                                (sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED)).toString());
                     }
                 }
             }

@@ -12,11 +12,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public final class Assassination implements Listener {
+public final class Assassinate implements Listener {
 
     private final MafiaCraft plugin;
 
-    public Assassination(MafiaCraft plugin) {
+    public Assassinate(MafiaCraft plugin) {
         this.plugin = plugin;
     }
 
@@ -31,12 +31,12 @@ public final class Assassination implements Listener {
             if (damager != null) {
                 // Only take action if not null
                 MafiaPlayer attacker = plugin.getLivingPlayers().get(damager.getUniqueId());
-                if (attacker != null && attacker.getRole().getAbilities().contains(Ability.ASSASSINATION) && !attacker.getCooldowns().isOnCooldown(Ability.ASSASSINATION)) {
+                if (attacker != null && attacker.getRole().getAbilities().contains(Ability.ASSASSINATE) && !attacker.getCooldowns().isOnCooldown(Ability.ASSASSINATE)) {
                     damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 0, false, false, true));
                     damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false, true));
                     long waitUntil = plugin.getWorldFullTime() + 24000L;
                     waitUntil = waitUntil - (waitUntil % 24000);
-                    attacker.getCooldowns().startCooldown(Ability.ASSASSINATION, waitUntil);
+                    attacker.getCooldowns().startCooldown(Ability.ASSASSINATE, waitUntil);
                 }
             }
         }

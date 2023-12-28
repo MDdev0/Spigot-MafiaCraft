@@ -125,27 +125,30 @@ public final class InfoGUI implements Listener {
                 abilItem = new ItemStack(Material.GRAY_CONCRETE);
                 abilMeta = abilItem.getItemMeta();
                 assert abilMeta != null;
-                abilMeta.setDisplayName(ChatColor.DARK_GRAY + abil.fullName());
+                abilMeta.setDisplayName(ChatColor.DARK_GRAY + abil.toString());
                 ArrayList<String> abilLore = new ArrayList<>();
                 abilLore.add(ChatColor.RESET + "" + ChatColor.GRAY + "This ability may only be used once.");
+                abilLore.add(ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + abil.getDesc());
                 abilMeta.setLore(abilLore);
                 abilItem.setItemMeta(abilMeta);
             } else if (caller.getCooldowns().isOnCooldown(abil)) { // On Cooldown
                 abilItem = new ItemStack(Material.YELLOW_CONCRETE);
                 abilMeta = abilItem.getItemMeta();
                 assert abilMeta != null;
-                abilMeta.setDisplayName(ChatColor.GOLD + abil.fullName());
+                abilMeta.setDisplayName(ChatColor.GOLD + abil.toString());
                 ArrayList<String> abilLore = new ArrayList<>();
                 abilLore.add(ChatColor.RESET + "" + ChatColor.YELLOW + "This ability is on cooldown.");
+                abilLore.add(ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + abil.getDesc());
                 abilMeta.setLore(abilLore);
                 abilItem.setItemMeta(abilMeta);
             } else { // Not On Cooldown
                 abilItem = new ItemStack(Material.WHITE_CONCRETE);
                 abilMeta = abilItem.getItemMeta();
                 assert abilMeta != null;
-                abilMeta.setDisplayName(ChatColor.AQUA + abil.fullName());
+                abilMeta.setDisplayName(ChatColor.AQUA + abil.toString());
                 ArrayList<String> abilLore = new ArrayList<>();
                 abilLore.add(ChatColor.RESET + "" + ChatColor.WHITE + "This ability is available!");
+                abilLore.add(ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + abil.getDesc());
                 abilMeta.setLore(abilLore);
                 abilItem.setItemMeta(abilMeta);
             }
