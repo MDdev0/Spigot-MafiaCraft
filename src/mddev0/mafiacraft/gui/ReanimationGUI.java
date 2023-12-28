@@ -60,7 +60,7 @@ public final class ReanimationGUI implements Listener {
         if (clicked == null || clicked.getType().isAir()) return;
         // SCUFFED: So many requireNonNull... am I doing this wrong?
         UUID toReanimate = Objects.requireNonNull(((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer()).getUniqueId();
-        Long cooldownExpires = (plugin.getWorldFullTime() + 48000L) - (plugin.getWorldFullTime() % 24000);
+        Long cooldownExpires = (plugin.getWorldFullTime() + 168000L) - (plugin.getWorldFullTime() % 24000);
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getCooldowns().startCooldown(Ability.REANIMATION, cooldownExpires);
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L);
         plugin.getPlayerList().get(toReanimate).makeAlive();
@@ -77,15 +77,17 @@ public final class ReanimationGUI implements Listener {
                 p.teleport(toSpawn);
             }
             p.setGameMode(GameMode.SURVIVAL);
-            // all dead players should be hidden, p should be unhidden
-            for (Player other : plugin.getServer().getOnlinePlayers()) {
-                other.showPlayer(plugin, p);
-                MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
-                if (spec == null || !spec.isLiving()) {
-                    p.hidePlayer(plugin, other);
+            if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+                // all dead players should be hidden, p should be unhidden
+                for (Player other : plugin.getServer().getOnlinePlayers()) {
+                    other.showPlayer(plugin, p);
+                    MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
+                    if (spec == null || !spec.isLiving()) {
+                        p.hidePlayer(plugin, other);
+                    }
                 }
+                Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
             }
-            Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
         }
     }
 
