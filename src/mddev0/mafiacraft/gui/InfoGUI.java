@@ -120,7 +120,17 @@ public final class InfoGUI implements Listener {
         for (Ability abil : caller.getRole().getAbilities()) {
             ItemStack abilItem;
             ItemMeta abilMeta;
-            if (caller.getCooldowns().isOnCooldown(abil)) { // On Cooldown
+            if (abil == Ability.JUST_A_PRANK && (Boolean)caller.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED)) {
+                // One-time use (this ability only)
+                abilItem = new ItemStack(Material.GRAY_CONCRETE);
+                abilMeta = abilItem.getItemMeta();
+                assert abilMeta != null;
+                abilMeta.setDisplayName(ChatColor.DARK_GRAY + abil.fullName());
+                ArrayList<String> abilLore = new ArrayList<>();
+                abilLore.add(ChatColor.RESET + "" + ChatColor.GRAY + "This ability may only be used once.");
+                abilMeta.setLore(abilLore);
+                abilItem.setItemMeta(abilMeta);
+            } else if (caller.getCooldowns().isOnCooldown(abil)) { // On Cooldown
                 abilItem = new ItemStack(Material.YELLOW_CONCRETE);
                 abilMeta = abilItem.getItemMeta();
                 assert abilMeta != null;

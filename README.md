@@ -98,7 +98,7 @@ _* These roles only win if they complete their special task **AND** survive unti
 | Convert       | All kills will not permanently kill the player, instead they will respawn as a Vampire.                                                                                                                           |                                      |
 | Night Owl     | Affected by Weakness II during the day.                                                                                                                                                                           | Occurs automatically.                |
 | Staked        | Weak to Wooden Tools.                                                                                                                                                                                             |                                      |
-| Just a Prank  | Any Villager who kills a Jester who does not fight back will be affected with Wither I indefinitely, until they are able to find a cure. The Jester will respawn.                                                 |                                      |
+| Just a Prank  | Any Villager who kills a Jester who does not fight back will be affected with Wither II indefinitely, until they are able to find a cure. The Jester will respawn and have their role revealed.                   | **One-time use.**                    |
 
 ## Rules and Definitions
 

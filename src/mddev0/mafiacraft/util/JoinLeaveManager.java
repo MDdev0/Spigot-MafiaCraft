@@ -2,10 +2,8 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.player.MafiaPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import mddev0.mafiacraft.player.RoleData;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -44,8 +42,7 @@ public class JoinLeaveManager implements Listener {
                     }
                 }
             }
-        }
-        else { // player is not in game or is dead
+        } else { // player is not in game or is dead
             // TODO: set spectator? Potential for dead players to remain in world?
             join.getPlayer().setGameMode(GameMode.SPECTATOR);
             if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
@@ -60,6 +57,11 @@ public class JoinLeaveManager implements Listener {
                     }
                 }
             }
+        }
+        // Handle Jester
+        if (joined != null && (Boolean) joined.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED)) {
+            join.getPlayer().setDisplayName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getDisplayName());
+            join.getPlayer().setPlayerListName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getPlayerListName());
         }
     }
 
