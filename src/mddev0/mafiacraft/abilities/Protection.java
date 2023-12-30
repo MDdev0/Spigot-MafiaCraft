@@ -33,8 +33,8 @@ public final class Protection implements Listener {
                 if (CombatState.findAttackingPlayer(damage) != null) {
                     // TRIGGER ABILITY
                     Player toProtect = (Player) damage.getEntity();
-                    toProtect.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,600,1,false,false,true));
-                    long waitUntil = plugin.getWorldFullTime() + 24000L;
+                    toProtect.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,1200,1,false,false,true));
+                    long waitUntil = plugin.getWorldFullTime() + 24000L * 3;
                     waitUntil = waitUntil - (waitUntil % 24000);
                     attacked.getCooldowns().startCooldown(Ability.PROTECTION, waitUntil);
                 }

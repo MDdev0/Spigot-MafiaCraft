@@ -35,7 +35,7 @@ public final class Retaliate implements Listener {
                     Player toRetaliate = (Player) damage.getEntity();
                     toRetaliate.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,600,1,false,false,true));
                     toRetaliate.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,600,1,false,false,true));
-                    long waitUntil = plugin.getWorldFullTime() + 24000L;
+                    long waitUntil = plugin.getWorldFullTime() + 24000L * 3;
                     waitUntil = waitUntil - (waitUntil % 24000); // Cooldown ends at dawn
                     attacked.getCooldowns().startCooldown(Ability.RETALIATE, waitUntil);
                 }

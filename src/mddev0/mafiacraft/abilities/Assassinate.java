@@ -32,9 +32,9 @@ public final class Assassinate implements Listener {
                 // Only take action if not null
                 MafiaPlayer attacker = plugin.getLivingPlayers().get(damager.getUniqueId());
                 if (attacker != null && attacker.getRole().getAbilities().contains(Ability.ASSASSINATE) && !attacker.getCooldowns().isOnCooldown(Ability.ASSASSINATE)) {
-                    damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 1200, 0, false, false, true));
-                    damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1200, 0, false, false, true));
-                    long waitUntil = plugin.getWorldFullTime() + 24000L;
+                    damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 2400, 0, false, false, true));
+                    damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 2400, 0, false, false, true));
+                    long waitUntil = plugin.getWorldFullTime() + 24000L * 3;
                     waitUntil = waitUntil - (waitUntil % 24000);
                     attacker.getCooldowns().startCooldown(Ability.ASSASSINATE, waitUntil);
                 }

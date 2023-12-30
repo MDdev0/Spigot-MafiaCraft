@@ -60,7 +60,7 @@ public final class ReviveGUI implements Listener {
         if (clicked == null || clicked.getType().isAir()) return;
         // SCUFFED: So many requireNonNull... am I doing this wrong?
         UUID toReanimate = Objects.requireNonNull(((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer()).getUniqueId();
-        Long cooldownExpires = (plugin.getWorldFullTime() + 168000L) - (plugin.getWorldFullTime() % 24000);
+        Long cooldownExpires = (plugin.getWorldFullTime() + 864000L);
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getCooldowns().startCooldown(Ability.REVIVE, cooldownExpires);
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L);
         plugin.getPlayerList().get(toReanimate).makeAlive();

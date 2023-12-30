@@ -87,8 +87,7 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                         Item spawned = (Item) i.getWorld().spawnEntity(b.getLocation(), EntityType.DROPPED_ITEM);
                                         spawned.setItemStack(ambrosiaItem);
                                         // Add cooldown to thrower
-                                        long waitUntil = plugin.getWorldFullTime() + (24000L * 7); // 7 days later
-                                        waitUntil = waitUntil - (waitUntil % 24000); // Round to earliest morning
+                                        long waitUntil = plugin.getWorldFullTime() + 864000L; // 12 real hours later
                                         thrower.getCooldowns().startCooldown(Ability.AMBROSIA, waitUntil);
                                         thrower.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                                     }
