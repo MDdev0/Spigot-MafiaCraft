@@ -255,15 +255,17 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                     p.teleport(toSpawn);
                 }
                 p.setGameMode(GameMode.SURVIVAL);
-                // all dead players should be hidden, p should be unhidden
-                for (Player other : plugin.getServer().getOnlinePlayers()) {
-                    other.showPlayer(plugin, p);
-                    MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
-                    if (spec == null || !spec.isLiving()) {
-                        p.hidePlayer(plugin, other);
+                if (plugin.getConfig().getBoolean("hideDeadPlayers")){
+                    // all dead players should be hidden, p should be unhidden
+                    for (Player other : plugin.getServer().getOnlinePlayers()) {
+                        other.showPlayer(plugin, p);
+                        MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
+                        if (spec == null || !spec.isLiving()) {
+                            p.hidePlayer(plugin, other);
+                        }
                     }
+                    Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
                 }
-                Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
                 sender.sendMessage(ChatColor.GREEN + args[1] + " has been revived.");
                 return true;
             }
