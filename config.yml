@@ -32,15 +32,15 @@ peripheralsRange: 10
 rescueRange: 8.0
 
 # Cost (in levels) to trigger Scatter
-scatterCost: 5
+scatterCost: 4
 # Cost (in levels) to trigger Toadify
-toadifyCost: 15
+toadifyCost: 4
 # Cost (in levels) to trigger Fog of War
-fogOfWarCost: 10
+fogOfWarCost: 8
 # Effective range of Fog of War
 fogOfWarRange: 30
 # Cost (in levels) to trigger Vanish
-vanishCost: 10
+vanishCost: 8
 
 # Number of targets hunters will be given
 hunterNumTargets: 3

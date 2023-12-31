@@ -28,7 +28,7 @@ Listed below are all the roles and abilities planned, as well as some definition
 | *Godfather* | The head of the local crime family.               | Protection,<br/>Charisma | Tell the members of the Mafia what to do. |
 | Mafioso     | A member of the local crime family.               | Succession               | Follow the orders of the Godfather.       |
 | Framer      | A skilled bookkeeper turned crime-staging genius. | Forgery                  | Follow the orders of the Godfather.       |
-| Assassin    | The dedicated killer within the Mafia's ranks.    | Assassinate            | Follow the orders of the Godfather.       |
+| Assassin    | The dedicated killer within the Mafia's ranks.    | Assassinate              | Follow the orders of the Godfather.       |
 
 ### <font color="#33cf33">Village</font> Roles
 
@@ -88,10 +88,10 @@ _* These roles only win if they complete their special task **AND** survive unti
 | Target       | Receive a list at the beginning of the game of targets.                                                                                                                                                           | At the start of the game.              |
 | Tracking     | See whether your targets are dead or alive.                                                                                                                                                                       |                                        |
 | Spell Book   | Craft a spell book by throwing any enchanted book into normal fire.                                                                                                                                               |                                        |
-| Scatter      | Using the spell book, grant one person Speed IV for 20 seconds. Costs 5 levels of experience.                                                                                                                     |                                        |
-| Toadify      | Using the spell book, inflict one person with Slowness V and Jump Boost V for 15 seconds. Costs 5 levels of experience.                                                                                           |                                        |
-| Fog of War   | Using the spell book, inflict everyone within 30 blocks with Blindness I for 30 seconds. Costs 10 levels of experience.                                                                                           |                                        |
-| Vanish       | Using the spell book, grant one person with Invisibility for 3 minutes. Costs 10 levels of experience.                                                                                                            |                                        |
+| Scatter      | Using the spell book, grant one person Speed IV for 20 seconds. Costs 4 levels of experience.                                                                                                                     |                                        |
+| Toadify      | Using the spell book, inflict one person with Slowness V and Jump Boost V for 15 seconds. Costs 4 levels of experience.                                                                                           |                                        |
+| Fog of War   | Using the spell book, inflict everyone within 30 blocks with Blindness I for 30 seconds. Costs 8 levels of experience.                                                                                            |                                        |
+| Vanish       | Using the spell book, grant one person with Invisibility for 3 minutes. Costs 8 levels of experience.                                                                                                             |                                        |
 | Transform    | Transform on full-moon nights.                                                                                                                                                                                    | Occurs automatically.                  |
 | Rampage      | For every kill while Transformed, gain one level of strength for the rest of the night (maximum Strength V).                                                                                                      |                                        |
 | Nemesis      | Weak to Iron Tools while Transformed.                                                                                                                                                                             |                                        |
