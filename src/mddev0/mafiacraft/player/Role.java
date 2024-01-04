@@ -22,7 +22,7 @@ public enum Role {
     TRAPPER("Trapper", false, Team.SOLO, Ability.THIS_IS_FINE, Ability.DODGE_ROLL),
     HUNTER("Hunter", false, Team.NONE, Ability.TARGET, Ability.TRACKING),
     SORCERER("Sorcerer", false, Team.NONE, Ability.SCATTER, Ability.TOADIFY, Ability.FOG_OF_WAR, Ability.VANISH, Ability.SPELL_BOOK),
-    WEREWOLF("Werewolf", false, Team.NONE, Ability.TRANSFORM, Ability.RAMPAGE, Ability.NEMESIS),
+    WEREWOLF("Werewolf", false, Team.SOLO, Ability.TRANSFORM, Ability.RAMPAGE, Ability.NEMESIS),
     VAMPIRE("Vampire", true, Team.VAMPIRES, Ability.CONVERT, Ability.NIGHT_OWL, Ability.STAKED),
     JESTER("Jester", true, Team.NONE, Ability.JUST_A_PRANK);
 

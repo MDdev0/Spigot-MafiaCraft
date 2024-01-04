@@ -8,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Objects;
-
 public final class ClearSight implements Listener {
 
     private final MafiaCraft plugin;
@@ -23,10 +21,10 @@ public final class ClearSight implements Listener {
     public void onEffectApplied(EntityPotionEffectEvent potion) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
         MafiaPlayer affected = plugin.getPlayerList().get(potion.getEntity().getUniqueId());
-        if (potion.getEntity().getType() == EntityType.PLAYER && affected != null &&
+        if (potion.getEntity().getType() == EntityType.PLAYER && affected != null && potion.getNewEffect() != null &&
                 affected.getRole().getAbilities().contains(Ability.CLEAR_SIGHT) && (
-                        Objects.requireNonNull(potion.getNewEffect()).getType() == PotionEffectType.BLINDNESS ||
-                        Objects.requireNonNull(potion.getNewEffect()).getType() == PotionEffectType.DARKNESS
+                        potion.getNewEffect().getType() == PotionEffectType.BLINDNESS ||
+                        potion.getNewEffect().getType() == PotionEffectType.DARKNESS
                 ))
             potion.setCancelled(true); // Cancel potion effect if eligible player is being blinded
     }
