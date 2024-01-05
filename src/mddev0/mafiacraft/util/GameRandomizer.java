@@ -137,23 +137,29 @@ public class GameRandomizer {
         // This loop could go on for ages... oh well
         // and by ages I mean worst case is potentially infinite
         final Random rand = new Random();
+        int consecutiveFailures = 0;
         while (!playersToRoll.isEmpty()) {
+            if (consecutiveFailures > 100)
+                throw new RandomizationException("Stopping randomization due to possible infinite loop. This may be a fluke, " +
+                        "or may be because there are more required roles of one type than the role ratios can fill.");
+
             // Get random player
             OfflinePlayer player = playersToRoll.get(rand.nextInt(playersToRoll.size()));
 
             Role role = null; // this will store the assigned role
 
             // Restock roles if there are none left
-            for (Role r : Role.values())
-                if (!r.isUnique() && !bannedRoles.contains(r.name())) // Role is not unique/banned
-                    availableRoles.add(r);
+            if (availableRoles.isEmpty()) {
+                for (Role r : Role.values())
+                    if (!r.isUnique() && !bannedRoles.contains(r.name())) // Role is not unique/banned
+                        availableRoles.add(r);
+            }
 
             // If there are required roles outstanding, assign them first
             if (!requiredRoles.isEmpty())
                 do {
                     try {
                         role = Role.valueOf(requiredRoles.get(0));
-
                     } catch (IllegalArgumentException ex) {
                         Bukkit.getLogger().log(Level.WARNING, "Skipping an invalid entry in the list of required roles: " + requiredRoles.remove(0));
                     }
@@ -166,20 +172,29 @@ public class GameRandomizer {
             if (numMafia > 0 || numVillage > 0 || numNeutral > 0) {
                 switch (role.getAlignment()) {
                     case MAFIA -> {
-                        if (numMafia <= 0) // Finish others before adding more mafia
+                        if (numMafia <= 0) { // Finish others before adding more mafia
+                            availableRoles.remove(role);
+                            consecutiveFailures++;
                             continue; // Just skip this iteration :)
+                        }
                         else // keep going, and update number of mafia
                             numMafia--;
                     }
                     case VILLAGE -> {
-                        if (numVillage <= 0) // Finish others before adding more villagers
+                        if (numVillage <= 0) { // Finish others before adding more villagers
+                            availableRoles.remove(role);
+                            consecutiveFailures++;
                             continue; // Just skip this iteration :)
+                        }
                         else // keep going, and update number of villagers
                             numVillage--;
                     }
                     default -> {
-                        if (numNeutral <= 0) // Finish others before adding more neutrals
+                        if (numNeutral <= 0) { // Finish others before adding more neutrals
+                            availableRoles.remove(role);
+                            consecutiveFailures++;
                             continue; // Just skip this iteration :)
+                        }
                         else // keep going, and update number of neutrals
                             numNeutral--;
                     }
@@ -187,6 +202,7 @@ public class GameRandomizer {
             }
 
             // at this point we know the player can be added to the role
+            consecutiveFailures = 0;
             // Prevent reselect of role
             requiredRoles.remove(role.name());
             availableRoles.remove(role);
@@ -198,14 +214,13 @@ public class GameRandomizer {
             plugin.getPlayerList().put(mafiaPlayer.getID(), mafiaPlayer);
             if (plugin.getPlayerList().containsKey(mafiaPlayer.getID())){
                 playersToRoll.remove(player);
-                // I think the logger is thread safe
                 Bukkit.getLogger().log(Level.INFO, "[MafiaCraft] Set random role for player " + player.getName() + " (" + player.getUniqueId() + ")");
             } else {
                 Bukkit.getLogger().log(Level.WARNING, "[MafiaCraft] Could not add " + player.getName() + " (" + player.getUniqueId() + ") to the MafiaCraft player list");
             }
         }
 
-        // All players should have been set up by this point do hunter targets
+        // All players should have been set up by this point, do hunter targets
         for (MafiaPlayer mp : plugin.getPlayerList().values()) {
             if (mp.getRole() == Role.HUNTER) {
                 Set<String> targets = new HashSet<>();
