@@ -62,7 +62,12 @@ public final class InfoGUI implements Listener {
             case MAFIA -> ChatColor.RED;
             case VILLAGE -> ChatColor.DARK_GREEN;
             case SOLO -> ChatColor.BLUE;
-            case NONE -> ChatColor.YELLOW;
+            case NONE ->
+                switch (caller.getRole()) {
+                    case JESTER -> ChatColor.LIGHT_PURPLE;
+                    case SORCERER -> ChatColor.DARK_AQUA;
+                    default -> ChatColor.YELLOW;
+                };
             case VAMPIRES -> ChatColor.DARK_PURPLE;
         } + Objects.requireNonNull(Bukkit.getPlayer(caller.getID())).getName() + " | "
                 + caller.getRole().toString();
@@ -79,10 +84,12 @@ public final class InfoGUI implements Listener {
                         if (caller.getRole() == Role.JESTER)
                             yield "if " + ChatColor.LIGHT_PURPLE + "killed" +
                                     ChatColor.GRAY + " by a member of the " + ChatColor.DARK_GREEN + "Village";
+                        else if (caller.getRole() == Role.SORCERER)
+                            yield ChatColor.GRAY + "by surviving to see " + ChatColor.DARK_AQUA + "your secret allegiance" + ChatColor.GRAY + " win";
                         else
-                            yield ChatColor.GRAY + " by completing all " + ChatColor.YELLOW + "tasks and win conditions";
+                            yield ChatColor.GRAY + "by completing all " + ChatColor.YELLOW + "tasks and win conditions";
                     }
-                    case VAMPIRES -> "by " + ChatColor.DARK_AQUA + "Converting all players to Vampires";
+                    case VAMPIRES -> "by " + ChatColor.DARK_PURPLE + "Converting all players to Vampires";
                 });
         headLore.add(ChatColor.GRAY + "See all your abilities below.");
         if (caller.getRole().getAlignment() == Role.Team.MAFIA || caller.getRole().getAlignment() == Role.Team.VAMPIRES) {
@@ -91,8 +98,11 @@ public final class InfoGUI implements Listener {
         } else if (caller.getRole() == Role.HUNTER) {
             headLore.add(ChatColor.GRAY + "The names and status of your");
             headLore.add(ChatColor.GRAY + "targets are listed below.");
+        } else if (caller.getRole() == Role.BODYGUARD) {
+            headLore.add(ChatColor.GRAY + "The name and status of your");
+            headLore.add(ChatColor.GRAY + "protectee is listed below.");
         }
-        headLore.add(ChatColor.DARK_GRAY + "See the Role List if you're still confused.");
+        headLore.add(ChatColor.DARK_GRAY + "See the role descriptions online if you're still confused.");
         headMeta.setLore(headLore);
         head.setItemMeta(headMeta);
         inv.setItem(4,head);
@@ -159,7 +169,8 @@ public final class InfoGUI implements Listener {
             abilityNumber++;
         }
 
-        // List of Teammates
+        // TODO: Switchify
+        // List of Teammates or other attributes
         if (caller.getRole().getAlignment() == Role.Team.MAFIA) { // If Mafia
             int teammateNumber = 0;
             for (MafiaPlayer other : plugin.getLivingPlayers().values()) {
@@ -191,7 +202,7 @@ public final class InfoGUI implements Listener {
                     teamMeta = (SkullMeta) teamHead.getItemMeta();
                     assert teamMeta != null;
                     teamMeta.setOwningPlayer(Bukkit.getOfflinePlayer(other.getID()));
-                    teamTitle = ChatColor.DARK_AQUA + Bukkit.getOfflinePlayer(other.getID()).getName() + " | " + other.getRole().toString();
+                    teamTitle = ChatColor.DARK_PURPLE + Bukkit.getOfflinePlayer(other.getID()).getName() + " | " + other.getRole().toString();
                     teamMeta.setDisplayName(teamTitle);
                     teamHead.setItemMeta(teamMeta);
                     // Set Item
@@ -224,6 +235,36 @@ public final class InfoGUI implements Listener {
                 inv.setItem(targetPos, targetHead);
                 targetNumber++;
             }
+        } else if (caller.getRole() == Role.BODYGUARD) {
+            String uuid = (String)caller.getRoleData().getData(RoleData.DataType.BODYGUARD_PROTECTEE);
+            MafiaPlayer protectee = plugin.getPlayerList().get(UUID.fromString(uuid));
+            ItemStack protecteeHead = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta protecteeMeta = (SkullMeta) protecteeHead.getItemMeta();
+            assert protecteeMeta != null;
+            protecteeMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(uuid)));
+            String protecteeTitle;
+            if (protectee.isLiving())
+                protecteeTitle = ChatColor.AQUA + Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName() + " | Alive";
+            else
+                protecteeTitle = ChatColor.DARK_GRAY + Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName() + " | Dead";
+            protecteeMeta.setDisplayName(protecteeTitle);
+            protecteeHead.setItemMeta(protecteeMeta);
+            inv.setItem(17, protecteeHead);
+        } else if (caller.getRole() == Role.SORCERER) {
+            ItemStack indicator;
+            String indicatorTitle = ChatColor.GRAY + "Secret Alignment: ";
+            if (Role.Team.valueOf((String)caller.getRoleData().getData(RoleData.DataType.SORCERER_ALIGNMENT)) == Role.Team.VILLAGE) {
+                indicator = new ItemStack(Material.LIME_WOOL);
+                indicatorTitle += ChatColor.DARK_GREEN + "Village";
+            } else { // aligned to Mafia
+                indicator = new ItemStack(Material.RED_WOOL);
+                indicatorTitle += ChatColor.RED + "Mafia";
+            }
+            ItemMeta indicatorMeta = indicator.getItemMeta();
+            assert indicatorMeta != null;
+            indicatorMeta.setDisplayName(indicatorTitle);
+            indicator.setItemMeta(indicatorMeta);
+            inv.setItem(17, indicator);
         }
         // TODO: Add indicators for Jester and Werewolves
     }

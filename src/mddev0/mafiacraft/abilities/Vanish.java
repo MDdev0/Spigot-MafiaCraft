@@ -49,7 +49,7 @@ public final class Vanish implements Listener {
                             }
                             if (p == null) p = click.getPlayer();
                             // apply effect
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 3600, 0, false, false, true));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 2400, 0, false, false, true));
                             click.getPlayer().setLevel(click.getPlayer().getLevel() - plugin.getConfig().getInt("vanishCost"));
                             click.getPlayer().sendMessage(ChatColor.GREEN + "You used " + ChatColor.LIGHT_PURPLE + "Vanish" +
                                     ChatColor.GREEN + " on " + ChatColor.AQUA + p.getName());

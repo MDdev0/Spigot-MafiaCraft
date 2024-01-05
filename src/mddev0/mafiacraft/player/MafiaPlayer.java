@@ -103,7 +103,12 @@ public class MafiaPlayer {
         // If this role has added attributes, set defaults if needed
         switch (role)  {
             case JESTER -> roleData.setData(RoleData.DataType.JESTER_ABILITY_USED, false);
-            case SORCERER -> roleData.setData(RoleData.DataType.SORCERER_SELECTED, Ability.SPELL_BOOK);
+            case SORCERER -> {
+                roleData.setData(RoleData.DataType.SORCERER_SELECTED, Ability.SPELL_BOOK);
+                // Ternary operator to randomly pick if they are Village or Mafia
+                Role.Team alignment = (new Random().nextInt(2) == 0) ? Role.Team.VILLAGE : Role.Team.MAFIA;
+                roleData.setData(RoleData.DataType.SORCERER_ALIGNMENT, alignment.name());
+            }
             case WEREWOLF -> {
                 roleData.setData(RoleData.DataType.WEREWOLF_TRANSFORM, false);
                 roleData.setData(RoleData.DataType.WEREWOLF_KILLS, 0);
@@ -116,7 +121,12 @@ public class MafiaPlayer {
                 for (int i = 0; i < num; i++)
                     targets.add(allLiving.remove(new Random().nextInt(allLiving.size())).toString()); // SCUFFED: oops terrible practice
                 roleData.setData(RoleData.DataType.HUNTER_TARGETS, targets);
-            } // TODO: add condition for Bodyguard
+            }
+            case BODYGUARD -> {
+                List<UUID> allLiving = new ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
+                allLiving.remove(uuid);
+                roleData.setData(RoleData.DataType.BODYGUARD_PROTECTEE, allLiving.get(new Random().nextInt(allLiving.size())).toString());
+            }
         }
 
 

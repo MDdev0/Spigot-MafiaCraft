@@ -47,8 +47,8 @@ public final class JustAPrank implements Listener {
                     // For other player
                     Player toAffect = death.getEntity().getKiller();
                     toAffect.sendMessage(ChatColor.GRAY + "You killed the " + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.GRAY + "!");
-                    jester.getWorld().createExplosion(jester.getLocation(), 5.0f, false, false, jester);
-                    toAffect.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, Integer.MAX_VALUE, 1, false, true, true));
+                    jester.getWorld().createExplosion(jester.getLocation(), 3.0f, false, false, jester);
+                    toAffect.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, PotionEffect.INFINITE_DURATION, 2, false, true, true));
                     toAffect.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, toAffect.getLocation().add(0, 1, 0), 10, 1, 2, 1);
                     // For all others
                     jester.getWorld().strikeLightningEffect(jester.getLocation());

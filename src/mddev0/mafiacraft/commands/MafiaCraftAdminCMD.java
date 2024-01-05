@@ -195,15 +195,17 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                                     case MAFIA -> ChatColor.RED;
                                                     case VILLAGE -> ChatColor.DARK_GREEN;
                                                     case SOLO -> {
-                                                        if (p.getRole().toString().equals("Serial Killer"))
+                                                        if (p.getRole() == Role.SERIAL_KILLER)
                                                             yield ChatColor.BLUE;
-                                                        else if (p.getRole().toString().equals("Trapper"))
-                                                            yield ChatColor.DARK_AQUA;
+                                                        else if (p.getRole() == Role.WEREWOLF)
+                                                            yield ChatColor.DARK_RED;
                                                         else yield ChatColor.DARK_GRAY; // Should never be used
                                                     }
                                                     case NONE -> {
-                                                        if (p.getRole().toString().equals("Jester"))
+                                                        if (p.getRole() == Role.JESTER)
                                                             yield ChatColor.LIGHT_PURPLE;
+                                                        if (p.getRole() == Role.SORCERER)
+                                                            yield ChatColor.DARK_AQUA;
                                                         else yield ChatColor.YELLOW; // Will be used
                                                     }
                                                     case VAMPIRES -> ChatColor.DARK_PURPLE;

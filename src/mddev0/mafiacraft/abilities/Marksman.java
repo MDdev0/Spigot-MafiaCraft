@@ -20,11 +20,10 @@ public final class Marksman implements Listener {
     @EventHandler
     public void onArrowShoot(EntityShootBowEvent shot) {
         if (!plugin.getActive()) return; // DO NOTHING IF NOT ACTIVE!
-        if (shot.getEntity().getType() != EntityType.ARROW) return;
+        if (shot.getEntity().getType() != EntityType.PLAYER) return;
         // Only shots from players allowed
         MafiaPlayer shooter = plugin.getLivingPlayers().get(shot.getEntity().getUniqueId());
-        if (shooter != null && shooter.getRole().getAbilities().contains(Ability.MARKSMAN)
-                && shot.getProjectile().getType() != EntityType.ARROW) {
+        if (shooter != null && shooter.getRole().getAbilities().contains(Ability.MARKSMAN)) {
             Arrow arrow = (Arrow) shot.getProjectile();
             arrow.setDamage(arrow.getDamage() + 2.0); // Add one heart
             // SCUFFED: Probably make that a config value at some point

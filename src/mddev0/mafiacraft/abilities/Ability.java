@@ -45,7 +45,7 @@ public enum Ability {
     TARGET("Target",
             "Receive a list at the beginning of the game of targets."), // Has no class
     TRACKING("Tracking",
-            "See whether your targets are dead or alive."), // Has no class
+            "See whether your targets or protectee are dead or alive."), // Has no class
     SPELL_BOOK("Spell Book",
             "Craft a spell book by throwing any enchanted book into normal fire. Use to switch spells."),
     SCATTER("Scatter",
@@ -56,6 +56,8 @@ public enum Ability {
             "Inflict everyone within 30 blocks with Blindness I for 30 seconds. Costs 10 levels of experience."),
     VANISH("Vanish",
             "Grant one person Invisibility for 3 minutes. Costs 10 levels of experience."),
+    SHADOW_PLEDGE("Shadow Pledge",
+            "At the beginning of the game, you are randomly assigned alignment with the Village or Mafia. You win with this team, but they do not know this."), // Has no class
     TRANSFORM("Transform",
             "Transform on full-moon nights."),
     RAMPAGE("Rampage",
@@ -68,7 +70,8 @@ public enum Ability {
             "Affected by Weakness II during the day."),
     STAKED("Staked",
             "Weak to Wooden Tools."),
-    JUST_A_PRANK("Just a Prank","Be killed by a member of the Village without fighting back to respawn.");
+    JUST_A_PRANK("Just a Prank",
+            "Be killed by a member of the Village without fighting back to respawn.");
 
     private final String NAME;
 

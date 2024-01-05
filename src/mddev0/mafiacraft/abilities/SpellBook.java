@@ -77,7 +77,8 @@ public final class SpellBook implements Listener {
                             selectedIndex += 1;
                             selectedIndex %= abilities.size();
                             sorcerer.getRoleData().setData(RoleData.DataType.SORCERER_SELECTED, abilities.stream().toList().get(selectedIndex));
-                        } while (sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED) == Ability.SPELL_BOOK);
+                        } while (sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED) == Ability.SPELL_BOOK ||
+                                sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED) == Ability.SHADOW_PLEDGE);
                         click.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE +
                                 "Changed spells to " + ChatColor.GRAY +
                                 (sorcerer.getRoleData().getData(RoleData.DataType.SORCERER_SELECTED)).toString());

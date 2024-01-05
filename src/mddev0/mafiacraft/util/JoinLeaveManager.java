@@ -59,9 +59,12 @@ public class JoinLeaveManager implements Listener {
             }
         }
         // Handle Jester
-        if (joined != null && (Boolean) joined.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED)) {
-            join.getPlayer().setDisplayName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getDisplayName());
-            join.getPlayer().setPlayerListName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getPlayerListName());
+        if (joined != null) {
+            Boolean jestStatus = (Boolean) joined.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED);
+            if (jestStatus != null && jestStatus) {
+                join.getPlayer().setDisplayName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getDisplayName());
+                join.getPlayer().setPlayerListName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getPlayerListName());
+            }
         }
     }
 

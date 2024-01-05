@@ -238,6 +238,10 @@ public class GameRandomizer {
                 allLiving.remove(mp.getID());
                 String protectee = allLiving.get(rand.nextInt(allLiving.size())).toString();
                 mp.getRoleData().setData(RoleData.DataType.BODYGUARD_PROTECTEE, protectee);
+            } if (mp.getRole().getAbilities().contains(Ability.SHADOW_PLEDGE)) {
+                // Ternary operator to randomly pick if they are Village or Mafia
+                Role.Team alignment = (new Random().nextInt(2) == 0) ? Role.Team.VILLAGE : Role.Team.MAFIA;
+                mp.getRoleData().setData(RoleData.DataType.SORCERER_ALIGNMENT, alignment.name());
             }
         }
     }

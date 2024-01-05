@@ -19,12 +19,12 @@ public enum Role {
     APOTHECARY("Apothecary", true, Team.VILLAGE, Ability.AMBROSIA),
     PRIEST("Priest", false, Team.VILLAGE, Ability.INQUISITION),
     SERIAL_KILLER("Serial Killer", false, Team.SOLO, Ability.PROTECTION, Ability.AMBUSH),
-    BODYGUARD("Bodyguard", false, Team.NONE, Ability.PROTECTEE, Ability.THIS_IS_FINE, Ability.DODGE_ROLL, Ability.PROTECTION),
+    BODYGUARD("Bodyguard", false, Team.NONE, Ability.PROTECTEE, Ability.THIS_IS_FINE, Ability.DODGE_ROLL, Ability.TRACKING),
     HUNTER("Hunter", false, Team.NONE, Ability.TARGET, Ability.TRACKING),
-    SORCERER("Sorcerer", false, Team.NONE, Ability.SCATTER, Ability.TOADIFY, Ability.FOG_OF_WAR, Ability.VANISH, Ability.SPELL_BOOK),
+    SORCERER("Sorcerer", true, Team.NONE, Ability.SCATTER, Ability.TOADIFY, Ability.FOG_OF_WAR, Ability.VANISH, Ability.SPELL_BOOK, Ability.SHADOW_PLEDGE),
     WEREWOLF("Werewolf", false, Team.SOLO, Ability.TRANSFORM, Ability.RAMPAGE, Ability.NEMESIS),
     VAMPIRE("Vampire", true, Team.VAMPIRES, Ability.CONVERT, Ability.NIGHT_OWL, Ability.STAKED),
-    JESTER("Jester", true, Team.NONE, Ability.JUST_A_PRANK);
+    JESTER("Jester", false, Team.NONE, Ability.JUST_A_PRANK);
 
     private final String NAME;
     private final boolean UNIQUE;

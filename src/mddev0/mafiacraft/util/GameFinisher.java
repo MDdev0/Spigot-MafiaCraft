@@ -84,8 +84,6 @@ public class GameFinisher extends BukkitRunnable {
                             winnerSet.add(winner);
                             if (winner.getRole() == Role.SERIAL_KILLER)
                                 subtitle = ChatColor.GRAY + "The " + ChatColor.BLUE + ChatColor.BOLD + "Serial Killer" + ChatColor.RESET + ChatColor.GRAY + " has won!";
-                            else if (winner.getRole() == Role.BODYGUARD)
-                                subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_AQUA + ChatColor.BOLD + "Trapper" + ChatColor.RESET + ChatColor.GRAY + " has won!";
                             else if (winner.getRole() == Role.WEREWOLF)
                                 subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_RED + ChatColor.BOLD + "Werewolf" + ChatColor.RESET + ChatColor.GRAY + " has won!";
                             break; // since we only take 1
@@ -100,32 +98,45 @@ public class GameFinisher extends BukkitRunnable {
                         }
                         subtitle = ChatColor.GRAY + "The " + ChatColor.DARK_PURPLE + ChatColor.BOLD + "Vampires" + ChatColor.RESET + ChatColor.GRAY + " have won!";
                     }
-                } else if (mafiaRemaining + villageRemaining + soloRemaining + vampRemaining == 0) { // only unaligned left somehow
+                } else if (mafiaRemaining + villageRemaining + soloRemaining + vampRemaining == 0 && !plugin.getLivingPlayers().isEmpty()) { // only unaligned left somehow
                     endGame = true;
-                    subtitle = ChatColor.GRAY + "The " + ChatColor.YELLOW + ChatColor.BOLD + "Survivors" + ChatColor.RESET + ChatColor.GRAY + " have won!";
+                    subtitle = ChatColor.GRAY + "Only " + ChatColor.YELLOW + ChatColor.BOLD + "Neutral" + ChatColor.RESET + ChatColor.GRAY + " players are alive!";
                 } else if (plugin.getLivingPlayers().isEmpty()) {
                     endGame = true;
                     subtitle = ChatColor.GRAY + "Everyone died!";
                 }
 
                 // Unaligned roles
-                for (MafiaPlayer mp : plugin.getLivingPlayers().values()) { // survivors ONLY win if alive
-                    if (mp.getRole() == Role.HUNTER) {
-                        // Check if targets are killed
-                        boolean hunterWin = true;
-                        // SCUFFED: Yes, this next line is an unchecked cast. Guess I just have to be careful.
-                        for (String id : (Set<String>)mp.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
-                            hunterWin = hunterWin && !plugin.getPlayerList().get(UUID.fromString(id)).isLiving();
+                for (MafiaPlayer mp : plugin.getPlayerList().values()) {
+                    switch (mp.getRole()) {
+                        case HUNTER -> {
+                            // Check if targets are killed
+                            boolean hunterWin = true;
+                            // SCUFFED: Yes, this next line is an unchecked cast. Guess I just have to be careful.
+                            for (String id : (Set<String>)mp.getRoleData().getData(RoleData.DataType.HUNTER_TARGETS)) {
+                                hunterWin = hunterWin && !plugin.getPlayerList().get(UUID.fromString(id)).isLiving();
+                            }
+                            if (hunterWin) winnerSet.add(mp);
                         }
-                        if (hunterWin) winnerSet.add(mp);
-                    } else if (mp.getRole() == Role.JESTER)
-                        if ((Boolean)mp.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED))  {
-                            winnerSet.add(mp);
-                    } else if (mp.getRole() == Role.BODYGUARD)
-                        if (plugin.getLivingPlayers().containsKey(UUID.fromString((String)mp.getRoleData().getData(RoleData.DataType.BODYGUARD_PROTECTEE)))) {
-                            winnerSet.add(mp);
-                    } else if (mp.isLiving()) { // Other surviving roles have no special win conditions, win if alive
-                        winnerSet.add(mp);
+                        case JESTER -> {
+                            if ((Boolean)mp.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED))
+                                winnerSet.add(mp);
+                        }
+                        case BODYGUARD -> {
+                            if (plugin.getLivingPlayers().containsKey(UUID.fromString((String)mp.getRoleData().getData(RoleData.DataType.BODYGUARD_PROTECTEE))))
+                                winnerSet.add(mp);
+                        }
+                        case SORCERER -> {
+                            if (Role.Team.valueOf((String) mp.getRoleData().getData(RoleData.DataType.SORCERER_ALIGNMENT)) == Role.Team.VILLAGE) {
+                                if (villageRemaining > 0) winnerSet.add(mp);
+                            }
+                            else { // they're aligned to Mafia
+                                if (mafiaRemaining > 0) winnerSet.add(mp);
+                            }
+                        }
+                        default -> {
+                            if (mp.isLiving()) winnerSet.add(mp);
+                        }
                     }
                 }
                 
@@ -141,7 +152,10 @@ public class GameFinisher extends BukkitRunnable {
                     }
                     // Winner list
                     String winnersMessage = ChatColor.GREEN + "";
-                    if (winners.size() == 1) {
+                    if (winners.isEmpty()) {
+                        winnersMessage = winnersMessage.concat("Nobody wins!");
+                    }
+                    else if (winners.size() == 1) {
                         winnersMessage = winnersMessage.concat(Bukkit.getOfflinePlayer(winners.get(0).getID()).getName() + " is the winner!");
                     } else if (winners.size() == 2) {
                         winnersMessage = winnersMessage.concat(Bukkit.getOfflinePlayer(winners.get(0).getID()).getName() + " and " +
@@ -174,11 +188,12 @@ public class GameFinisher extends BukkitRunnable {
                             case VILLAGE -> ChatColor.DARK_GREEN;
                             case SOLO-> {
                                 if (p.getRole() == Role.SERIAL_KILLER) yield ChatColor.BLUE;
-                                else if (p.getRole() == Role.BODYGUARD) yield ChatColor.DARK_AQUA;
+                                else if (p.getRole() == Role.WEREWOLF) yield ChatColor.DARK_RED;
                                 else yield ChatColor.DARK_GRAY; // Should never be used
                             }
                             case NONE -> {
                                 if (p.getRole() == Role.JESTER) yield ChatColor.LIGHT_PURPLE;
+                                if (p.getRole() == Role.SORCERER) yield ChatColor.DARK_AQUA;
                                 else yield ChatColor.YELLOW; // Will be used
                             }
                             case VAMPIRES -> {
@@ -194,7 +209,7 @@ public class GameFinisher extends BukkitRunnable {
                                 case VILLAGE -> ChatColor.DARK_GREEN;
                                 case SOLO -> {
                                     if (p.getOriginalRole() == Role.SERIAL_KILLER) yield ChatColor.BLUE;
-                                    else if (p.getOriginalRole() == Role.BODYGUARD) yield ChatColor.DARK_AQUA;
+                                    else if (p.getOriginalRole() == Role.WEREWOLF) yield ChatColor.DARK_RED;
                                     else yield ChatColor.DARK_GRAY; // Should never be used
                                 }
                                 case NONE -> {
