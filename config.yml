@@ -26,7 +26,7 @@ spyglassTargetTime: 10.0
 spyglassSensitivity: 0.1
 
 # Effective range of Peripherals ability
-peripheralsRange: 10
+peripheralsRange: 20
 
 # Doctor Rescue ability range
 rescueRange: 8.0

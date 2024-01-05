@@ -25,7 +25,7 @@ public enum Ability {
     WATCH("Watch",
             "Can see invisible players when using a Spyglass."),
     PERIPHERALS("Peripherals",
-            "Can see invisible players within 20 blocks."),
+            "Can see invisible players when nearby."),
     CLEAR_SIGHT("Clear Sight",
             "Not affected by Blindness or Darkness."),
     RESCUE("Rescue",
