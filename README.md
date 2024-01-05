@@ -136,5 +136,5 @@ These commands also have aliases to make them easier to use quickly.
 ## Thanks To
 Code Contributions: [@kalyus](https://github.com/kalyus)  
 Gameplay Ideas: dustyporcupine  
-Development Testing: dustyporcupine, set_h, SpaghetBoi, [@kalyus](https://github.com/kalyus)  
+Development Testing: dustyporcupine, set_h, SpaghetBoi, [@kalyus](https://github.com/kalyus), Dorkstorm3927, GilbertLafTaf  
 and everyone who helped workshop and encourage this idea along the way
