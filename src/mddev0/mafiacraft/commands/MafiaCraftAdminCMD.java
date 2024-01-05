@@ -195,15 +195,17 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                                                     case MAFIA -> ChatColor.RED;
                                                     case VILLAGE -> ChatColor.DARK_GREEN;
                                                     case SOLO -> {
-                                                        if (p.getRole().toString().equals("Serial Killer"))
+                                                        if (p.getRole() == Role.SERIAL_KILLER)
                                                             yield ChatColor.BLUE;
-                                                        else if (p.getRole().toString().equals("Trapper"))
-                                                            yield ChatColor.DARK_AQUA;
+                                                        else if (p.getRole() == Role.WEREWOLF)
+                                                            yield ChatColor.DARK_RED;
                                                         else yield ChatColor.DARK_GRAY; // Should never be used
                                                     }
                                                     case NONE -> {
-                                                        if (p.getRole().toString().equals("Jester"))
+                                                        if (p.getRole() == Role.JESTER)
                                                             yield ChatColor.LIGHT_PURPLE;
+                                                        if (p.getRole() == Role.SORCERER)
+                                                            yield ChatColor.DARK_AQUA;
                                                         else yield ChatColor.YELLOW; // Will be used
                                                     }
                                                     case VAMPIRES -> ChatColor.DARK_PURPLE;
@@ -255,15 +257,17 @@ public class MafiaCraftAdminCMD implements CommandExecutor {
                     p.teleport(toSpawn);
                 }
                 p.setGameMode(GameMode.SURVIVAL);
-                // all dead players should be hidden, p should be unhidden
-                for (Player other : plugin.getServer().getOnlinePlayers()) {
-                    other.showPlayer(plugin, p);
-                    MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
-                    if (spec == null || !spec.isLiving()) {
-                        p.hidePlayer(plugin, other);
+                if (plugin.getConfig().getBoolean("hideDeadPlayers")){
+                    // all dead players should be hidden, p should be unhidden
+                    for (Player other : plugin.getServer().getOnlinePlayers()) {
+                        other.showPlayer(plugin, p);
+                        MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
+                        if (spec == null || !spec.isLiving()) {
+                            p.hidePlayer(plugin, other);
+                        }
                     }
+                    Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
                 }
-                Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
                 sender.sendMessage(ChatColor.GREEN + args[1] + " has been revived.");
                 return true;
             }

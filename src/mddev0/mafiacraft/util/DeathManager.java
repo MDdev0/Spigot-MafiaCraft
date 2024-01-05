@@ -40,17 +40,25 @@ public class DeathManager implements Listener {
             Bukkit.getLogger().log(Level.INFO, death.getDeathMessage() + " <" + death.getEntity().getWorld().getName() + ": " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ">");
         }
         if (!plugin.getActive()) return;
-        MafiaPlayer dead = plugin.getPlayerList().get(death.getEntity().getUniqueId());
-        if (dead != null && !dead.isLiving() && death.getEntity().getGameMode() != GameMode.SPECTATOR) {
-            Player died = death.getEntity();
-            Bukkit.broadcastMessage(ChatColor.YELLOW + died.getName() + " left the game");
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                MafiaPlayer live = plugin.getLivingPlayers().get(p.getUniqueId());
-                if (live != null) {
-                    // player is online and alive
-                    p.hidePlayer(plugin, died);
+        if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+            // Execute only if hiding dead players
+            MafiaPlayer dead = plugin.getPlayerList().get(death.getEntity().getUniqueId());
+            if (dead != null && !dead.isLiving() && death.getEntity().getGameMode() != GameMode.SPECTATOR) {
+                Player died = death.getEntity();
+                Bukkit.broadcastMessage(ChatColor.YELLOW + died.getName() + " left the game");
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
+                    MafiaPlayer live = plugin.getLivingPlayers().get(p.getUniqueId());
+                    if (live != null) {
+                        // player is online and alive
+                        p.hidePlayer(plugin, died);
+                    }
                 }
             }
+        } else {
+            // If not hiding dead players, announce their death BUT NOT THE CAUSE
+            Location loc = death.getEntity().getLocation();
+            Bukkit.getLogger().log(Level.INFO, death.getDeathMessage() + " <" + death.getEntity().getWorld().getName() + ": " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ">");
+            death.setDeathMessage(death.getEntity().getDisplayName() + ChatColor.RESET + " died");
         }
     }
 

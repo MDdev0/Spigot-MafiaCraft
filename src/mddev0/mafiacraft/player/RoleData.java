@@ -44,8 +44,10 @@ public class RoleData {
         WEREWOLF_TRANSFORM(Boolean.class),
         WEREWOLF_KILLS(Integer.class),
         SORCERER_SELECTED(Ability.class),
+        SORCERER_ALIGNMENT(String.class),
         JESTER_ABILITY_USED(Boolean.class),
-        HUNTER_TARGETS(HashSet.class);
+        HUNTER_TARGETS(HashSet.class),
+        BODYGUARD_PROTECTEE(String.class);
 
         private final Type TYPENAME;
         DataType(Type typename) {

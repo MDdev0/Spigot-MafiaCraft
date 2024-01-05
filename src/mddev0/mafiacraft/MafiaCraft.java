@@ -60,9 +60,9 @@ public class MafiaCraft extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new Protection(this), this);
         Bukkit.getPluginManager().registerEvents(new Succession(this), this);
         Bukkit.getPluginManager().registerEvents(new Forgery(this), this);
-        Bukkit.getPluginManager().registerEvents(new Assassination(this), this);
-        Bukkit.getPluginManager().registerEvents(new Reanimation(this), this);
-        Bukkit.getPluginManager().registerEvents(new Retaliation(this), this);
+        Bukkit.getPluginManager().registerEvents(new Assassinate(this), this);
+        Bukkit.getPluginManager().registerEvents(new Revive(this), this);
+        Bukkit.getPluginManager().registerEvents(new Retaliate(this), this);
         abilityHighNoon.runTaskTimer(this, 0L, 1L); // checks every tick
         Bukkit.getPluginManager().registerEvents(new Marksman(this), this);
         Bukkit.getPluginManager().registerEvents(new Investigate(this), this);
@@ -72,7 +72,7 @@ public class MafiaCraft extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new Rescue(this), this);
         abilityAmbrosia.runTaskTimer(this, 0L, 100L); // checks every 5 seconds
         Bukkit.getPluginManager().registerEvents(abilityAmbrosia, this);
-        abilityInquisition.runTaskTimer(this, 0L, 600L); // show particles every 10 seconds
+        abilityInquisition.runTaskTimer(this, 0L, 200L); // show particles every 10 seconds
         Bukkit.getPluginManager().registerEvents(new Ambush(this), this);
         Bukkit.getPluginManager().registerEvents(new ThisIsFine(this), this);
         Bukkit.getPluginManager().registerEvents(new DodgeRoll(this), this);

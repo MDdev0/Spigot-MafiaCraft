@@ -49,7 +49,10 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                     if (b.getType() == Material.WATER_CAULDRON) {
                         // check block below
                         if (i.getLocation().add(0, -1, 0).getBlock().getType() == Material.FIRE ||
-                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.SOUL_FIRE) {
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.SOUL_FIRE ||
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.CAMPFIRE ||
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.SOUL_CAMPFIRE ||
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.LAVA) {
                             // Check cauldron level
                             Levelled bdata = (Levelled) b.getBlockData();
                             if (bdata.getLevel() == bdata.getMaximumLevel()) {
@@ -80,16 +83,14 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                                         ambrosiaPotion.setColor(Color.fromRGB(255,200,0));
                                         ambrosiaPotion.setDisplayName(ChatColor.GOLD + "Ambrosia");
                                         List<String> ambrosiaLore = new ArrayList<>();
-                                        ambrosiaLore.add("Splash on any " + ChatColor.DARK_RED + "Werewolf" +
-                                                ChatColor.RESET + " or " + ChatColor.DARK_PURPLE + "Vampire");
+                                        ambrosiaLore.add("Splash on any " + ChatColor.DARK_PURPLE + "Vampire");
                                         ambrosiaLore.add("to convert them back to their original role.");
                                         ambrosiaPotion.setLore(ambrosiaLore);
                                         ambrosiaItem.setItemMeta(ambrosiaPotion);
                                         Item spawned = (Item) i.getWorld().spawnEntity(b.getLocation(), EntityType.DROPPED_ITEM);
                                         spawned.setItemStack(ambrosiaItem);
                                         // Add cooldown to thrower
-                                        long waitUntil = plugin.getWorldFullTime() + (24000L * 7); // 7 days later
-                                        waitUntil = waitUntil - (waitUntil % 24000); // Round to earliest morning
+                                        long waitUntil = plugin.getWorldFullTime() + 864000L; // 12 real hours later
                                         thrower.getCooldowns().startCooldown(Ability.AMBROSIA, waitUntil);
                                         thrower.getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L); // Two days of unholy
                                     }
@@ -102,7 +103,6 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
         }
     }
 
-    // TODO: Make this take werewolves out of transformation?
     // When potion lands
     @EventHandler
     public void onPotionLand(PotionSplashEvent splash) {

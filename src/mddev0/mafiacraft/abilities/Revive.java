@@ -1,7 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
-import mddev0.mafiacraft.gui.ReanimationGUI;
+import mddev0.mafiacraft.gui.ReviveGUI;
 import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,12 +13,12 @@ import org.bukkit.event.entity.EntityCombustByBlockEvent;
 
 import java.util.Objects;
 
-// XXX: There is probably a bug somewhere in the Reanimation ability. We'll see during testing
-public final class Reanimation implements Listener {
+// XXX: There is probably a bug somewhere in the Revive ability. We'll see during testing
+public final class Revive implements Listener {
 
     private final MafiaCraft plugin;
 
-    public Reanimation(MafiaCraft plugin) {
+    public Revive(MafiaCraft plugin) {
         this.plugin = plugin;
     }
 
@@ -32,9 +32,9 @@ public final class Reanimation implements Listener {
                 // Valid item, check player and cooldown
                 if (item.getThrower() == null) return;
                 MafiaPlayer thrower = plugin.getLivingPlayers().get(item.getThrower());
-                if (thrower.getRole().getAbilities().contains(Ability.REANIMATION) && !thrower.getCooldowns().isOnCooldown(Ability.REANIMATION)) {
+                if (thrower.getRole().getAbilities().contains(Ability.REVIVE) && !thrower.getCooldowns().isOnCooldown(Ability.REVIVE)) {
                     item.remove();
-                    ReanimationGUI gui = new ReanimationGUI(plugin);
+                    ReviveGUI gui = new ReviveGUI(plugin);
                     gui.open(Objects.requireNonNull(Bukkit.getPlayer(item.getThrower())));
                 }
             }

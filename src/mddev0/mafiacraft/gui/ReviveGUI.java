@@ -18,12 +18,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public final class ReanimationGUI implements Listener {
+public final class ReviveGUI implements Listener {
 
     private final MafiaCraft plugin;
     private final Inventory inv;
 
-    public ReanimationGUI(MafiaCraft plugin) {
+    public ReviveGUI(MafiaCraft plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
@@ -60,8 +60,8 @@ public final class ReanimationGUI implements Listener {
         if (clicked == null || clicked.getType().isAir()) return;
         // SCUFFED: So many requireNonNull... am I doing this wrong?
         UUID toReanimate = Objects.requireNonNull(((SkullMeta) Objects.requireNonNull(clicked.getItemMeta())).getOwningPlayer()).getUniqueId();
-        Long cooldownExpires = (plugin.getWorldFullTime() + 48000L) - (plugin.getWorldFullTime() % 24000);
-        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getCooldowns().startCooldown(Ability.REANIMATION, cooldownExpires);
+        Long cooldownExpires = (plugin.getWorldFullTime() + 864000L);
+        plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getCooldowns().startCooldown(Ability.REVIVE, cooldownExpires);
         plugin.getLivingPlayers().get(click.getWhoClicked().getUniqueId()).getStatus().startStatus(StatusData.Status.UNHOLY, plugin.getWorldFullTime() + 48000L);
         plugin.getPlayerList().get(toReanimate).makeAlive();
         click.getWhoClicked().sendMessage(ChatColor.GREEN + Bukkit.getOfflinePlayer(toReanimate).getName() + " has been revived.");
@@ -77,15 +77,17 @@ public final class ReanimationGUI implements Listener {
                 p.teleport(toSpawn);
             }
             p.setGameMode(GameMode.SURVIVAL);
-            // all dead players should be hidden, p should be unhidden
-            for (Player other : plugin.getServer().getOnlinePlayers()) {
-                other.showPlayer(plugin, p);
-                MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
-                if (spec == null || !spec.isLiving()) {
-                    p.hidePlayer(plugin, other);
+            if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+                // all dead players should be hidden, p should be unhidden
+                for (Player other : plugin.getServer().getOnlinePlayers()) {
+                    other.showPlayer(plugin, p);
+                    MafiaPlayer spec = plugin.getPlayerList().get(other.getUniqueId());
+                    if (spec == null || !spec.isLiving()) {
+                        p.hidePlayer(plugin, other);
+                    }
                 }
+                Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
             }
-            Bukkit.broadcastMessage(ChatColor.YELLOW + p.getName() + " joined the game");
         }
     }
 

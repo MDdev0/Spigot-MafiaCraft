@@ -31,6 +31,7 @@ public class SpyglassUtil extends BukkitRunnable {
         targeted = null;
     }
 
+    // TODO: Update to use World.rayTraceEntities()
     @Override
     public void run() {
         if (!holder.isOnline()) return; // holder is offline
@@ -55,7 +56,14 @@ public class SpyglassUtil extends BukkitRunnable {
         if (active) {
             // If line of sight between player and target is interrupted, then false. otherwise true
             double lineDistance = holder.getPlayer().getEyeLocation().distance(targeted.getEyeLocation());
-            RayTraceResult lineOfSight = holder.getPlayer().rayTraceBlocks(lineDistance, FluidCollisionMode.NEVER);
+            Player play = holder.getPlayer();
+            RayTraceResult lineOfSight = play.getWorld().rayTraceBlocks(
+                    play.getLocation(),
+                    play.getEyeLocation().toVector().subtract(targeted.getEyeLocation().toVector()).normalize(),
+                    lineDistance,
+                    FluidCollisionMode.NEVER,
+                    true
+            );
             active = (lineOfSight == null);
         }
     }

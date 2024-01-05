@@ -74,14 +74,20 @@ public class GameSaver {
             for (Map.Entry<RoleData.DataType, Object> roleDataEntry : playerData.roleData().dataMap().entrySet())
                 if (roleDataEntry.getKey() == RoleData.DataType.HUNTER_TARGETS) { // Treat this as a collection
                     data.set("roleData." + roleDataEntry.getKey().name(), ((Collection<?>)roleDataEntry.getValue()).stream().toList());
-                } else
+                } else if (roleDataEntry.getKey() == RoleData.DataType.SORCERER_SELECTED) {
+                    data.set("roleData." + roleDataEntry.getKey().name(), ((Ability)roleDataEntry.getValue()).name());
+                } else {
                     data.set("roleData." + roleDataEntry.getKey().name(), roleDataEntry.getValue());
+                }
             data.set("originalRole", playerData.originalRole().name());
             for (Map.Entry<RoleData.DataType, Object> originalRoleDataEntry : playerData.roleData().dataMap().entrySet())
                 if (originalRoleDataEntry.getKey() == RoleData.DataType.HUNTER_TARGETS) { // Treat this as a collection
                     data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), ((Collection<?>)originalRoleDataEntry.getValue()).stream().toList());
-                } else
+                } else if (originalRoleDataEntry.getKey() == RoleData.DataType.SORCERER_SELECTED) {
+                    data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), ((Ability)originalRoleDataEntry.getValue()).name());
+                } else {
                     data.set("originalRoleData." + originalRoleDataEntry.getKey().name(), originalRoleDataEntry.getValue());
+                }
             // Cooldown Data
             for (Map.Entry<Ability, Long> cooldownDataEntry : playerData.cooldowns().cooldownMap().entrySet())
                 data.set("cooldowns." + cooldownDataEntry.getKey().name(), cooldownDataEntry.getValue());
@@ -150,10 +156,12 @@ public class GameSaver {
                     if (RoleData.DataType.valueOf(rd) == RoleData.DataType.HUNTER_TARGETS) { // SCUFFED: this is crude but it'll work
                         List<?> targets = roleDataSection.getList(RoleData.DataType.HUNTER_TARGETS.name());
                         if (targets == null) {
-                            Bukkit.getLogger().log(Level.SEVERE, "NOPE, IT'S BROKEN");
+                            Bukkit.getLogger().log(Level.SEVERE, "FAILED TO GET HUNTER TARGETS FROM " + dataFile.getName());
                             continue;
                         }
                         roleDataMap.put(RoleData.DataType.HUNTER_TARGETS, new HashSet<>(targets));
+                    } else if (RoleData.DataType.valueOf(rd) == RoleData.DataType.SORCERER_SELECTED) {
+                        roleDataMap.put(RoleData.DataType.SORCERER_SELECTED, Ability.valueOf(roleDataSection.getString(RoleData.DataType.SORCERER_SELECTED.name())));
                     } else {
                         roleDataMap.put(RoleData.DataType.valueOf(rd), roleDataSection.get(rd));
                     }
@@ -168,7 +176,14 @@ public class GameSaver {
                 Set<String> rdEntries = originalRoleDataSection.getKeys(false);
                 for (String rd : rdEntries) {
                     if (RoleData.DataType.valueOf(rd) == RoleData.DataType.HUNTER_TARGETS) { // SCUFFED: this is crude but it'll work
-                        originalRoleDataMap.put(RoleData.DataType.HUNTER_TARGETS, new HashSet<>(originalRoleDataSection.getList(RoleData.DataType.HUNTER_TARGETS.name())));
+                        List<?> targets = originalRoleDataSection.getList(RoleData.DataType.HUNTER_TARGETS.name());
+                        if (targets == null) {
+                            Bukkit.getLogger().log(Level.SEVERE, "FAILED TO GET HUNTER TARGETS FROM " + dataFile.getName());
+                            continue;
+                        }
+                        originalRoleDataMap.put(RoleData.DataType.HUNTER_TARGETS, new HashSet<>(targets));
+                    } else if (RoleData.DataType.valueOf(rd) == RoleData.DataType.SORCERER_SELECTED) {
+                        originalRoleDataMap.put(RoleData.DataType.SORCERER_SELECTED, Ability.valueOf(originalRoleDataSection.getString(RoleData.DataType.SORCERER_SELECTED.name())));
                     } else {
                         originalRoleDataMap.put(RoleData.DataType.valueOf(rd), originalRoleDataSection.get(rd));
                     }

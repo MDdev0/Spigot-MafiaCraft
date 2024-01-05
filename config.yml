@@ -7,6 +7,10 @@ hardcoreStyle: true
 # If true, players in spectator mode will not be able to send messages to chat. Operators bypass this.
 blockSpectatorChat: true
 
+# If true, spectating players will appear to leave the game when they die and will be hidden from the tab list when online.
+# Remember to set the game rule to hide player death messages if true!
+hideDeadPlayers: false
+
 # Amount of time in seconds players will be considered as "attacking" after attempting to kill someone
 attackDuration: 30
 
@@ -28,15 +32,15 @@ peripheralsRange: 10
 rescueRange: 8.0
 
 # Cost (in levels) to trigger Scatter
-scatterCost: 5
+scatterCost: 4
 # Cost (in levels) to trigger Toadify
-toadifyCost: 15
+toadifyCost: 4
 # Cost (in levels) to trigger Fog of War
-fogOfWarCost: 10
+fogOfWarCost: 8
 # Effective range of Fog of War
 fogOfWarRange: 30
 # Cost (in levels) to trigger Vanish
-vanishCost: 10
+vanishCost: 8
 
 # Number of targets hunters will be given
 hunterNumTargets: 3
@@ -50,7 +54,7 @@ requiredRoles:
   - "REANIMATOR"
   - "INVESTIGATOR"
   - "APOTHECARY"
-  - "DEACON"
+  - "PRIEST"
   - "SERIAL_KILLER"
   - "HUNTER"
 

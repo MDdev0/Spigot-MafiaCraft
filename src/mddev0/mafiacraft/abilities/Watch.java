@@ -3,7 +3,10 @@ package mddev0.mafiacraft.abilities;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.google.common.collect.Lists;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.Material;
@@ -14,6 +17,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 public final class Watch implements Listener {
 
@@ -48,13 +53,19 @@ public final class Watch implements Listener {
                             // if spyglass is active, keep setting all players inside the spyglass as visible
                             for (Player p : plugin.getServer().getOnlinePlayers()) {
                                 if (!p.equals(click.getPlayer()) && p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                                    PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-                                    packet.getIntegers().write(0, p.getEntityId());
-                                    WrappedDataWatcher watcher = new WrappedDataWatcher();
-                                    WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class);
-                                    watcher.setEntity(p);
-                                    watcher.setObject(0, serializer, (byte) (0)); // 0 remove invis
-                                    packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+                                    PacketContainer packet = manager.createPacket(PacketType.Play.Server.ENTITY_METADATA); // Create packet
+                                    packet.getIntegers().write(0, p.getEntityId()); // Set player to modify
+
+                                    // Lists which contain metadata values to modify
+                                    // SEE:
+                                    // https://wiki.vg/Entity_metadata#Entity_Metadata
+                                    // https://github.com/dmulloy2/ProtocolLib/issues/2032
+                                    StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+                                    List<WrappedDataValue> values = Lists.newArrayList(
+                                            new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), (byte)0x00) // 0 sets as visible
+                                    );
+
+                                    watchableAccessor.write(0, values);
                                     manager.sendServerPacket(click.getPlayer(), packet);
                                 }
                             }
@@ -62,13 +73,15 @@ public final class Watch implements Listener {
                             // spyglass is down, reset all invis players to invis
                             for (Player p : plugin.getServer().getOnlinePlayers()) {
                                 if (!p.equals(click.getPlayer()) && p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                                    PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-                                    packet.getIntegers().write(0, p.getEntityId());
-                                    WrappedDataWatcher watcher = new WrappedDataWatcher();
-                                    WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class);
-                                    watcher.setEntity(p);
-                                    watcher.setObject(0, serializer, (byte) (0x20)); // 0x20 set invis
-                                    packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+                                    PacketContainer packet = manager.createPacket(PacketType.Play.Server.ENTITY_METADATA); // Create packet
+                                    packet.getIntegers().write(0, p.getEntityId()); // Set player to modify
+
+                                    StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+                                    List<WrappedDataValue> values = Lists.newArrayList(
+                                            new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), (byte)0x20) // 0x20 sets as invisible
+                                    );
+
+                                    watchableAccessor.write(0, values);
                                     manager.sendServerPacket(click.getPlayer(), packet);
                                 }
                             }

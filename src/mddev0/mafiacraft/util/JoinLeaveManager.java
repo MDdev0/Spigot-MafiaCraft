@@ -2,10 +2,8 @@ package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.player.MafiaPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import mddev0.mafiacraft.player.RoleData;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,26 +33,37 @@ public class JoinLeaveManager implements Listener {
                 join.getPlayer().teleport(toSpawn);
             }
             join.getPlayer().setGameMode(GameMode.SURVIVAL);
-            // all dead players should be hidden
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                MafiaPlayer spec = plugin.getPlayerList().get(p.getUniqueId());
-                if (spec == null || !spec.isLiving()) {
-                    join.getPlayer().hidePlayer(plugin, p);
+            if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+                // if true, dead players should be hidden
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
+                    MafiaPlayer spec = plugin.getPlayerList().get(p.getUniqueId());
+                    if (spec == null || !spec.isLiving()) {
+                        join.getPlayer().hidePlayer(plugin, p);
+                    }
+                }
+            }
+        } else { // player is not in game or is dead
+            // TODO: set spectator? Potential for dead players to remain in world?
+            join.getPlayer().setGameMode(GameMode.SPECTATOR);
+            if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+                // if true, hide player from all living players
+                join.setJoinMessage(null);
+                for (Map.Entry<UUID, MafiaPlayer> living : plugin.getLivingPlayers().entrySet()) {
+                    OfflinePlayer offp = Bukkit.getOfflinePlayer(living.getKey());
+                    if (offp.isOnline()) {
+                        Player p = offp.getPlayer();
+                        assert p != null;
+                        p.hidePlayer(plugin, join.getPlayer());
+                    }
                 }
             }
         }
-        else { // player is not in game or is dead
-            // set spectator and hide join message
-            join.getPlayer().setGameMode(GameMode.SPECTATOR);
-            join.setJoinMessage(null);
-            // hide player from all living players
-            for (Map.Entry<UUID, MafiaPlayer> living : plugin.getLivingPlayers().entrySet()) {
-                OfflinePlayer offp = Bukkit.getOfflinePlayer(living.getKey());
-                if (offp.isOnline()) {
-                    Player p = offp.getPlayer();
-                    assert p != null;
-                    p.hidePlayer(plugin, join.getPlayer());
-                }
+        // Handle Jester
+        if (joined != null) {
+            Boolean jestStatus = (Boolean) joined.getRoleData().getData(RoleData.DataType.JESTER_ABILITY_USED);
+            if (jestStatus != null && jestStatus) {
+                join.getPlayer().setDisplayName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getDisplayName());
+                join.getPlayer().setPlayerListName("[" + ChatColor.LIGHT_PURPLE + "Jester" + ChatColor.RESET + "] " + join.getPlayer().getPlayerListName());
             }
         }
     }
@@ -63,9 +72,11 @@ public class JoinLeaveManager implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent leave) {
         if (!plugin.getActive()) return;
-        MafiaPlayer left = plugin.getPlayerList().get(leave.getPlayer().getUniqueId());
-        if (left == null || !left.isLiving()) {
-            leave.setQuitMessage("");
+        if (plugin.getConfig().getBoolean("hideDeadPlayers")) {
+            MafiaPlayer left = plugin.getPlayerList().get(leave.getPlayer().getUniqueId());
+            if (left == null || !left.isLiving()) {
+                leave.setQuitMessage(null);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.abilities;
 
 import mddev0.mafiacraft.MafiaCraft;
+import mddev0.mafiacraft.player.MafiaPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -33,8 +34,10 @@ public final class Rescue implements Listener {
                 double range = plugin.getConfig().getDouble("rescueRange");
                 List<Entity> nearbyEntities = damaged.getNearbyEntities(range,range,range);
                 for (Entity e : nearbyEntities) {
+                    MafiaPlayer rescuer = plugin.getLivingPlayers().get(e.getUniqueId());
                     if (e.getType() == EntityType.PLAYER &&
-                            plugin.getLivingPlayers().get(e.getUniqueId()).getRole().getAbilities().contains(Ability.RESCUE)) {
+                            rescuer.getRole().getAbilities().contains(Ability.RESCUE) &&
+                            !rescuer.getCooldowns().isOnCooldown(Ability.RESCUE)) {
                         // a player nearby has the rescue ability
                         if (e.getUniqueId() != damaged.getUniqueId()) { // Can't dataMap yourself
                             // the player is able to be saved
@@ -45,9 +48,9 @@ public final class Rescue implements Listener {
                             damaged.sendMessage(ChatColor.AQUA + "You were saved from death!");
                             // Handle the rescuer
                             e.sendMessage(ChatColor.AQUA + "You saved " + ChatColor.GREEN + damaged.getName() + ChatColor.AQUA + " from death!");
-                            long waitUntil = plugin.getWorldFullTime() + 24000L;
+                            long waitUntil = plugin.getWorldFullTime() + 24000L * 3;
                             waitUntil = waitUntil - (waitUntil % 24000); // Cooldown ends at dawn
-                            plugin.getLivingPlayers().get(e.getUniqueId()).getCooldowns().startCooldown(Ability.RESCUE, waitUntil);
+                            rescuer.getCooldowns().startCooldown(Ability.RESCUE, waitUntil);
                         }
                     }
                 }
