@@ -9,7 +9,6 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.google.common.collect.Lists;
 import mddev0.mafiacraft.MafiaCraft;
 import mddev0.mafiacraft.player.MafiaPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
