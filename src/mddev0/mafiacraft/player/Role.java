@@ -19,7 +19,7 @@ public enum Role {
     APOTHECARY("Apothecary", true, Team.VILLAGE, Ability.AMBROSIA),
     PRIEST("Priest", false, Team.VILLAGE, Ability.INQUISITION),
     SERIAL_KILLER("Serial Killer", false, Team.SOLO, Ability.PROTECTION, Ability.AMBUSH),
-    TRAPPER("Trapper", false, Team.SOLO, Ability.THIS_IS_FINE, Ability.DODGE_ROLL),
+    BODYGUARD("Bodyguard", false, Team.NONE, Ability.PROTECTEE, Ability.THIS_IS_FINE, Ability.DODGE_ROLL, Ability.PROTECTION),
     HUNTER("Hunter", false, Team.NONE, Ability.TARGET, Ability.TRACKING),
     SORCERER("Sorcerer", false, Team.NONE, Ability.SCATTER, Ability.TOADIFY, Ability.FOG_OF_WAR, Ability.VANISH, Ability.SPELL_BOOK),
     WEREWOLF("Werewolf", false, Team.SOLO, Ability.TRANSFORM, Ability.RAMPAGE, Ability.NEMESIS),

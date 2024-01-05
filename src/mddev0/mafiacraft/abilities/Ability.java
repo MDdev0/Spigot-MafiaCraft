@@ -36,6 +36,8 @@ public enum Ability {
             "Any player who has is using or has recently used any magical ability will display a subtle particle effect to Priests."),
     AMBUSH("Ambush",
             "When attacking first, gains Strength II for 30 seconds."),
+    PROTECTEE("Protectee",
+            "Assigned one player to protect at the beginning of the game."), // Has no class
     THIS_IS_FINE("This is Fine",
             "Take reduced damage from fire and lava."),
     DODGE_ROLL("Dodge Roll",

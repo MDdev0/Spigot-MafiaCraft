@@ -80,7 +80,7 @@ public final class InfoGUI implements Listener {
                             yield "if " + ChatColor.LIGHT_PURPLE + "killed" +
                                     ChatColor.GRAY + " by a member of the " + ChatColor.DARK_GREEN + "Village";
                         else
-                            yield ChatColor.YELLOW + "by surviving";
+                            yield ChatColor.GRAY + " by completing all " + ChatColor.YELLOW + "tasks and win conditions";
                     }
                     case VAMPIRES -> "by " + ChatColor.DARK_AQUA + "Converting all players to Vampires";
                 });
@@ -92,6 +92,7 @@ public final class InfoGUI implements Listener {
             headLore.add(ChatColor.GRAY + "The names and status of your");
             headLore.add(ChatColor.GRAY + "targets are listed below.");
         }
+        headLore.add(ChatColor.DARK_GRAY + "See the Role List if you're still confused.");
         headMeta.setLore(headLore);
         head.setItemMeta(headMeta);
         inv.setItem(4,head);

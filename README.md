@@ -40,27 +40,25 @@ Listed below are all the roles and abilities planned, as well as some definition
 | Investigator | An armchair detective whose skills can finally be put to good use.                 | Investigate                             | Discover who is really on the side of the Villagers.      |
 | Lookout      | An eagle-eyed observer who always seems to know who's been where.                  | Watch,<br/>Peripherals,<br/>Clear Sight | Gather information to help the Village.                   |
 | Doctor       | A skilled medic capable of helping those in need.                                  | Rescue                                  | Protect other Villagers.                                  |
-| *Apothecary* | A skilled brewer capable of producing special concoctions.                         | Ambrosia                                | Brew potions for the Village.                             |
+| *Apothecary* | A skilled brewer capable of producing special concoctions.                         | Ambrosia                                | Stop the spread of the Vampires and protect the Village.  |
 | Priest       | A religious devotee who can sense the presence of unholy abilities.                | Inquisition                             | Find out who in the town may be harboring a secret power. |
 
 ### <font color="#6666ee">Neutral</font> Roles
 
 _Notes:  
-Alone and Same Role mean only themselves (or those who share their role) and those
-who win by Surviving remaining alive.  
-Win by Surviving roles can win with anyone, as long as they survive until the end of the game._
+Players who win Alone win only if there are no Mafia, Village, or Vampires remaining.  
+Vampires must kill all players with the alignments the Mafia, Village, or Alone.  
+Those with no alignment can win with any team, as long as their tasks and win conditions are complete._
 
-| Role          | Description                                                                                 | Abilities                                                        | Win Conditions | Tasks                                                                      |
-|---------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------|----------------|----------------------------------------------------------------------------|
-| Serial Killer | An insane murderer who wants nothing more than to be alone.                                 | Protection,<br/>Ambush                                           | Alone          | Kill everyone without being caught.                                        |
-| Trapper       | Some people just want to see the world burn.                                                | This is Fine,<br/>Dodge Roll                                     | Alone          | Use traps and fire to kill everyone without being caught.                  |
-| Hunter        | Ensure that the targets you are given die by the end of the game, and remain dead.          | Target,<br/>Tracking                                             | Surviving*     | Use any means necessary to ensure your target players die.<p/>Avoid dying. |
-| Sorcerer      | A powerful spell-caster bound by no allegiances.                                            | Scatter,<br/>Toadify,<br/>Fog of War,<br/>Vanish,<br/>Spell Book | Surviving      | Use your abilities to survive.                                             |
-| *Werewolf*    | A regular person who suddenly transforms under the Full Moon.                               | Transform,<br/>Rampage,<br/>Nemesis                              | Alone          | Kill everyone without being caught.                                        |
-| *Vampire*     | A mythical creature whose only goal is to spread their reach to as many people as possible. | Convert,<br/>Night Owl,<br/>Staked                               | Same Role      | Convert or kill all others.<p/>Do not get caught.                          |
-| *Jester*      | A clown who just wants to trick the Village into making a grave mistake.                    | Just a Prank                                                     | Surviving*     | Be killed by a member of the Village without fighting back.                |
-
-_* These roles only win if they complete their special task **AND** survive until the end of the game._
+| Role          | Description                                                                                 | Abilities                                                        | Alignment | Tasks and Win Conditions                                    |
+|---------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------|-----------|-------------------------------------------------------------|
+| Serial Killer | An insane murderer who wants nothing more than to be alone.                                 | Protection,<br/>Ambush                                           | Alone     | Kill everyone without being caught.                         |
+| Bodyguard     | Someone who's willing to put their life on the line to save another.                        | Protectee,<br/>This is Fine,<br/>Dodge Roll,</br>Protection      | None      | Keep your protectee alive at any cost.                      |
+| Hunter        | Ensure that the targets you are given die by the end of the game, and remain dead.          | Target,<br/>Tracking                                             | None      | Use any means necessary to ensure your target players die.  |
+| Sorcerer      | A powerful spell-caster bound by no allegiances.                                            | Scatter,<br/>Toadify,<br/>Fog of War,<br/>Vanish,<br/>Spell Book | None      | Use your abilities to survive.                              |
+| *Werewolf*    | A regular person who suddenly transforms under the Full Moon.                               | Transform,<br/>Rampage,<br/>Nemesis                              | Alone     | Kill everyone without being caught.                         |
+| *Vampire*     | A mythical creature whose only goal is to spread their reach to as many people as possible. | Convert,<br/>Night Owl,<br/>Staked                               | Vampires  | Convert or kill all others.<br/>Do not get caught.          |
+| *Jester*      | A clown who just wants to trick the Village into making a grave mistake.                    | Just a Prank                                                     | None      | Be killed by a member of the Village without fighting back. |
 
 ## Abilities
 
@@ -83,6 +81,7 @@ _* These roles only win if they complete their special task **AND** survive unti
 | Ambrosia     | Brew a special splash potion by throwing a golden apple, bottle of honey, and bucket of milk into a heated cauldron. This will revert a Vampire back to their original role, unless that was their original role. | Can be *brewed* every 12 (real) hours. |
 | Inquisition  | Any player who has is using or has recently used an Unholy Ability will display a subtle particle effect to Priests.                                                                                              |                                        |
 | Ambush       | When attacking first, gains Strength II for 60 seconds.                                                                                                                                                           | Once every 3 in-game days.             |
+| Protectee    | Assigned one player to protect at the beginning of the game.                                                                                                                                                      | At the start of the game.              |
 | This is Fine | Take reduced damage from fire and lava.                                                                                                                                                                           |                                        |
 | Dodge Roll   | Take significantly less damage from explosions and fall damage.                                                                                                                                                   |                                        |
 | Target       | Receive a list at the beginning of the game of targets.                                                                                                                                                           | At the start of the game.              |

@@ -1,6 +1,7 @@
 package mddev0.mafiacraft.util;
 
 import mddev0.mafiacraft.MafiaCraft;
+import mddev0.mafiacraft.abilities.Ability;
 import mddev0.mafiacraft.player.MafiaPlayer;
 import mddev0.mafiacraft.player.Role;
 import mddev0.mafiacraft.player.RoleData;
@@ -221,8 +222,9 @@ public class GameRandomizer {
         }
 
         // All players should have been set up by this point, do hunter targets
+        // FIXME: If all roles are manually assigned, this process will never happen.
         for (MafiaPlayer mp : plugin.getPlayerList().values()) {
-            if (mp.getRole() == Role.HUNTER) {
+            if (mp.getRole().getAbilities().contains(Ability.TARGET)) {
                 Set<String> targets = new HashSet<>();
                 List<UUID> allLiving = new ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
                 allLiving.remove(mp.getID());
@@ -230,6 +232,12 @@ public class GameRandomizer {
                 for (int i = 0; i < num; i++)
                     targets.add(allLiving.remove(rand.nextInt(allLiving.size())).toString());
                 mp.getRoleData().setData(RoleData.DataType.HUNTER_TARGETS, targets);
+            }
+            if (mp.getRole().getAbilities().contains(Ability.PROTECTEE)) {
+                List<UUID> allLiving = new ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
+                allLiving.remove(mp.getID());
+                String protectee = allLiving.get(rand.nextInt(allLiving.size())).toString();
+                mp.getRoleData().setData(RoleData.DataType.BODYGUARD_PROTECTEE, protectee);
             }
         }
     }
