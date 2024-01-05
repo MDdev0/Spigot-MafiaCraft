@@ -29,7 +29,7 @@ public enum Ability {
     CLEAR_SIGHT("Clear Sight",
             "Not affected by Blindness or Darkness."),
     RESCUE("Rescue",
-            "If a player (other than you), would otherwise die within 16 blocks of you, they will be placed at 0.5 hearts and receive Regeneration III for 15 seconds."),
+            "If a player (other than you), would otherwise die near you, they will be placed at 0.5 hearts and receive Regeneration III for 15 seconds."),
     AMBROSIA("Ambrosia",
             "Brew a special potion by throwing a Golden Apple, Bottle of Honey, and Bucket of Milk into a heated cauldron."),
     INQUISITION("Inquisition",
