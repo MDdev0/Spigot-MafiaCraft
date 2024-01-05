@@ -108,7 +108,7 @@ public class MafiaPlayer {
                 roleData.setData(RoleData.DataType.WEREWOLF_TRANSFORM, false);
                 roleData.setData(RoleData.DataType.WEREWOLF_KILLS, 0);
             }
-            case HUNTER -> {
+            case HUNTER -> { // TODO: Deal with no players in game
                 Set<String> targets = new HashSet<>();
                 List<UUID> allLiving = new ArrayList<>(plugin.getLivingPlayers().keySet().stream().toList());
                 allLiving.remove(uuid);
@@ -116,7 +116,7 @@ public class MafiaPlayer {
                 for (int i = 0; i < num; i++)
                     targets.add(allLiving.remove(new Random().nextInt(allLiving.size())).toString()); // SCUFFED: oops terrible practice
                 roleData.setData(RoleData.DataType.HUNTER_TARGETS, targets);
-            }
+            } // TODO: add condition for Bodyguard
         }
 
 

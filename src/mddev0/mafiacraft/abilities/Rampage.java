@@ -46,7 +46,7 @@ public final class Rampage extends BukkitRunnable implements Listener {
         for (MafiaPlayer p : plugin.getLivingPlayers().values()) {
             if (p.getRole().getAbilities().contains(Ability.RAMPAGE)) {
                 if ((Boolean)p.getRoleData().getData(RoleData.DataType.WEREWOLF_TRANSFORM)) {
-                    int level = Math.min(3, (Integer)p.getRoleData().getData(RoleData.DataType.WEREWOLF_KILLS) - 1);
+                    int level = Math.min(3, (Integer)p.getRoleData().getData(RoleData.DataType.WEREWOLF_KILLS)) - 1;
                     if (level >= 0)
                         Objects.requireNonNull(Bukkit.getPlayer(p.getID())).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 120, level, false, false, true));
                 }

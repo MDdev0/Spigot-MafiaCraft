@@ -49,7 +49,10 @@ public final class Ambrosia extends BukkitRunnable implements Listener {
                     if (b.getType() == Material.WATER_CAULDRON) {
                         // check block below
                         if (i.getLocation().add(0, -1, 0).getBlock().getType() == Material.FIRE ||
-                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.SOUL_FIRE) {
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.SOUL_FIRE ||
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.CAMPFIRE ||
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.SOUL_CAMPFIRE ||
+                                i.getLocation().add(0, -1, 0).getBlock().getType() == Material.LAVA) {
                             // Check cauldron level
                             Levelled bdata = (Levelled) b.getBlockData();
                             if (bdata.getLevel() == bdata.getMaximumLevel()) {
