@@ -5,7 +5,7 @@ import mddev0.mafiacraft.abilities.Ability;
 import java.util.Set;
 
 public enum Role {
-    GODFATHER("Godfather", true, Team.MAFIA, Ability.PROTECTION, Ability.AMBUSH),
+    GODFATHER("Godfather", true, Team.MAFIA, Ability.PROTECTION, Ability.CHARISMA),
     MAFIOSO("Mafioso", false, Team.MAFIA, Ability.SUCCESSION),
     FRAMER("Framer", false, Team.MAFIA, Ability.FORGERY),
     ASSASSIN("Assassin", false, Team.MAFIA, Ability.ASSASSINATE),
