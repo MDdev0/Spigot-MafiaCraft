@@ -29,9 +29,10 @@ public final class Inquisition extends BukkitRunnable {
                 for (Map.Entry<UUID, MafiaPlayer> target : plugin.getLivingPlayers().entrySet()) {
                     if (target.getValue().getStatus().hasStatus(StatusData.Status.UNHOLY)) {
                         Player t = Bukkit.getPlayer(target.getKey());
-                        assert t != null;
-                        s.spawnParticle(Particle.TOWN_AURA, t.getLocation().add(0,1,0), 15, 0.7, 0.7, 0.7, 0.0);
-                        s.spawnParticle(Particle.SCULK_SOUL, t.getLocation().add(0,1,0), 2, 1.5, 1.5, 1.5, 0.0);
+                        if (t != null) {
+                            s.spawnParticle(Particle.TOWN_AURA, t.getLocation().add(0, 1, 0), 15, 0.7, 0.7, 0.7, 0.0);
+                            s.spawnParticle(Particle.SCULK_SOUL, t.getLocation().add(0, 1, 0), 2, 1.5, 1.5, 1.5, 0.0);
+                        }
                     }
                 }
             }
